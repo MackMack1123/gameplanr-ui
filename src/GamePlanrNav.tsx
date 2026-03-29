@@ -6,9 +6,9 @@ import { LogoIcon } from "./LogoIcon";
 export type AppId = "calendar" | "lineup" | "field";
 
 export interface GamePlanrNavProps {
-  /** Which app is currently active */
-  currentApp: AppId;
-  /** User's email to display (optional) */
+  /** Which app is currently active (omit for platform-level pages like auth) */
+  currentApp?: AppId;
+  /** User's email to display (optional — hide on login/register) */
   userEmail?: string | null;
   /** Called when the user clicks Sign out */
   onSignOut?: () => void;
@@ -20,29 +20,26 @@ const APP_LINKS: { label: string; href: string; id: AppId }[] = [
   { label: "GamePlanr Field", href: "https://field.gameplanr.co", id: "field" },
 ];
 
-const APP_META: Record<AppId, { name: string; pillBg: string; pillText: string; focusRing: string }> = {
+const APP_META: Record<AppId, { name: string; pillBg: string; pillText: string }> = {
   calendar: {
     name: "Calendar",
     pillBg: "rgba(99,102,241,0.15)",
     pillText: "#818cf8",
-    focusRing: "rgb(99,102,241)",
   },
   lineup: {
     name: "Lineup Builder",
     pillBg: "rgba(56,189,248,0.15)",
     pillText: "#38bdf8",
-    focusRing: "rgb(56,189,248)",
   },
   field: {
     name: "Field Management",
     pillBg: "rgba(16,185,129,0.15)",
     pillText: "#34d399",
-    focusRing: "rgb(16,185,129)",
   },
 };
 
 export function GamePlanrNav({ currentApp, userEmail, onSignOut }: GamePlanrNavProps) {
-  const meta = APP_META[currentApp];
+  const meta = currentApp ? APP_META[currentApp] : null;
 
   return (
     <nav
@@ -63,7 +60,7 @@ export function GamePlanrNav({ currentApp, userEmail, onSignOut }: GamePlanrNavP
       {/* Left: Logo + App badge */}
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <a
-          href={APP_LINKS.find((a) => a.id === currentApp)?.href || "/"}
+          href={currentApp ? (APP_LINKS.find((a) => a.id === currentApp)?.href || "/") : "/"}
           style={{
             display: "flex",
             alignItems: "center",
@@ -79,26 +76,30 @@ export function GamePlanrNav({ currentApp, userEmail, onSignOut }: GamePlanrNavP
           </span>
         </a>
 
-        {/* Divider */}
-        <div
-          style={{ width: 1, height: 20, backgroundColor: "rgba(255,255,255,0.15)" }}
-          aria-hidden="true"
-        />
+        {meta && (
+          <>
+            {/* Divider */}
+            <div
+              style={{ width: 1, height: 20, backgroundColor: "rgba(255,255,255,0.15)" }}
+              aria-hidden="true"
+            />
 
-        {/* Current app pill */}
-        <span
-          style={{
-            display: "inline-flex",
-            borderRadius: 9999,
-            backgroundColor: meta.pillBg,
-            padding: "2px 10px",
-            fontSize: 12,
-            fontWeight: 500,
-            color: meta.pillText,
-          }}
-        >
-          {meta.name}
-        </span>
+            {/* Current app pill */}
+            <span
+              style={{
+                display: "inline-flex",
+                borderRadius: 9999,
+                backgroundColor: meta.pillBg,
+                padding: "2px 10px",
+                fontSize: 12,
+                fontWeight: 500,
+                color: meta.pillText,
+              }}
+            >
+              {meta.name}
+            </span>
+          </>
+        )}
       </div>
 
       {/* Center: App switcher */}
@@ -114,7 +115,7 @@ export function GamePlanrNav({ currentApp, userEmail, onSignOut }: GamePlanrNavP
         role="list"
       >
         {APP_LINKS.map((app) => {
-          const isCurrent = app.id === currentApp;
+          const isCurrent = currentApp === app.id;
           return (
             <li key={app.id}>
               <a
