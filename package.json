@@ -15,17 +15,20 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "prepare": "tsup",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
+  "dependencies": {
+    "tsup": "^8",
+    "typescript": "^5"
+  },
   "devDependencies": {
     "react": "^18",
     "react-dom": "^18",
-    "@types/react": "^18",
-    "tsup": "^8",
-    "typescript": "^5"
+    "@types/react": "^18"
   }
 }
