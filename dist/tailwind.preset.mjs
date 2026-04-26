@@ -1,3 +1,5 @@
+"use client";
+
 // src/tokens.ts
 var COLORS = {
   // Brand green — Tailwind green-600 family. NOT emerald.

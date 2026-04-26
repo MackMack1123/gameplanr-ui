@@ -1,3 +1,5 @@
+"use client";
+
 // src/GamePlanrNav.tsx
 import { useState, useRef, useEffect } from "react";
 
