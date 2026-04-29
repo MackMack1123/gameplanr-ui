@@ -58,3 +58,6 @@ export type {
 
 export { FilterBar } from "./components/FilterBar";
 export type { FilterBarProps } from "./components/FilterBar";
+
+export { Modal } from "./components/Modal";
+export type { ModalProps, ModalSize } from "./components/Modal";

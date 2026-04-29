@@ -43,6 +43,7 @@ __export(index_exports, {
   Input: () => Input,
   LAYOUT: () => LAYOUT,
   LogoIcon: () => LogoIcon,
+  Modal: () => Modal,
   PageHeader: () => PageHeader,
   RADIUS: () => RADIUS,
   SHADOW: () => SHADOW,
@@ -1954,6 +1955,114 @@ function FilterBar({ filters, actions, bare = false, style, children, ...rest })
     }
   );
 }
+
+// src/components/Modal.tsx
+var import_react13 = __toESM(require("react"));
+var import_react_dom = require("react-dom");
+var import_jsx_runtime19 = require("react/jsx-runtime");
+var sizeMap6 = { sm: 400, md: 560, lg: 760 };
+function Modal({
+  open,
+  onClose,
+  title,
+  description,
+  footer,
+  size = "md",
+  closeOnBackdrop = true,
+  children
+}) {
+  import_react13.default.useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open, onClose]);
+  if (!open) return null;
+  if (typeof document === "undefined") return null;
+  return (0, import_react_dom.createPortal)(
+    /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+      "div",
+      {
+        role: "presentation",
+        onMouseDown: (e) => {
+          if (closeOnBackdrop && e.target === e.currentTarget) onClose();
+        },
+        style: {
+          position: "fixed",
+          inset: 0,
+          backgroundColor: "rgba(15,23,42,0.45)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 16,
+          zIndex: 1e3
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+          "div",
+          {
+            role: "dialog",
+            "aria-modal": "true",
+            "aria-labelledby": title ? "gp-modal-title" : void 0,
+            style: {
+              backgroundColor: COLORS.surface.card,
+              borderRadius: RADIUS.lg,
+              boxShadow: "0 12px 32px rgba(15,23,42,0.18)",
+              width: "100%",
+              maxWidth: sizeMap6[size],
+              maxHeight: "calc(100vh - 32px)",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              fontFamily: TYPE.family.sans
+            },
+            children: [
+              (title || description) && /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { style: { padding: "16px 20px", borderBottom: `1px solid ${COLORS.surface.borderSoft}` }, children: [
+                title && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+                  "h2",
+                  {
+                    id: "gp-modal-title",
+                    style: {
+                      margin: 0,
+                      fontSize: TYPE.size.h2,
+                      fontWeight: TYPE.weight.semibold,
+                      color: COLORS.ink[1]
+                    },
+                    children: title
+                  }
+                ),
+                description && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("p", { style: { margin: "4px 0 0", fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: description })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { style: { padding: "16px 20px", overflowY: "auto", color: COLORS.ink[1], fontSize: TYPE.size.body }, children }),
+              footer && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+                "div",
+                {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    gap: 8,
+                    padding: "12px 20px",
+                    borderTop: `1px solid ${COLORS.surface.borderSoft}`,
+                    backgroundColor: COLORS.surface.page
+                  },
+                  children: footer
+                }
+              )
+            ]
+          }
+        )
+      }
+    ),
+    document.body
+  );
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -1968,6 +2077,7 @@ function FilterBar({ filters, actions, bare = false, style, children, ...rest })
   Input,
   LAYOUT,
   LogoIcon,
+  Modal,
   PageHeader,
   RADIUS,
   SHADOW,

@@ -1896,6 +1896,114 @@ function FilterBar({ filters, actions, bare = false, style, children, ...rest })
     }
   );
 }
+
+// src/components/Modal.tsx
+import React13 from "react";
+import { createPortal } from "react-dom";
+import { jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
+var sizeMap6 = { sm: 400, md: 560, lg: 760 };
+function Modal({
+  open,
+  onClose,
+  title,
+  description,
+  footer,
+  size = "md",
+  closeOnBackdrop = true,
+  children
+}) {
+  React13.useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open, onClose]);
+  if (!open) return null;
+  if (typeof document === "undefined") return null;
+  return createPortal(
+    /* @__PURE__ */ jsx19(
+      "div",
+      {
+        role: "presentation",
+        onMouseDown: (e) => {
+          if (closeOnBackdrop && e.target === e.currentTarget) onClose();
+        },
+        style: {
+          position: "fixed",
+          inset: 0,
+          backgroundColor: "rgba(15,23,42,0.45)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 16,
+          zIndex: 1e3
+        },
+        children: /* @__PURE__ */ jsxs14(
+          "div",
+          {
+            role: "dialog",
+            "aria-modal": "true",
+            "aria-labelledby": title ? "gp-modal-title" : void 0,
+            style: {
+              backgroundColor: COLORS.surface.card,
+              borderRadius: RADIUS.lg,
+              boxShadow: "0 12px 32px rgba(15,23,42,0.18)",
+              width: "100%",
+              maxWidth: sizeMap6[size],
+              maxHeight: "calc(100vh - 32px)",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              fontFamily: TYPE.family.sans
+            },
+            children: [
+              (title || description) && /* @__PURE__ */ jsxs14("div", { style: { padding: "16px 20px", borderBottom: `1px solid ${COLORS.surface.borderSoft}` }, children: [
+                title && /* @__PURE__ */ jsx19(
+                  "h2",
+                  {
+                    id: "gp-modal-title",
+                    style: {
+                      margin: 0,
+                      fontSize: TYPE.size.h2,
+                      fontWeight: TYPE.weight.semibold,
+                      color: COLORS.ink[1]
+                    },
+                    children: title
+                  }
+                ),
+                description && /* @__PURE__ */ jsx19("p", { style: { margin: "4px 0 0", fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: description })
+              ] }),
+              /* @__PURE__ */ jsx19("div", { style: { padding: "16px 20px", overflowY: "auto", color: COLORS.ink[1], fontSize: TYPE.size.body }, children }),
+              footer && /* @__PURE__ */ jsx19(
+                "div",
+                {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    gap: 8,
+                    padding: "12px 20px",
+                    borderTop: `1px solid ${COLORS.surface.borderSoft}`,
+                    backgroundColor: COLORS.surface.page
+                  },
+                  children: footer
+                }
+              )
+            ]
+          }
+        )
+      }
+    ),
+    document.body
+  );
+}
 export {
   AppSwitcher,
   Button,
@@ -1909,6 +2017,7 @@ export {
   Input,
   LAYOUT,
   LogoIcon,
+  Modal,
   PageHeader,
   RADIUS,
   SHADOW,
