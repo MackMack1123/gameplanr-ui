@@ -38,6 +38,7 @@ __export(index_exports, {
   FontDebugToggle: () => FontDebugToggle,
   GamePlanrNav: () => GamePlanrNav,
   IconButton: () => IconButton,
+  Input: () => Input,
   LAYOUT: () => LAYOUT,
   LogoIcon: () => LogoIcon,
   PageHeader: () => PageHeader,
@@ -1288,6 +1289,75 @@ var IconButton = import_react5.default.forwardRef(function IconButton2({
     }
   );
 });
+
+// src/components/Input.tsx
+var import_react6 = __toESM(require("react"));
+var import_jsx_runtime11 = require("react/jsx-runtime");
+var sizeMap3 = {
+  sm: { height: 28, padX: 10, font: TYPE.size.small },
+  md: { height: 36, padX: 12, font: TYPE.size.body },
+  lg: { height: 40, padX: 14, font: TYPE.size.body }
+};
+var Input = import_react6.default.forwardRef(function Input2({ inputSize = "md", invalid = false, leadingIcon, trailingIcon, disabled, style, className, ...rest }, ref) {
+  const [focused, setFocused] = import_react6.default.useState(false);
+  const dims = sizeMap3[inputSize];
+  const borderColor = invalid ? "#dc2626" : focused ? COLORS.green[600] : COLORS.surface.border;
+  const ringColor = invalid ? "#fecaca" : "#bbf7d0";
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+    "span",
+    {
+      className,
+      style: {
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
+        height: dims.height,
+        paddingInline: dims.padX,
+        backgroundColor: disabled ? COLORS.surface.hover : COLORS.surface.card,
+        border: `1px solid ${borderColor}`,
+        borderRadius: RADIUS.md,
+        boxShadow: focused ? `0 0 0 3px ${ringColor}` : "none",
+        transition: "border-color 120ms ease, box-shadow 120ms ease",
+        cursor: disabled ? "not-allowed" : "text",
+        opacity: disabled ? 0.7 : 1,
+        ...style
+      },
+      children: [
+        leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: leadingIcon }),
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          "input",
+          {
+            ref,
+            disabled,
+            "aria-invalid": invalid || void 0,
+            onFocus: (e) => {
+              setFocused(true);
+              rest.onFocus?.(e);
+            },
+            onBlur: (e) => {
+              setFocused(false);
+              rest.onBlur?.(e);
+            },
+            ...rest,
+            style: {
+              flex: 1,
+              minWidth: 0,
+              height: "100%",
+              border: "none",
+              outline: "none",
+              background: "transparent",
+              fontFamily: TYPE.family.sans,
+              fontSize: dims.font,
+              color: COLORS.ink[1],
+              padding: 0
+            }
+          }
+        ),
+        trailingIcon && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: trailingIcon })
+      ]
+    }
+  );
+});
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -1297,6 +1367,7 @@ var IconButton = import_react5.default.forwardRef(function IconButton2({
   FontDebugToggle,
   GamePlanrNav,
   IconButton,
+  Input,
   LAYOUT,
   LogoIcon,
   PageHeader,
