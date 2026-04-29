@@ -36,6 +36,7 @@ __export(index_exports, {
   COLORS: () => COLORS,
   Card: () => Card,
   EmptyState: () => EmptyState,
+  FilterBar: () => FilterBar,
   FontDebugToggle: () => FontDebugToggle,
   GamePlanrNav: () => GamePlanrNav,
   IconButton: () => IconButton,
@@ -1926,6 +1927,33 @@ var Table = Object.assign(TableRoot, {
   HeaderCell: TableHeaderCell,
   Cell: TableCell
 });
+
+// src/components/FilterBar.tsx
+var import_jsx_runtime18 = require("react/jsx-runtime");
+function FilterBar({ filters, actions, bare = false, style, children, ...rest }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
+    "div",
+    {
+      ...rest,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+        flexWrap: "wrap",
+        paddingBottom: bare ? 0 : 12,
+        marginBottom: bare ? 0 : 12,
+        borderBottom: bare ? "none" : `1px solid ${COLORS.surface.borderSoft}`,
+        ...style
+      },
+      children: [
+        filters && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }, children: filters }),
+        children,
+        actions && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }, children: actions })
+      ]
+    }
+  );
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -1933,6 +1961,7 @@ var Table = Object.assign(TableRoot, {
   COLORS,
   Card,
   EmptyState,
+  FilterBar,
   FontDebugToggle,
   GamePlanrNav,
   IconButton,

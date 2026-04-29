@@ -55,3 +55,6 @@ export type {
   TableCellProps,
   TableSortDirection,
 } from "./components/Table";
+
+export { FilterBar } from "./components/FilterBar";
+export type { FilterBarProps } from "./components/FilterBar";

@@ -1869,12 +1869,40 @@ var Table = Object.assign(TableRoot, {
   HeaderCell: TableHeaderCell,
   Cell: TableCell
 });
+
+// src/components/FilterBar.tsx
+import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
+function FilterBar({ filters, actions, bare = false, style, children, ...rest }) {
+  return /* @__PURE__ */ jsxs13(
+    "div",
+    {
+      ...rest,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+        flexWrap: "wrap",
+        paddingBottom: bare ? 0 : 12,
+        marginBottom: bare ? 0 : 12,
+        borderBottom: bare ? "none" : `1px solid ${COLORS.surface.borderSoft}`,
+        ...style
+      },
+      children: [
+        filters && /* @__PURE__ */ jsx18("div", { style: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }, children: filters }),
+        children,
+        actions && /* @__PURE__ */ jsx18("div", { style: { display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }, children: actions })
+      ]
+    }
+  );
+}
 export {
   AppSwitcher,
   Button,
   COLORS,
   Card,
   EmptyState,
+  FilterBar,
   FontDebugToggle,
   GamePlanrNav,
   IconButton,

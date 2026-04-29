@@ -545,4 +545,18 @@ declare const Table: typeof TableRoot & {
     Cell: typeof TableCell;
 };
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Left-side filter controls (Select, Input, DateRange, etc.). */
+    filters?: React.ReactNode;
+    /** Right-aligned actions (e.g., "+ New Request" Button). */
+    actions?: React.ReactNode;
+    /** Drop the bottom divider — useful when sitting directly above a Table card. */
+    bare?: boolean;
+}
+/**
+ * Horizontal bar that sits above tables and lists. Filters wrap on small viewports;
+ * actions stay pinned right.
+ */
+declare function FilterBar({ filters, actions, bare, style, children, ...rest }: FilterBarProps): react_jsx_runtime.JSX.Element;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };
