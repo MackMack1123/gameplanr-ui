@@ -34,3 +34,6 @@ export type { InputProps, InputSize } from "./components/Input";
 
 export { Select } from "./components/Select";
 export type { SelectProps, SelectSize, SelectOption } from "./components/Select";
+
+export { Toggle } from "./components/Toggle";
+export type { ToggleProps, ToggleSize } from "./components/Toggle";

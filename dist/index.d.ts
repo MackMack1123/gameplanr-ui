@@ -455,4 +455,16 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
 }
 declare const Select: React.ForwardRefExoticComponent<SelectProps & React.RefAttributes<HTMLSelectElement>>;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type Tokens };
+type ToggleSize = "sm" | "md";
+interface ToggleProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange" | "type"> {
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+    size?: ToggleSize;
+    /**
+     * Required for accessibility — describes what the toggle controls.
+     */
+    "aria-label": string;
+}
+declare const Toggle: React.ForwardRefExoticComponent<ToggleProps & React.RefAttributes<HTMLButtonElement>>;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, Toggle, type ToggleProps, type ToggleSize, type Tokens };

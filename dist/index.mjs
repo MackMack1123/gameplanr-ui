@@ -1395,6 +1395,67 @@ var Select = React7.forwardRef(function Select2({ selectSize = "md", invalid = f
     }
   );
 });
+
+// src/components/Toggle.tsx
+import React8 from "react";
+import { jsx as jsx13 } from "react/jsx-runtime";
+var sizeMap5 = {
+  sm: { width: 32, height: 18, thumb: 14, pad: 2 },
+  md: { width: 40, height: 22, thumb: 18, pad: 2 }
+};
+var Toggle = React8.forwardRef(function Toggle2({ checked, onChange, size = "md", disabled, style, className, ...rest }, ref) {
+  const dims = sizeMap5[size];
+  const trackBg = checked ? COLORS.green[600] : COLORS.surface.border;
+  const thumbX = checked ? dims.width - dims.thumb - dims.pad : dims.pad;
+  return /* @__PURE__ */ jsx13(
+    "button",
+    {
+      ref,
+      type: "button",
+      role: "switch",
+      "aria-checked": checked,
+      disabled,
+      onClick: (e) => {
+        if (disabled) return;
+        onChange(!checked);
+        rest.onClick?.(e);
+      },
+      className,
+      ...rest,
+      style: {
+        position: "relative",
+        display: "inline-block",
+        width: dims.width,
+        height: dims.height,
+        padding: 0,
+        backgroundColor: trackBg,
+        border: "none",
+        borderRadius: dims.height / 2,
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.55 : 1,
+        transition: "background-color 160ms ease",
+        ...style
+      },
+      children: /* @__PURE__ */ jsx13(
+        "span",
+        {
+          "aria-hidden": true,
+          style: {
+            position: "absolute",
+            top: dims.pad,
+            left: thumbX,
+            width: dims.thumb,
+            height: dims.thumb,
+            backgroundColor: "#ffffff",
+            borderRadius: "50%",
+            boxShadow: "0 1px 3px rgba(15,23,42,0.18)",
+            transition: "left 160ms ease"
+          }
+        }
+      )
+    }
+  );
+});
 export {
   AppSwitcher,
   Button,
@@ -1413,5 +1474,6 @@ export {
   Sidebar,
   StatusPill,
   TOKENS,
-  TYPE
+  TYPE,
+  Toggle
 };

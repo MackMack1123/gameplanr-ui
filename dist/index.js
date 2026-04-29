@@ -48,7 +48,8 @@ __export(index_exports, {
   Sidebar: () => Sidebar,
   StatusPill: () => StatusPill,
   TOKENS: () => TOKENS,
-  TYPE: () => TYPE
+  TYPE: () => TYPE,
+  Toggle: () => Toggle
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -1447,6 +1448,67 @@ var Select = import_react7.default.forwardRef(function Select2({ selectSize = "m
     }
   );
 });
+
+// src/components/Toggle.tsx
+var import_react8 = __toESM(require("react"));
+var import_jsx_runtime13 = require("react/jsx-runtime");
+var sizeMap5 = {
+  sm: { width: 32, height: 18, thumb: 14, pad: 2 },
+  md: { width: 40, height: 22, thumb: 18, pad: 2 }
+};
+var Toggle = import_react8.default.forwardRef(function Toggle2({ checked, onChange, size = "md", disabled, style, className, ...rest }, ref) {
+  const dims = sizeMap5[size];
+  const trackBg = checked ? COLORS.green[600] : COLORS.surface.border;
+  const thumbX = checked ? dims.width - dims.thumb - dims.pad : dims.pad;
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    "button",
+    {
+      ref,
+      type: "button",
+      role: "switch",
+      "aria-checked": checked,
+      disabled,
+      onClick: (e) => {
+        if (disabled) return;
+        onChange(!checked);
+        rest.onClick?.(e);
+      },
+      className,
+      ...rest,
+      style: {
+        position: "relative",
+        display: "inline-block",
+        width: dims.width,
+        height: dims.height,
+        padding: 0,
+        backgroundColor: trackBg,
+        border: "none",
+        borderRadius: dims.height / 2,
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.55 : 1,
+        transition: "background-color 160ms ease",
+        ...style
+      },
+      children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        "span",
+        {
+          "aria-hidden": true,
+          style: {
+            position: "absolute",
+            top: dims.pad,
+            left: thumbX,
+            width: dims.thumb,
+            height: dims.thumb,
+            backgroundColor: "#ffffff",
+            borderRadius: "50%",
+            boxShadow: "0 1px 3px rgba(15,23,42,0.18)",
+            transition: "left 160ms ease"
+          }
+        }
+      )
+    }
+  );
+});
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -1466,5 +1528,6 @@ var Select = import_react7.default.forwardRef(function Select2({ selectSize = "m
   Sidebar,
   StatusPill,
   TOKENS,
-  TYPE
+  TYPE,
+  Toggle
 });
