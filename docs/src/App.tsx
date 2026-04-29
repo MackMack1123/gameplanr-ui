@@ -110,7 +110,7 @@ function DocsSidebar() {
           padding: "8px 6px",
         }}
       >
-        @gameplanr/ui · Gitea registry
+        @gameplanr/ui · v3
       </div>
     </aside>
   );
