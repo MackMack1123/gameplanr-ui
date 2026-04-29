@@ -419,4 +419,17 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type Tokens };
+type IconButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+type IconButtonSize = "sm" | "md" | "lg";
+interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    variant?: IconButtonVariant;
+    size?: IconButtonSize;
+    /**
+     * Required for accessibility — describes the action since there's no visible label.
+     */
+    "aria-label": string;
+    children: React.ReactNode;
+}
+declare const IconButton: React.ForwardRefExoticComponent<IconButtonProps & React.RefAttributes<HTMLButtonElement>>;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type Tokens };

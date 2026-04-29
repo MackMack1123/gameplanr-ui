@@ -1140,6 +1140,104 @@ function Spinner() {
     )
   ] });
 }
+
+// src/components/IconButton.tsx
+import React5 from "react";
+import { jsx as jsx10 } from "react/jsx-runtime";
+var sizeMap2 = {
+  sm: 28,
+  md: 36,
+  lg: 40
+};
+var variantStyle2 = (variant, hovered, pressed) => {
+  if (variant === "primary") {
+    const bg = pressed ? COLORS.green[700] : COLORS.green[600];
+    return {
+      backgroundColor: hovered && !pressed ? COLORS.green[700] : bg,
+      color: "#ffffff",
+      border: "1px solid transparent"
+    };
+  }
+  if (variant === "secondary") {
+    return {
+      backgroundColor: hovered ? COLORS.surface.hover : COLORS.surface.card,
+      color: COLORS.ink[2],
+      border: `1px solid ${COLORS.surface.border}`
+    };
+  }
+  if (variant === "ghost") {
+    return {
+      backgroundColor: hovered ? COLORS.surface.hover : "transparent",
+      color: COLORS.ink[2],
+      border: "1px solid transparent"
+    };
+  }
+  const dangerBg = pressed ? "#b91c1c" : "#dc2626";
+  return {
+    backgroundColor: hovered && !pressed ? "#b91c1c" : dangerBg,
+    color: "#ffffff",
+    border: "1px solid transparent"
+  };
+};
+var IconButton = React5.forwardRef(function IconButton2({
+  variant = "ghost",
+  size = "md",
+  disabled,
+  style,
+  className,
+  children,
+  onMouseEnter,
+  onMouseLeave,
+  onMouseDown,
+  onMouseUp,
+  ...rest
+}, ref) {
+  const [hovered, setHovered] = React5.useState(false);
+  const [pressed, setPressed] = React5.useState(false);
+  const dim = sizeMap2[size];
+  const palette = variantStyle2(variant, hovered && !disabled, pressed && !disabled);
+  return /* @__PURE__ */ jsx10(
+    "button",
+    {
+      ref,
+      disabled,
+      className,
+      onMouseEnter: (e) => {
+        setHovered(true);
+        onMouseEnter?.(e);
+      },
+      onMouseLeave: (e) => {
+        setHovered(false);
+        setPressed(false);
+        onMouseLeave?.(e);
+      },
+      onMouseDown: (e) => {
+        setPressed(true);
+        onMouseDown?.(e);
+      },
+      onMouseUp: (e) => {
+        setPressed(false);
+        onMouseUp?.(e);
+      },
+      style: {
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: dim,
+        height: dim,
+        padding: 0,
+        borderRadius: RADIUS.md,
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.55 : 1,
+        transition: "background-color 120ms ease, color 120ms ease, border-color 120ms ease",
+        ...palette,
+        ...style
+      },
+      ...rest,
+      children
+    }
+  );
+});
 export {
   AppSwitcher,
   Button,
@@ -1147,6 +1245,7 @@ export {
   EmptyState,
   FontDebugToggle,
   GamePlanrNav,
+  IconButton,
   LAYOUT,
   LogoIcon,
   PageHeader,
