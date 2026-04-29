@@ -1,6 +1,6 @@
 {
   "name": "@gameplanr/ui",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "GamePlanr v3 design system — shared tokens, Tailwind preset, and components.",
   "repository": {
     "type": "git",

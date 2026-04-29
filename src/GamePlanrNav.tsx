@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { LogoIcon } from "./LogoIcon";
 
-export type AppId = "calendar" | "lineup" | "field" | "volunteer";
+export type AppId = "calendar" | "lineup" | "field" | "volunteer" | "tournament" | "fundraiser";
 
 export interface GamePlanrNavProps {
   /** Which app is currently active (omit for platform-level pages like auth) */

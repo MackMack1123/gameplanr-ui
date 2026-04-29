@@ -1,7 +1,7 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import React from 'react';
 
-type AppId$1 = "calendar" | "lineup" | "field" | "volunteer";
+type AppId$1 = "calendar" | "lineup" | "field" | "volunteer" | "tournament" | "fundraiser";
 interface GamePlanrNavProps {
     /** Which app is currently active (omit for platform-level pages like auth) */
     currentApp?: AppId$1;
