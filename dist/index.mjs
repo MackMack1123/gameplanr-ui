@@ -1618,6 +1618,104 @@ function CardFooter({ children, style, ...rest }) {
     }
   );
 }
+
+// src/components/StatCard.tsx
+import React11 from "react";
+import { jsx as jsx16, jsxs as jsxs11 } from "react/jsx-runtime";
+var accentMap = {
+  green: { bg: COLORS.green[100], fg: COLORS.green[700] },
+  blue: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg },
+  orange: { bg: COLORS.accent.orange.bg, fg: COLORS.accent.orange.fg },
+  purple: { bg: COLORS.accent.purple.bg, fg: COLORS.accent.purple.fg },
+  neutral: { bg: COLORS.surface.hover, fg: COLORS.ink[2] }
+};
+var deltaToneMap = {
+  positive: COLORS.green[700],
+  negative: "#b91c1c",
+  neutral: COLORS.ink[3]
+};
+var StatCard = React11.forwardRef(function StatCard2({ label, value, delta, deltaTone = "neutral", icon, accent = "neutral", style, ...rest }, ref) {
+  const tone = accentMap[accent];
+  return /* @__PURE__ */ jsxs11(
+    "div",
+    {
+      ref,
+      ...rest,
+      style: {
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        gap: 12,
+        backgroundColor: COLORS.surface.card,
+        border: `1px solid ${COLORS.surface.border}`,
+        borderRadius: RADIUS.lg,
+        boxShadow: SHADOW.sm,
+        padding: 16,
+        ...style
+      },
+      children: [
+        /* @__PURE__ */ jsxs11("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
+          /* @__PURE__ */ jsx16(
+            "span",
+            {
+              style: {
+                fontFamily: TYPE.family.sans,
+                fontSize: TYPE.size.small,
+                fontWeight: TYPE.weight.medium,
+                color: COLORS.ink[3]
+              },
+              children: label
+            }
+          ),
+          /* @__PURE__ */ jsx16(
+            "span",
+            {
+              style: {
+                fontFamily: TYPE.family.sans,
+                fontSize: TYPE.size.h1,
+                fontWeight: TYPE.weight.bold,
+                letterSpacing: TYPE.letterSpacing.tight,
+                color: COLORS.ink[1],
+                lineHeight: 1.1
+              },
+              children: value
+            }
+          ),
+          delta && /* @__PURE__ */ jsx16(
+            "span",
+            {
+              style: {
+                fontFamily: TYPE.family.sans,
+                fontSize: TYPE.size.small,
+                fontWeight: TYPE.weight.medium,
+                color: deltaToneMap[deltaTone]
+              },
+              children: delta
+            }
+          )
+        ] }),
+        icon && /* @__PURE__ */ jsx16(
+          "span",
+          {
+            "aria-hidden": true,
+            style: {
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 40,
+              height: 40,
+              backgroundColor: tone.bg,
+              color: tone.fg,
+              borderRadius: "50%",
+              flexShrink: 0
+            },
+            children: icon
+          }
+        )
+      ]
+    }
+  );
+});
 export {
   AppSwitcher,
   Button,
@@ -1635,6 +1733,7 @@ export {
   SHADOW,
   Select,
   Sidebar,
+  StatCard,
   StatusPill,
   TOKENS,
   TYPE,

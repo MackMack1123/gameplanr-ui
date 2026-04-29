@@ -499,4 +499,18 @@ declare function CardDescription({ children, style, ...rest }: React.HTMLAttribu
 declare function CardBody({ children, style, ...rest }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
 declare function CardFooter({ children, style, ...rest }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+type StatAccent = "green" | "blue" | "orange" | "purple" | "neutral";
+interface StatCardProps extends React.HTMLAttributes<HTMLDivElement> {
+    label: React.ReactNode;
+    value: React.ReactNode;
+    /** Small text below value, e.g. "+12% vs last week". */
+    delta?: React.ReactNode;
+    /** Tone of the delta text — green for positive, red for negative, neutral by default. */
+    deltaTone?: "positive" | "negative" | "neutral";
+    /** Icon shown in a colored circular badge. */
+    icon?: React.ReactNode;
+    accent?: StatAccent;
+}
+declare const StatCard: React.ForwardRefExoticComponent<StatCardProps & React.RefAttributes<HTMLDivElement>>;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };

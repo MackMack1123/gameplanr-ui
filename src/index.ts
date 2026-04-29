@@ -43,3 +43,6 @@ export type { TabsProps, TabItem } from "./components/Tabs";
 
 export { Card } from "./components/Card";
 export type { CardProps } from "./components/Card";
+
+export { StatCard } from "./components/StatCard";
+export type { StatCardProps, StatAccent } from "./components/StatCard";
