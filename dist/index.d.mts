@@ -407,4 +407,16 @@ interface SidebarNavItemProps {
     trailing?: React.ReactNode;
 }
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type Tokens };
+type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+type ButtonSize = "sm" | "md" | "lg";
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    block?: boolean;
+    loading?: boolean;
+    leadingIcon?: React.ReactNode;
+    trailingIcon?: React.ReactNode;
+}
+declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type Tokens };

@@ -1,8 +1,10 @@
 "use client";
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -16,12 +18,21 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
   AppSwitcher: () => AppSwitcher,
+  Button: () => Button,
   COLORS: () => COLORS,
   EmptyState: () => EmptyState,
   FontDebugToggle: () => FontDebugToggle,
@@ -1044,9 +1055,144 @@ Sidebar.Section = Section;
 Sidebar.Nav = Nav;
 Sidebar.NavItem = NavItem;
 Sidebar.Footer = Footer;
+
+// src/components/Button.tsx
+var import_react4 = __toESM(require("react"));
+var import_jsx_runtime9 = require("react/jsx-runtime");
+var sizeMap = {
+  sm: { height: 28, padX: 10, font: TYPE.size.small, gap: 6 },
+  md: { height: 36, padX: 14, font: TYPE.size.body, gap: 8 },
+  lg: { height: 40, padX: 18, font: TYPE.size.body, gap: 8 }
+};
+var variantStyle = (variant, hovered, pressed) => {
+  if (variant === "primary") {
+    const bg = pressed ? COLORS.green[700] : COLORS.green[600];
+    return {
+      backgroundColor: hovered && !pressed ? COLORS.green[700] : bg,
+      color: "#ffffff",
+      border: "1px solid transparent"
+    };
+  }
+  if (variant === "secondary") {
+    return {
+      backgroundColor: hovered ? COLORS.surface.hover : COLORS.surface.card,
+      color: COLORS.ink[1],
+      border: `1px solid ${COLORS.surface.border}`
+    };
+  }
+  if (variant === "ghost") {
+    return {
+      backgroundColor: hovered ? COLORS.surface.hover : "transparent",
+      color: COLORS.ink[2],
+      border: "1px solid transparent"
+    };
+  }
+  const dangerBg = pressed ? "#b91c1c" : "#dc2626";
+  return {
+    backgroundColor: hovered && !pressed ? "#b91c1c" : dangerBg,
+    color: "#ffffff",
+    border: "1px solid transparent"
+  };
+};
+var Button = import_react4.default.forwardRef(function Button2({
+  variant = "primary",
+  size = "md",
+  block = false,
+  loading = false,
+  leadingIcon,
+  trailingIcon,
+  disabled,
+  style,
+  className,
+  children,
+  onMouseEnter,
+  onMouseLeave,
+  onMouseDown,
+  onMouseUp,
+  ...rest
+}, ref) {
+  const [hovered, setHovered] = import_react4.default.useState(false);
+  const [pressed, setPressed] = import_react4.default.useState(false);
+  const dims = sizeMap[size];
+  const isDisabled = disabled || loading;
+  const palette = variantStyle(variant, hovered && !isDisabled, pressed && !isDisabled);
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+    "button",
+    {
+      ref,
+      disabled: isDisabled,
+      "aria-busy": loading || void 0,
+      className,
+      onMouseEnter: (e) => {
+        setHovered(true);
+        onMouseEnter?.(e);
+      },
+      onMouseLeave: (e) => {
+        setHovered(false);
+        setPressed(false);
+        onMouseLeave?.(e);
+      },
+      onMouseDown: (e) => {
+        setPressed(true);
+        onMouseDown?.(e);
+      },
+      onMouseUp: (e) => {
+        setPressed(false);
+        onMouseUp?.(e);
+      },
+      style: {
+        display: block ? "flex" : "inline-flex",
+        width: block ? "100%" : void 0,
+        alignItems: "center",
+        justifyContent: "center",
+        gap: dims.gap,
+        height: dims.height,
+        paddingInline: dims.padX,
+        borderRadius: RADIUS.md,
+        fontFamily: TYPE.family.sans,
+        fontSize: dims.font,
+        fontWeight: TYPE.weight.semibold,
+        lineHeight: 1,
+        cursor: isDisabled ? "not-allowed" : "pointer",
+        opacity: isDisabled ? 0.55 : 1,
+        transition: "background-color 120ms ease, color 120ms ease, border-color 120ms ease",
+        whiteSpace: "nowrap",
+        ...palette,
+        ...style
+      },
+      ...rest,
+      children: [
+        loading ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Spinner, {}) : leadingIcon,
+        children,
+        !loading && trailingIcon
+      ]
+    }
+  );
+});
+function Spinner() {
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_jsx_runtime9.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("style", { children: `@keyframes gp-spin { to { transform: rotate(360deg); } }` }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      "span",
+      {
+        "aria-hidden": true,
+        style: {
+          display: "inline-block",
+          width: 14,
+          height: 14,
+          border: "2px solid currentColor",
+          borderRightColor: "transparent",
+          borderRadius: "50%",
+          animation: "gp-spin 0.7s linear infinite"
+        }
+      }
+    )
+  ] });
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
+  Button,
   COLORS,
   EmptyState,
   FontDebugToggle,

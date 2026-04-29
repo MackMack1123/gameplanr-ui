@@ -22,3 +22,6 @@ export type { AppSwitcherProps, AppSwitcherApp, AppId } from "./components/AppSw
 
 export { Sidebar } from "./components/Sidebar";
 export type { SidebarProps, SidebarNavItemProps } from "./components/Sidebar";
+
+export { Button } from "./components/Button";
+export type { ButtonProps, ButtonVariant, ButtonSize } from "./components/Button";
