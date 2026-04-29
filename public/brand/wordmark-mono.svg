@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 80" role="img" aria-label="GamePlanr">
+  <text x="0" y="58" font-family="'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-weight="700" font-size="56" letter-spacing="-2" fill="#0f172a">
+    GamePlanr
+  </text>
+  <path d="M310 22 L316 26 L322 22 L318 30 L322 38 L316 34 L310 38 L314 30 Z" fill="#0f172a" opacity="0.9"/>
+</svg>
