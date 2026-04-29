@@ -1,13 +1,21 @@
 :3000 {
-	basic_auth {
-		brett $2a$14$mqryqJybrIoKYOI.OPnQRu3GiUa0R.86aKHxo9ejPXl5zrpHvm1d6
+	# Unauth health endpoint for kamal-proxy.
+	handle /up {
+		respond "ok" 200
 	}
-	header {
-		X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
-		-Server
+
+	# Everything else: gated.
+	handle {
+		basic_auth {
+			brett $2a$14$mqryqJybrIoKYOI.OPnQRu3GiUa0R.86aKHxo9ejPXl5zrpHvm1d6
+		}
+		header {
+			X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
+			-Server
+		}
+		root * /usr/share/caddy
+		encode gzip
+		try_files {path} /index.html
+		file_server
 	}
-	root * /usr/share/caddy
-	encode gzip
-	try_files {path} /index.html
-	file_server
 }
