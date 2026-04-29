@@ -67,3 +67,6 @@ export type { ToastProps, ToastTone } from "./components/Toast";
 
 export { FormField } from "./components/FormField";
 export type { FormFieldProps } from "./components/FormField";
+
+export { KPIBar } from "./components/KPIBar";
+export type { KPIBarProps, KPIItem } from "./components/KPIBar";

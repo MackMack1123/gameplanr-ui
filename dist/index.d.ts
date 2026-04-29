@@ -601,4 +601,20 @@ interface FormFieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "tit
 }
 declare function FormField({ label, required, helperText, error, htmlFor, layout, style, children, ...rest }: FormFieldProps): react_jsx_runtime.JSX.Element;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+interface KPIItem {
+    label: React.ReactNode;
+    value: React.ReactNode;
+    /** Optional small line below the value (e.g., "vs last week"). */
+    hint?: React.ReactNode;
+    /** Override the value tone — useful for highlighting a positive/negative figure. */
+    valueTone?: "default" | "positive" | "negative";
+}
+interface KPIBarProps extends React.HTMLAttributes<HTMLDivElement> {
+    items: KPIItem[];
+    orientation?: "horizontal" | "vertical";
+    /** Show thin dividers between items. Default true. */
+    dividers?: boolean;
+}
+declare function KPIBar({ items, orientation, dividers, style, ...rest }: KPIBarProps): react_jsx_runtime.JSX.Element;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };

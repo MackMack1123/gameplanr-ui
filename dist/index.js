@@ -42,6 +42,7 @@ __export(index_exports, {
   GamePlanrNav: () => GamePlanrNav,
   IconButton: () => IconButton,
   Input: () => Input,
+  KPIBar: () => KPIBar,
   LAYOUT: () => LAYOUT,
   LogoIcon: () => LogoIcon,
   Modal: () => Modal,
@@ -2213,6 +2214,80 @@ function FormField({
     }
   );
 }
+
+// src/components/KPIBar.tsx
+var import_jsx_runtime22 = require("react/jsx-runtime");
+var valueColor = (tone) => {
+  if (tone === "positive") return COLORS.green[700];
+  if (tone === "negative") return "#b91c1c";
+  return COLORS.ink[1];
+};
+function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...rest }) {
+  const isVertical = orientation === "vertical";
+  const dividerStyle = isVertical ? `1px solid ${COLORS.surface.borderSoft}` : `1px solid ${COLORS.surface.borderSoft}`;
+  return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+    "div",
+    {
+      ...rest,
+      style: {
+        display: "flex",
+        flexDirection: isVertical ? "column" : "row",
+        alignItems: isVertical ? "stretch" : "center",
+        fontFamily: TYPE.family.sans,
+        ...style
+      },
+      children: items.map((item, i) => {
+        const showDivider = dividers && i > 0;
+        const padBlock = isVertical ? "10px 0" : "0";
+        const padInline = isVertical ? "0" : "0 16px";
+        return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+          "div",
+          {
+            style: {
+              display: "flex",
+              flexDirection: isVertical ? "row" : "column",
+              alignItems: isVertical ? "center" : "flex-start",
+              justifyContent: isVertical ? "space-between" : void 0,
+              gap: isVertical ? 12 : 4,
+              flex: isVertical ? "0 0 auto" : "1 1 0",
+              minWidth: 0,
+              padding: `${padBlock}`.trim() + " " + padInline,
+              borderTop: showDivider && isVertical ? dividerStyle : "none",
+              borderLeft: showDivider && !isVertical ? dividerStyle : "none"
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+                "span",
+                {
+                  style: {
+                    fontSize: TYPE.size.small,
+                    fontWeight: TYPE.weight.medium,
+                    color: COLORS.ink[3]
+                  },
+                  children: item.label
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+                "span",
+                {
+                  style: {
+                    fontSize: isVertical ? TYPE.size.body : TYPE.size.h2,
+                    fontWeight: TYPE.weight.bold,
+                    color: valueColor(item.valueTone),
+                    lineHeight: 1.2
+                  },
+                  children: item.value
+                }
+              ),
+              item.hint && !isVertical && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: item.hint })
+            ]
+          },
+          i
+        );
+      })
+    }
+  );
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -2226,6 +2301,7 @@ function FormField({
   GamePlanrNav,
   IconButton,
   Input,
+  KPIBar,
   LAYOUT,
   LogoIcon,
   Modal,
