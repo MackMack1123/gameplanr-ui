@@ -70,3 +70,6 @@ export type { FormFieldProps } from "./components/FormField";
 
 export { KPIBar } from "./components/KPIBar";
 export type { KPIBarProps, KPIItem } from "./components/KPIBar";
+
+export { DiamondField } from "./components/DiamondField";
+export type { DiamondFieldProps, DiamondPlayer, PositionCode } from "./components/DiamondField";

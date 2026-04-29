@@ -2226,11 +2226,155 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
     }
   );
 }
+
+// src/components/DiamondField.tsx
+import { jsx as jsx23, jsxs as jsxs18 } from "react/jsx-runtime";
+var POSITION_LAYOUT = {
+  P: { x: 50, y: 56 },
+  C: { x: 50, y: 90 },
+  "1B": { x: 70, y: 64 },
+  "2B": { x: 56, y: 42 },
+  "3B": { x: 30, y: 64 },
+  SS: { x: 44, y: 42 },
+  LF: { x: 18, y: 22 },
+  CF: { x: 50, y: 12 },
+  RF: { x: 82, y: 22 }
+};
+var ALL_POSITIONS = ["P", "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF"];
+function DiamondField({
+  positions,
+  selected,
+  onPositionClick,
+  style,
+  ...rest
+}) {
+  return /* @__PURE__ */ jsxs18(
+    "div",
+    {
+      ...rest,
+      style: {
+        position: "relative",
+        width: "100%",
+        aspectRatio: "1 / 1",
+        fontFamily: TYPE.family.sans,
+        ...style
+      },
+      children: [
+        /* @__PURE__ */ jsxs18("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "xMidYMid meet", style: { width: "100%", height: "100%", display: "block" }, children: [
+          /* @__PURE__ */ jsx23("rect", { x: "0", y: "0", width: "100", height: "100", rx: "6", fill: "#e8f5ec" }),
+          /* @__PURE__ */ jsx23("path", { d: "M 8 92 Q 50 -8 92 92 Z", fill: "#c9e7d3" }),
+          /* @__PURE__ */ jsx23("polygon", { points: "50,30 70,60 50,90 30,60", fill: "#e8c89a" }),
+          /* @__PURE__ */ jsx23("line", { x1: "50", y1: "90", x2: "70", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx23("line", { x1: "70", y1: "60", x2: "50", y2: "30", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx23("line", { x1: "50", y1: "30", x2: "30", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx23("line", { x1: "30", y1: "60", x2: "50", y2: "90", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx23("circle", { cx: "50", cy: "60", r: "4", fill: "#d4b380" })
+        ] }),
+        ALL_POSITIONS.map((pos) => {
+          const layout = POSITION_LAYOUT[pos];
+          const player = positions[pos];
+          const isSelected = selected === pos;
+          return /* @__PURE__ */ jsx23(
+            PositionMarker,
+            {
+              code: pos,
+              player: player ?? null,
+              x: layout.x,
+              y: layout.y,
+              selected: isSelected,
+              onClick: onPositionClick ? () => onPositionClick(pos) : void 0
+            },
+            pos
+          );
+        })
+      ]
+    }
+  );
+}
+function PositionMarker({
+  code,
+  player,
+  x,
+  y,
+  selected,
+  onClick
+}) {
+  const interactive = !!onClick;
+  const filled = !!player;
+  const bg = selected ? COLORS.green[600] : filled ? COLORS.surface.card : "rgba(255,255,255,0.6)";
+  const fg = selected ? "#ffffff" : COLORS.ink[1];
+  const border = selected ? COLORS.green[700] : COLORS.surface.border;
+  return /* @__PURE__ */ jsxs18(
+    "button",
+    {
+      type: "button",
+      onClick,
+      disabled: !interactive,
+      "aria-label": `Position ${code}${player?.name ? `: ${player.name}` : ": empty"}`,
+      style: {
+        position: "absolute",
+        left: `${x}%`,
+        top: `${y}%`,
+        transform: "translate(-50%, -50%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 2,
+        padding: 0,
+        background: "transparent",
+        border: "none",
+        cursor: interactive ? "pointer" : "default"
+      },
+      children: [
+        /* @__PURE__ */ jsx23(
+          "span",
+          {
+            style: {
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 28,
+              height: 28,
+              borderRadius: "50%",
+              backgroundColor: bg,
+              color: fg,
+              border: `1.5px solid ${border}`,
+              boxShadow: "0 1px 2px rgba(15,23,42,0.12)",
+              fontSize: TYPE.size.micro,
+              fontWeight: TYPE.weight.bold,
+              lineHeight: 1
+            },
+            children: player?.number ?? code
+          }
+        ),
+        player?.name && /* @__PURE__ */ jsx23(
+          "span",
+          {
+            style: {
+              fontSize: 9,
+              fontWeight: TYPE.weight.medium,
+              color: COLORS.ink[2],
+              backgroundColor: "rgba(255,255,255,0.8)",
+              padding: "1px 4px",
+              borderRadius: 3,
+              whiteSpace: "nowrap",
+              maxWidth: 60,
+              overflow: "hidden",
+              textOverflow: "ellipsis"
+            },
+            children: player.name
+          }
+        )
+      ]
+    }
+  );
+}
 export {
   AppSwitcher,
   Button,
   COLORS,
   Card,
+  DiamondField,
   EmptyState,
   FilterBar,
   FontDebugToggle,

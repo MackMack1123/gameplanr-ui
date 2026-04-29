@@ -617,4 +617,20 @@ interface KPIBarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare function KPIBar({ items, orientation, dividers, style, ...rest }: KPIBarProps): react_jsx_runtime.JSX.Element;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+type PositionCode = "P" | "C" | "1B" | "2B" | "3B" | "SS" | "LF" | "CF" | "RF";
+interface DiamondPlayer {
+    id?: string;
+    number?: string | number;
+    name?: string;
+}
+interface DiamondFieldProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Player assigned to each position. Use null for empty/unassigned. */
+    positions: Partial<Record<PositionCode, DiamondPlayer | null>>;
+    /** Highlights a position (e.g., currently being edited). */
+    selected?: PositionCode;
+    /** Click handler for a position marker. */
+    onPositionClick?: (position: PositionCode) => void;
+}
+declare function DiamondField({ positions, selected, onPositionClick, style, ...rest }: DiamondFieldProps): react_jsx_runtime.JSX.Element;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, type PositionCode, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };
