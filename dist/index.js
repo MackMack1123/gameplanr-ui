@@ -44,6 +44,7 @@ __export(index_exports, {
   PageHeader: () => PageHeader,
   RADIUS: () => RADIUS,
   SHADOW: () => SHADOW,
+  Select: () => Select,
   Sidebar: () => Sidebar,
   StatusPill: () => StatusPill,
   TOKENS: () => TOKENS,
@@ -1358,6 +1359,94 @@ var Input = import_react6.default.forwardRef(function Input2({ inputSize = "md",
     }
   );
 });
+
+// src/components/Select.tsx
+var import_react7 = __toESM(require("react"));
+var import_jsx_runtime12 = require("react/jsx-runtime");
+var sizeMap4 = {
+  sm: { height: 28, padX: 10, font: TYPE.size.small },
+  md: { height: 36, padX: 12, font: TYPE.size.body },
+  lg: { height: 40, padX: 14, font: TYPE.size.body }
+};
+var Select = import_react7.default.forwardRef(function Select2({ selectSize = "md", invalid = false, options, placeholder, disabled, style, className, ...rest }, ref) {
+  const [focused, setFocused] = import_react7.default.useState(false);
+  const dims = sizeMap4[selectSize];
+  const borderColor = invalid ? "#dc2626" : focused ? COLORS.green[600] : COLORS.surface.border;
+  const ringColor = invalid ? "#fecaca" : "#bbf7d0";
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
+    "span",
+    {
+      className,
+      style: {
+        position: "relative",
+        display: "inline-flex",
+        alignItems: "center",
+        height: dims.height,
+        backgroundColor: disabled ? COLORS.surface.hover : COLORS.surface.card,
+        border: `1px solid ${borderColor}`,
+        borderRadius: RADIUS.md,
+        boxShadow: focused ? `0 0 0 3px ${ringColor}` : "none",
+        transition: "border-color 120ms ease, box-shadow 120ms ease",
+        opacity: disabled ? 0.7 : 1,
+        ...style
+      },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
+          "select",
+          {
+            ref,
+            disabled,
+            "aria-invalid": invalid || void 0,
+            onFocus: (e) => {
+              setFocused(true);
+              rest.onFocus?.(e);
+            },
+            onBlur: (e) => {
+              setFocused(false);
+              rest.onBlur?.(e);
+            },
+            ...rest,
+            style: {
+              appearance: "none",
+              WebkitAppearance: "none",
+              MozAppearance: "none",
+              height: "100%",
+              paddingInline: dims.padX,
+              paddingRight: dims.padX + 18,
+              border: "none",
+              outline: "none",
+              background: "transparent",
+              fontFamily: TYPE.family.sans,
+              fontSize: dims.font,
+              color: COLORS.ink[1],
+              cursor: disabled ? "not-allowed" : "pointer"
+            },
+            children: [
+              placeholder && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("option", { value: "", disabled: true, children: placeholder }),
+              options.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("option", { value: opt.value, disabled: opt.disabled, children: opt.label }, opt.value))
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+          "span",
+          {
+            "aria-hidden": true,
+            style: {
+              position: "absolute",
+              right: dims.padX,
+              top: "50%",
+              transform: "translateY(-50%)",
+              color: COLORS.ink[3],
+              pointerEvents: "none",
+              display: "inline-flex"
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("path", { d: "M3 4.5L6 7.5L9 4.5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) })
+          }
+        )
+      ]
+    }
+  );
+});
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -1373,6 +1462,7 @@ var Input = import_react6.default.forwardRef(function Input2({ inputSize = "md",
   PageHeader,
   RADIUS,
   SHADOW,
+  Select,
   Sidebar,
   StatusPill,
   TOKENS,

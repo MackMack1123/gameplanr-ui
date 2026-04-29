@@ -31,3 +31,6 @@ export type { IconButtonProps, IconButtonVariant, IconButtonSize } from "./compo
 
 export { Input } from "./components/Input";
 export type { InputProps, InputSize } from "./components/Input";
+
+export { Select } from "./components/Select";
+export type { SelectProps, SelectSize, SelectOption } from "./components/Select";
