@@ -40,3 +40,6 @@ export type { ToggleProps, ToggleSize } from "./components/Toggle";
 
 export { Tabs } from "./components/Tabs";
 export type { TabsProps, TabItem } from "./components/Tabs";
+
+export { Card } from "./components/Card";
+export type { CardProps } from "./components/Card";

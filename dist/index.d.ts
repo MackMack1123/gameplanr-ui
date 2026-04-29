@@ -481,4 +481,22 @@ interface TabsProps {
 }
 declare function Tabs({ items, value, onChange, className, style }: TabsProps): react_jsx_runtime.JSX.Element;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Use `flat` for nested cards or list items where double-border looks heavy. */
+    variant?: "default" | "flat";
+    padding?: "none" | "sm" | "md" | "lg";
+}
+declare const Card: React.ForwardRefExoticComponent<CardProps & React.RefAttributes<HTMLDivElement>> & {
+    Header: typeof CardHeader;
+    Title: typeof CardTitle;
+    Description: typeof CardDescription;
+    Body: typeof CardBody;
+    Footer: typeof CardFooter;
+};
+declare function CardHeader({ children, style, ...rest }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
+declare function CardTitle({ children, style, ...rest }: React.HTMLAttributes<HTMLHeadingElement>): react_jsx_runtime.JSX.Element;
+declare function CardDescription({ children, style, ...rest }: React.HTMLAttributes<HTMLParagraphElement>): react_jsx_runtime.JSX.Element;
+declare function CardBody({ children, style, ...rest }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
+declare function CardFooter({ children, style, ...rest }: React.HTMLAttributes<HTMLDivElement>): react_jsx_runtime.JSX.Element;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };

@@ -1512,10 +1512,117 @@ function Tab({ item, active, onSelect }) {
     }
   );
 }
+
+// src/components/Card.tsx
+import React10 from "react";
+import { jsx as jsx15 } from "react/jsx-runtime";
+var padMap = { none: 0, sm: 12, md: 16, lg: 20 };
+var Card = Object.assign(
+  React10.forwardRef(function Card2({ variant = "default", padding = "md", style, children, ...rest }, ref) {
+    return /* @__PURE__ */ jsx15(
+      "div",
+      {
+        ref,
+        ...rest,
+        style: {
+          backgroundColor: COLORS.surface.card,
+          border: variant === "flat" ? "none" : `1px solid ${COLORS.surface.border}`,
+          borderRadius: RADIUS.lg,
+          boxShadow: variant === "flat" ? "none" : SHADOW.sm,
+          padding: padMap[padding],
+          ...style
+        },
+        children
+      }
+    );
+  }),
+  {
+    Header: CardHeader,
+    Title: CardTitle,
+    Description: CardDescription,
+    Body: CardBody,
+    Footer: CardFooter
+  }
+);
+function CardHeader({ children, style, ...rest }) {
+  return /* @__PURE__ */ jsx15(
+    "div",
+    {
+      ...rest,
+      style: {
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        gap: 12,
+        paddingBottom: 12,
+        marginBottom: 12,
+        borderBottom: `1px solid ${COLORS.surface.borderSoft}`,
+        ...style
+      },
+      children
+    }
+  );
+}
+function CardTitle({ children, style, ...rest }) {
+  return /* @__PURE__ */ jsx15(
+    "h3",
+    {
+      ...rest,
+      style: {
+        margin: 0,
+        fontFamily: TYPE.family.sans,
+        fontSize: TYPE.size.h3,
+        fontWeight: TYPE.weight.semibold,
+        color: COLORS.ink[1],
+        ...style
+      },
+      children
+    }
+  );
+}
+function CardDescription({ children, style, ...rest }) {
+  return /* @__PURE__ */ jsx15(
+    "p",
+    {
+      ...rest,
+      style: {
+        margin: "4px 0 0",
+        fontFamily: TYPE.family.sans,
+        fontSize: TYPE.size.small,
+        color: COLORS.ink[3],
+        ...style
+      },
+      children
+    }
+  );
+}
+function CardBody({ children, style, ...rest }) {
+  return /* @__PURE__ */ jsx15("div", { ...rest, style, children });
+}
+function CardFooter({ children, style, ...rest }) {
+  return /* @__PURE__ */ jsx15(
+    "div",
+    {
+      ...rest,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        gap: 8,
+        paddingTop: 12,
+        marginTop: 12,
+        borderTop: `1px solid ${COLORS.surface.borderSoft}`,
+        ...style
+      },
+      children
+    }
+  );
+}
 export {
   AppSwitcher,
   Button,
   COLORS,
+  Card,
   EmptyState,
   FontDebugToggle,
   GamePlanrNav,
