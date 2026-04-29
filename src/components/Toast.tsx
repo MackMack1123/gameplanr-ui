@@ -5,7 +5,7 @@ import { COLORS, RADIUS, TYPE } from "../tokens";
 
 export type ToastTone = "success" | "error" | "info" | "warning";
 
-export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   tone?: ToastTone;
   title?: React.ReactNode;
   description?: React.ReactNode;
