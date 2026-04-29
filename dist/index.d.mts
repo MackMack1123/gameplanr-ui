@@ -586,4 +586,19 @@ interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">
 }
 declare const Toast: React.ForwardRefExoticComponent<ToastProps & React.RefAttributes<HTMLDivElement>>;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+interface FormFieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
+    label?: React.ReactNode;
+    /** Visually mark required, plus aria. */
+    required?: boolean;
+    /** Helper text below the input. Hidden when `error` is set. */
+    helperText?: React.ReactNode;
+    /** Error message below the input. Replaces helperText when present. */
+    error?: React.ReactNode;
+    /** Wired into the label's htmlFor. Caller still applies it to the input. */
+    htmlFor?: string;
+    /** Layout: stacked (default) or horizontal (label left, input right). */
+    layout?: "stacked" | "horizontal";
+}
+declare function FormField({ label, required, helperText, error, htmlFor, layout, style, children, ...rest }: FormFieldProps): react_jsx_runtime.JSX.Element;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };

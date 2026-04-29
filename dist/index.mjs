@@ -2100,6 +2100,58 @@ function InfoCircle() {
 function AlertCircle() {
   return /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M7 4V8M7 11H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
 }
+
+// src/components/FormField.tsx
+import { jsx as jsx21, jsxs as jsxs16 } from "react/jsx-runtime";
+function FormField({
+  label,
+  required,
+  helperText,
+  error,
+  htmlFor,
+  layout = "stacked",
+  style,
+  children,
+  ...rest
+}) {
+  const isHorizontal = layout === "horizontal";
+  return /* @__PURE__ */ jsxs16(
+    "div",
+    {
+      ...rest,
+      style: {
+        display: isHorizontal ? "grid" : "flex",
+        flexDirection: isHorizontal ? void 0 : "column",
+        gridTemplateColumns: isHorizontal ? "minmax(120px, 30%) 1fr" : void 0,
+        alignItems: isHorizontal ? "center" : "stretch",
+        gap: isHorizontal ? 16 : 6,
+        fontFamily: TYPE.family.sans,
+        ...style
+      },
+      children: [
+        label && /* @__PURE__ */ jsxs16(
+          "label",
+          {
+            htmlFor,
+            style: {
+              fontSize: TYPE.size.small,
+              fontWeight: TYPE.weight.semibold,
+              color: COLORS.ink[1]
+            },
+            children: [
+              label,
+              required && /* @__PURE__ */ jsx21("span", { "aria-hidden": true, style: { color: "#dc2626", marginLeft: 4 }, children: "*" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxs16("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
+          children,
+          error ? /* @__PURE__ */ jsx21("span", { style: { fontSize: TYPE.size.small, color: "#dc2626" }, children: error }) : helperText ? /* @__PURE__ */ jsx21("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: helperText }) : null
+        ] })
+      ]
+    }
+  );
+}
 export {
   AppSwitcher,
   Button,
@@ -2108,6 +2160,7 @@ export {
   EmptyState,
   FilterBar,
   FontDebugToggle,
+  FormField,
   GamePlanrNav,
   IconButton,
   Input,

@@ -64,3 +64,6 @@ export type { ModalProps, ModalSize } from "./components/Modal";
 
 export { Toast } from "./components/Toast";
 export type { ToastProps, ToastTone } from "./components/Toast";
+
+export { FormField } from "./components/FormField";
+export type { FormFieldProps } from "./components/FormField";
