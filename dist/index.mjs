@@ -1456,6 +1456,62 @@ var Toggle = React8.forwardRef(function Toggle2({ checked, onChange, size = "md"
     }
   );
 });
+
+// src/components/Tabs.tsx
+import React9 from "react";
+import { jsx as jsx14 } from "react/jsx-runtime";
+function Tabs({ items, value, onChange, className, style }) {
+  return /* @__PURE__ */ jsx14(
+    "div",
+    {
+      role: "tablist",
+      className,
+      style: {
+        display: "flex",
+        alignItems: "stretch",
+        gap: 4,
+        borderBottom: `1px solid ${COLORS.surface.border}`,
+        ...style
+      },
+      children: items.map((item) => {
+        const active = item.value === value;
+        return /* @__PURE__ */ jsx14(Tab, { item, active, onSelect: onChange }, item.value);
+      })
+    }
+  );
+}
+function Tab({ item, active, onSelect }) {
+  const [hovered, setHovered] = React9.useState(false);
+  const color = active ? COLORS.ink[1] : hovered ? COLORS.ink[2] : COLORS.ink[3];
+  return /* @__PURE__ */ jsx14(
+    "button",
+    {
+      type: "button",
+      role: "tab",
+      "aria-selected": active,
+      disabled: item.disabled,
+      onClick: () => !item.disabled && onSelect(item.value),
+      onMouseEnter: () => setHovered(true),
+      onMouseLeave: () => setHovered(false),
+      style: {
+        position: "relative",
+        padding: "10px 14px",
+        marginBottom: -1,
+        background: "transparent",
+        border: "none",
+        borderBottom: `2px solid ${active ? COLORS.green[600] : "transparent"}`,
+        fontFamily: TYPE.family.sans,
+        fontSize: TYPE.size.body,
+        fontWeight: active ? TYPE.weight.semibold : TYPE.weight.medium,
+        color,
+        cursor: item.disabled ? "not-allowed" : "pointer",
+        opacity: item.disabled ? 0.55 : 1,
+        transition: "color 120ms ease, border-color 120ms ease"
+      },
+      children: item.label
+    }
+  );
+}
 export {
   AppSwitcher,
   Button,
@@ -1475,5 +1531,6 @@ export {
   StatusPill,
   TOKENS,
   TYPE,
+  Tabs,
   Toggle
 };

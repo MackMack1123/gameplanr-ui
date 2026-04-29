@@ -467,4 +467,18 @@ interface ToggleProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 declare const Toggle: React.ForwardRefExoticComponent<ToggleProps & React.RefAttributes<HTMLButtonElement>>;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+interface TabItem {
+    value: string;
+    label: React.ReactNode;
+    disabled?: boolean;
+}
+interface TabsProps {
+    items: TabItem[];
+    value: string;
+    onChange: (value: string) => void;
+    className?: string;
+    style?: React.CSSProperties;
+}
+declare function Tabs({ items, value, onChange, className, style }: TabsProps): react_jsx_runtime.JSX.Element;
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };

@@ -37,3 +37,6 @@ export type { SelectProps, SelectSize, SelectOption } from "./components/Select"
 
 export { Toggle } from "./components/Toggle";
 export type { ToggleProps, ToggleSize } from "./components/Toggle";
+
+export { Tabs } from "./components/Tabs";
+export type { TabsProps, TabItem } from "./components/Tabs";

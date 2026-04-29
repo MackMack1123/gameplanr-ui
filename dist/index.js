@@ -49,6 +49,7 @@ __export(index_exports, {
   StatusPill: () => StatusPill,
   TOKENS: () => TOKENS,
   TYPE: () => TYPE,
+  Tabs: () => Tabs,
   Toggle: () => Toggle
 });
 module.exports = __toCommonJS(index_exports);
@@ -1509,6 +1510,62 @@ var Toggle = import_react8.default.forwardRef(function Toggle2({ checked, onChan
     }
   );
 });
+
+// src/components/Tabs.tsx
+var import_react9 = __toESM(require("react"));
+var import_jsx_runtime14 = require("react/jsx-runtime");
+function Tabs({ items, value, onChange, className, style }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+    "div",
+    {
+      role: "tablist",
+      className,
+      style: {
+        display: "flex",
+        alignItems: "stretch",
+        gap: 4,
+        borderBottom: `1px solid ${COLORS.surface.border}`,
+        ...style
+      },
+      children: items.map((item) => {
+        const active = item.value === value;
+        return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Tab, { item, active, onSelect: onChange }, item.value);
+      })
+    }
+  );
+}
+function Tab({ item, active, onSelect }) {
+  const [hovered, setHovered] = import_react9.default.useState(false);
+  const color = active ? COLORS.ink[1] : hovered ? COLORS.ink[2] : COLORS.ink[3];
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+    "button",
+    {
+      type: "button",
+      role: "tab",
+      "aria-selected": active,
+      disabled: item.disabled,
+      onClick: () => !item.disabled && onSelect(item.value),
+      onMouseEnter: () => setHovered(true),
+      onMouseLeave: () => setHovered(false),
+      style: {
+        position: "relative",
+        padding: "10px 14px",
+        marginBottom: -1,
+        background: "transparent",
+        border: "none",
+        borderBottom: `2px solid ${active ? COLORS.green[600] : "transparent"}`,
+        fontFamily: TYPE.family.sans,
+        fontSize: TYPE.size.body,
+        fontWeight: active ? TYPE.weight.semibold : TYPE.weight.medium,
+        color,
+        cursor: item.disabled ? "not-allowed" : "pointer",
+        opacity: item.disabled ? 0.55 : 1,
+        transition: "color 120ms ease, border-color 120ms ease"
+      },
+      children: item.label
+    }
+  );
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -1529,5 +1586,6 @@ var Toggle = import_react8.default.forwardRef(function Toggle2({ checked, onChan
   StatusPill,
   TOKENS,
   TYPE,
+  Tabs,
   Toggle
 });
