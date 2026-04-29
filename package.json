@@ -1,7 +1,11 @@
 {
   "name": "@gameplanr/ui",
-  "version": "2.0.0",
-  "private": true,
+  "version": "2.0.1",
+  "description": "GamePlanr v3 design system — shared tokens, Tailwind preset, and components.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MackMack1123/gameplanr-ui.git"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -19,9 +23,13 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "registry": "https://gitea.mvp-labs.com/api/packages/brm5017/npm/"
+  },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18",

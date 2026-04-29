@@ -1,0 +1,9 @@
+# Copy to .npmrc and fill in GITEA_NPM_TOKEN, OR export GITEA_NPM_TOKEN
+# in your shell before running `npm publish` (the env-var form is preferred —
+# .npmrc is gitignored to avoid accidentally committing the token).
+#
+# Token: reuse the existing Gitea PAT in any other repo's .kamal/secrets.prod
+# under KAMAL_REGISTRY_PASSWORD (scope `package` covers the npm registry too).
+
+@gameplanr:registry=https://gitea.mvp-labs.com/api/packages/brm5017/npm/
+//gitea.mvp-labs.com/api/packages/brm5017/npm/:_authToken=${GITEA_NPM_TOKEN}
