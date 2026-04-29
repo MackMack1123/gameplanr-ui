@@ -2004,6 +2004,102 @@ function Modal({
     document.body
   );
 }
+
+// src/components/Toast.tsx
+import React14 from "react";
+import { jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
+var toneMap = {
+  success: { bg: COLORS.green[100], fg: COLORS.green[700], icon: /* @__PURE__ */ jsx20(CheckCircle, {}) },
+  error: { bg: "#fee2e2", fg: "#b91c1c", icon: /* @__PURE__ */ jsx20(XCircle, {}) },
+  info: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg, icon: /* @__PURE__ */ jsx20(InfoCircle, {}) },
+  warning: { bg: COLORS.accent.orange.bg, fg: COLORS.accent.orange.fg, icon: /* @__PURE__ */ jsx20(AlertCircle, {}) }
+};
+var Toast = React14.forwardRef(function Toast2({ tone = "info", title, description, onClose, action, style, children, ...rest }, ref) {
+  const palette = toneMap[tone];
+  return /* @__PURE__ */ jsxs15(
+    "div",
+    {
+      ref,
+      role: "status",
+      "aria-live": "polite",
+      ...rest,
+      style: {
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 12,
+        backgroundColor: COLORS.surface.card,
+        border: `1px solid ${COLORS.surface.border}`,
+        borderRadius: RADIUS.lg,
+        boxShadow: "0 8px 24px rgba(15,23,42,0.12)",
+        padding: 14,
+        fontFamily: TYPE.family.sans,
+        minWidth: 280,
+        maxWidth: 420,
+        ...style
+      },
+      children: [
+        /* @__PURE__ */ jsx20(
+          "span",
+          {
+            "aria-hidden": true,
+            style: {
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 28,
+              height: 28,
+              backgroundColor: palette.bg,
+              color: palette.fg,
+              borderRadius: "50%",
+              flexShrink: 0
+            },
+            children: palette.icon
+          }
+        ),
+        /* @__PURE__ */ jsxs15("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx20("div", { style: { fontSize: TYPE.size.body, fontWeight: TYPE.weight.semibold, color: COLORS.ink[1] }, children: title }),
+          description && /* @__PURE__ */ jsx20("div", { style: { marginTop: title ? 2 : 0, fontSize: TYPE.size.small, color: COLORS.ink[2] }, children: description }),
+          children,
+          action && /* @__PURE__ */ jsx20("div", { style: { marginTop: 8 }, children: action })
+        ] }),
+        onClose && /* @__PURE__ */ jsx20(
+          "button",
+          {
+            type: "button",
+            onClick: onClose,
+            "aria-label": "Dismiss notification",
+            style: {
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 24,
+              height: 24,
+              background: "transparent",
+              border: "none",
+              color: COLORS.ink[3],
+              cursor: "pointer",
+              borderRadius: RADIUS.sm,
+              flexShrink: 0
+            },
+            children: /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" }) })
+          }
+        )
+      ]
+    }
+  );
+});
+function CheckCircle() {
+  return /* @__PURE__ */ jsx20("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M4 8.5L7 11L12 5.5", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round" }) });
+}
+function XCircle() {
+  return /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+}
+function InfoCircle() {
+  return /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M7 6V10M7 4H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+}
+function AlertCircle() {
+  return /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M7 4V8M7 11H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+}
 export {
   AppSwitcher,
   Button,
@@ -2029,5 +2125,6 @@ export {
   TYPE,
   Table,
   Tabs,
+  Toast,
   Toggle
 };

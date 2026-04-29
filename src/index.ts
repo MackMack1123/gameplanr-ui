@@ -61,3 +61,6 @@ export type { FilterBarProps } from "./components/FilterBar";
 
 export { Modal } from "./components/Modal";
 export type { ModalProps, ModalSize } from "./components/Modal";
+
+export { Toast } from "./components/Toast";
+export type { ToastProps, ToastTone } from "./components/Toast";
