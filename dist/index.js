@@ -51,6 +51,7 @@ __export(index_exports, {
   StatusPill: () => StatusPill,
   TOKENS: () => TOKENS,
   TYPE: () => TYPE,
+  Table: () => Table,
   Tabs: () => Tabs,
   Toggle: () => Toggle
 });
@@ -1772,6 +1773,159 @@ var StatCard = import_react11.default.forwardRef(function StatCard2({ label, val
     }
   );
 });
+
+// src/components/Table.tsx
+var import_react12 = __toESM(require("react"));
+var import_jsx_runtime17 = require("react/jsx-runtime");
+function TableRoot({ style, children, ...rest }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+    "div",
+    {
+      style: {
+        backgroundColor: COLORS.surface.card,
+        border: `1px solid ${COLORS.surface.border}`,
+        borderRadius: RADIUS.lg,
+        overflow: "hidden"
+      },
+      children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+        "table",
+        {
+          ...rest,
+          style: {
+            width: "100%",
+            borderCollapse: "collapse",
+            fontFamily: TYPE.family.sans,
+            fontSize: TYPE.size.body,
+            color: COLORS.ink[1],
+            ...style
+          },
+          children
+        }
+      ) })
+    }
+  );
+}
+function TableHeader({ style, children, ...rest }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+    "thead",
+    {
+      ...rest,
+      style: {
+        backgroundColor: COLORS.surface.page,
+        borderBottom: `1px solid ${COLORS.surface.border}`,
+        ...style
+      },
+      children
+    }
+  );
+}
+function TableBody({ style, children, ...rest }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("tbody", { ...rest, style, children });
+}
+function TableRow({ interactive, style, onMouseEnter, onMouseLeave, children, ...rest }) {
+  const [hovered, setHovered] = import_react12.default.useState(false);
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+    "tr",
+    {
+      ...rest,
+      onMouseEnter: (e) => {
+        setHovered(true);
+        onMouseEnter?.(e);
+      },
+      onMouseLeave: (e) => {
+        setHovered(false);
+        onMouseLeave?.(e);
+      },
+      style: {
+        backgroundColor: interactive && hovered ? COLORS.surface.hover : "transparent",
+        cursor: interactive ? "pointer" : "default",
+        borderBottom: `1px solid ${COLORS.surface.borderSoft}`,
+        transition: "background-color 100ms ease",
+        ...style
+      },
+      children
+    }
+  );
+}
+function TableHeaderCell({
+  sortable,
+  sortDirection = null,
+  onSort,
+  align = "left",
+  style,
+  children,
+  ...rest
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+    "th",
+    {
+      ...rest,
+      onClick: sortable ? onSort : rest.onClick,
+      style: {
+        padding: "10px 14px",
+        textAlign: align,
+        fontFamily: TYPE.family.sans,
+        fontSize: TYPE.size.micro,
+        fontWeight: TYPE.weight.semibold,
+        color: COLORS.ink[3],
+        textTransform: "uppercase",
+        letterSpacing: "0.04em",
+        whiteSpace: "nowrap",
+        cursor: sortable ? "pointer" : "default",
+        userSelect: sortable ? "none" : "auto",
+        ...style
+      },
+      children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", gap: 4 }, children: [
+        children,
+        sortable && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(SortGlyph, { direction: sortDirection })
+      ] })
+    }
+  );
+}
+function SortGlyph({ direction }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(
+    "span",
+    {
+      "aria-hidden": true,
+      style: {
+        display: "inline-flex",
+        flexDirection: "column",
+        gap: 1,
+        color: direction ? COLORS.ink[2] : COLORS.ink[4]
+      },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "desc" ? 0.3 : 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("path", { d: "M1 4L4 1L7 4", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "asc" ? 0.3 : 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("path", { d: "M1 1L4 4L7 1", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) })
+      ]
+    }
+  );
+}
+function TableCell({ align = "left", truncate, style, children, ...rest }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+    "td",
+    {
+      ...rest,
+      style: {
+        padding: "12px 14px",
+        textAlign: align,
+        fontFamily: TYPE.family.sans,
+        fontSize: TYPE.size.body,
+        color: COLORS.ink[1],
+        verticalAlign: "middle",
+        ...truncate ? { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 240 } : {},
+        ...style
+      },
+      children
+    }
+  );
+}
+var Table = Object.assign(TableRoot, {
+  Header: TableHeader,
+  Body: TableBody,
+  Row: TableRow,
+  HeaderCell: TableHeaderCell,
+  Cell: TableCell
+});
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppSwitcher,
@@ -1794,6 +1948,7 @@ var StatCard = import_react11.default.forwardRef(function StatCard2({ label, val
   StatusPill,
   TOKENS,
   TYPE,
+  Table,
   Tabs,
   Toggle
 });

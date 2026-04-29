@@ -46,3 +46,12 @@ export type { CardProps } from "./components/Card";
 
 export { StatCard } from "./components/StatCard";
 export type { StatCardProps, StatAccent } from "./components/StatCard";
+
+export { Table } from "./components/Table";
+export type {
+  TableProps,
+  TableRowProps,
+  TableHeaderCellProps,
+  TableCellProps,
+  TableSortDirection,
+} from "./components/Table";

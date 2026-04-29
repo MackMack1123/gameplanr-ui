@@ -513,4 +513,36 @@ interface StatCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare const StatCard: React.ForwardRefExoticComponent<StatCardProps & React.RefAttributes<HTMLDivElement>>;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+}
+interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+    /** Highlights the row on hover and shows a pointer cursor. Pair with onClick. */
+    interactive?: boolean;
+}
+type TableSortDirection = "asc" | "desc" | null;
+interface TableHeaderCellProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+    sortable?: boolean;
+    sortDirection?: TableSortDirection;
+    onSort?: () => void;
+    align?: "left" | "right" | "center";
+}
+interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+    align?: "left" | "right" | "center";
+    /** Truncate with ellipsis if content overflows. */
+    truncate?: boolean;
+}
+declare function TableRoot({ style, children, ...rest }: TableProps): react_jsx_runtime.JSX.Element;
+declare function TableHeader({ style, children, ...rest }: React.HTMLAttributes<HTMLTableSectionElement>): react_jsx_runtime.JSX.Element;
+declare function TableBody({ style, children, ...rest }: React.HTMLAttributes<HTMLTableSectionElement>): react_jsx_runtime.JSX.Element;
+declare function TableRow({ interactive, style, onMouseEnter, onMouseLeave, children, ...rest }: TableRowProps): react_jsx_runtime.JSX.Element;
+declare function TableHeaderCell({ sortable, sortDirection, onSort, align, style, children, ...rest }: TableHeaderCellProps): react_jsx_runtime.JSX.Element;
+declare function TableCell({ align, truncate, style, children, ...rest }: TableCellProps): react_jsx_runtime.JSX.Element;
+declare const Table: typeof TableRoot & {
+    Header: typeof TableHeader;
+    Body: typeof TableBody;
+    Row: typeof TableRow;
+    HeaderCell: typeof TableHeaderCell;
+    Cell: typeof TableCell;
+};
+
+export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, EmptyState, type EmptyStateProps, FontDebugToggle, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, LAYOUT, LogoIcon, PageHeader, type PageHeaderProps, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toggle, type ToggleProps, type ToggleSize, type Tokens };
