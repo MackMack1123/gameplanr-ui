@@ -1,0 +1,9 @@
+node_modules
+docs/node_modules
+docs/dist
+dist
+.git
+.kamal
+.npmrc
+.DS_Store
+*.log

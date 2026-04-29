@@ -1,0 +1,28 @@
+service: gameplanr-design
+image: brm5017/gameplanr-design
+
+servers:
+  web:
+    hosts:
+      - 72.61.71.153
+
+ssh:
+  user: kamal
+  port: 2222
+  keys: ["~/.ssh/kamal_deploy"]
+  keys_only: true
+
+registry:
+  server: gitea.mvp-labs.com
+  username: brm5017
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  context: .
+
+proxy:
+  ssl: false
+  host: design.gameplanr.co
+  app_port: 3000
