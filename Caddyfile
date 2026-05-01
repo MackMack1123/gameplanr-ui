@@ -7,7 +7,7 @@
 	# Everything else: gated.
 	handle {
 		basic_auth {
-			brett.mackrell@gmail.com $2a$14$xGoPlnft.c/CtLXqYuldtO4NrGbIH8EpOjCS9YgPB/b.CGAi32nNK
+			brett.mackrell@gmail.com $2y$14$kdxOMGi.PEBACEkmzvZROeb7ezE3G/LeClboWiS5kEjnSH5V/dev.
 		}
 		header {
 			X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
