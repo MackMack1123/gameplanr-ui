@@ -7,6 +7,7 @@ import { DataSection } from "./pages/Data";
 import { FeedbackSection } from "./pages/Feedback";
 import { DomainSection } from "./pages/Domain";
 import { ChromeSection } from "./pages/Chrome";
+import { WidgetsSection } from "./pages/Widgets";
 
 const sections = [
   { id: "tokens",   label: "Tokens",     Component: TokensSection },
@@ -17,6 +18,7 @@ const sections = [
   { id: "feedback", label: "Feedback",   Component: FeedbackSection },
   { id: "domain",   label: "Domain",     Component: DomainSection },
   { id: "chrome",   label: "Chrome",     Component: ChromeSection },
+  { id: "widgets",  label: "Widgets",    Component: WidgetsSection },
 ];
 
 export function App() {
