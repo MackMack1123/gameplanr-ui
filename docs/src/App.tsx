@@ -1,4 +1,5 @@
 import { COLORS, LAYOUT } from "@gameplanr/ui";
+import { BrandSection } from "./pages/Brand";
 import { TokensSection } from "./pages/Tokens";
 import { ButtonsSection } from "./pages/Buttons";
 import { FormsSection } from "./pages/Forms";
@@ -10,6 +11,7 @@ import { ChromeSection } from "./pages/Chrome";
 import { WidgetsSection } from "./pages/Widgets";
 
 const sections = [
+  { id: "brand",    label: "Brand",      Component: BrandSection },
   { id: "tokens",   label: "Tokens",     Component: TokensSection },
   { id: "buttons",  label: "Buttons",    Component: ButtonsSection },
   { id: "forms",    label: "Forms",      Component: FormsSection },
