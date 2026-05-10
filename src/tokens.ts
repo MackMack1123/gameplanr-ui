@@ -110,5 +110,21 @@ export const LAYOUT = {
   sidebarPadding: 16,
 } as const;
 
-export const TOKENS = { COLORS, TYPE, RADIUS, SHADOW, LAYOUT } as const;
+/**
+ * Tint pairs (background + foreground) for app icons in the post-login app
+ * launcher and similar surfaces. Each app maps to one tint name; the consumer
+ * looks up TINT[name] for its bg/fg pair.
+ */
+export const TINT = {
+  purple: { bg: "#ede9fe", fg: "#6d28d9" },
+  blue:   { bg: "#dbeafe", fg: "#1d4ed8" },
+  orange: { bg: "#ffedd5", fg: "#c2410c" },
+  green:  { bg: "#dcfce7", fg: "#166534" },
+  amber:  { bg: "#fef3c7", fg: "#92400e" },
+  slate:  { bg: "#f3f4f6", fg: "#334155" },
+} as const;
+
+export type TintName = keyof typeof TINT;
+
+export const TOKENS = { COLORS, TYPE, RADIUS, SHADOW, LAYOUT, TINT } as const;
 export type Tokens = typeof TOKENS;

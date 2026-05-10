@@ -454,7 +454,15 @@ var LAYOUT = {
   sidebarWidth: 248,
   sidebarPadding: 16
 };
-var TOKENS = { COLORS, TYPE, RADIUS, SHADOW, LAYOUT };
+var TINT = {
+  purple: { bg: "#ede9fe", fg: "#6d28d9" },
+  blue: { bg: "#dbeafe", fg: "#1d4ed8" },
+  orange: { bg: "#ffedd5", fg: "#c2410c" },
+  green: { bg: "#dcfce7", fg: "#166534" },
+  amber: { bg: "#fef3c7", fg: "#92400e" },
+  slate: { bg: "#f3f4f6", fg: "#334155" }
+};
+var TOKENS = { COLORS, TYPE, RADIUS, SHADOW, LAYOUT, TINT };
 
 // src/components/StatusPill.tsx
 import { jsx as jsx3 } from "react/jsx-runtime";
@@ -879,10 +887,756 @@ function Chevron({ open }) {
   );
 }
 
+// src/components/AppLauncher.tsx
+import { useState as useState4 } from "react";
+
+// src/components/AppIcon.tsx
+import { jsx as jsx8, jsxs as jsxs7 } from "react/jsx-runtime";
+function AppIcon({
+  name,
+  size = 22,
+  stroke = "currentColor",
+  strokeWidth = 1.75,
+  ...rest
+}) {
+  const common = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke,
+    strokeWidth,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    ...rest
+  };
+  switch (name) {
+    case "trophy":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("path", { d: "M7 4h10v3a5 5 0 0 1-10 0V4Z" }),
+        /* @__PURE__ */ jsx8("path", { d: "M17 5h2.5a1.5 1.5 0 0 1 0 3H17M7 5H4.5a1.5 1.5 0 0 0 0 3H7" }),
+        /* @__PURE__ */ jsx8("path", { d: "M10 12.5v3.5h4v-3.5" }),
+        /* @__PURE__ */ jsx8("path", { d: "M8 19h8" }),
+        /* @__PURE__ */ jsx8("path", { d: "M9 16h6v3H9z" })
+      ] });
+    case "pitch":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("rect", { x: "2.5", y: "5", width: "19", height: "14", rx: "1.5" }),
+        /* @__PURE__ */ jsx8("path", { d: "M12 5v14" }),
+        /* @__PURE__ */ jsx8("circle", { cx: "12", cy: "12", r: "2" }),
+        /* @__PURE__ */ jsx8("path", { d: "M2.5 9h2v6h-2zM21.5 9h-2v6h2z" })
+      ] });
+    case "baseball":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("circle", { cx: "12", cy: "12", r: "8.5" }),
+        /* @__PURE__ */ jsx8("path", { d: "M5.2 7.5c2.2 1.2 3.6 3.6 3.6 6.5 0 1.4-.4 2.8-1 3.9" }),
+        /* @__PURE__ */ jsx8("path", { d: "M18.8 7.5c-2.2 1.2-3.6 3.6-3.6 6.5 0 1.4.4 2.8 1 3.9" }),
+        /* @__PURE__ */ jsx8("path", { d: "M7.5 6.2l.6 1M9 5.2l.5 1M16.5 6.2l-.6 1M15 5.2l-.5 1M6.5 18l.6-1M8 19l.5-1M17.5 18l-.6-1M16 19l-.5-1" })
+      ] });
+    case "calendar":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("rect", { x: "3", y: "5", width: "18", height: "16", rx: "2" }),
+        /* @__PURE__ */ jsx8("path", { d: "M3 10h18" }),
+        /* @__PURE__ */ jsx8("path", { d: "M8 3v4M16 3v4" }),
+        /* @__PURE__ */ jsx8("rect", { x: "7", y: "13", width: "3", height: "3", rx: "0.5", fill: stroke, stroke: "none" })
+      ] });
+    case "megaphone":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("path", { d: "M3 10v4a1 1 0 0 0 1 1h2l5 4V5L6 9H4a1 1 0 0 0-1 1Z" }),
+        /* @__PURE__ */ jsx8("path", { d: "M14 8a4 4 0 0 1 0 8" }),
+        /* @__PURE__ */ jsx8("path", { d: "M17 5.5a8 8 0 0 1 0 13" })
+      ] });
+    case "clipboard":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("rect", { x: "5", y: "4", width: "14", height: "17", rx: "2" }),
+        /* @__PURE__ */ jsx8("path", { d: "M9 4h6v3H9z" }),
+        /* @__PURE__ */ jsx8("path", { d: "M9 12h6M9 16h4" })
+      ] });
+    case "fundraise":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("path", { d: "M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z" }),
+        /* @__PURE__ */ jsx8("path", { d: "M9.5 11.5h3a1 1 0 0 0 0-2H10a1 1 0 0 1 0-2h3M11 6.5v1.5M11 13v1.5" })
+      ] });
+    case "grid":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("rect", { x: "3.5", y: "3.5", width: "6", height: "6", rx: "1" }),
+        /* @__PURE__ */ jsx8("rect", { x: "14.5", y: "3.5", width: "6", height: "6", rx: "1" }),
+        /* @__PURE__ */ jsx8("rect", { x: "3.5", y: "14.5", width: "6", height: "6", rx: "1" }),
+        /* @__PURE__ */ jsx8("rect", { x: "14.5", y: "14.5", width: "6", height: "6", rx: "1" })
+      ] });
+    case "arrow-right":
+      return /* @__PURE__ */ jsx8("svg", { ...common, children: /* @__PURE__ */ jsx8("path", { d: "M5 12h14M13 6l6 6-6 6" }) });
+    case "plus":
+      return /* @__PURE__ */ jsx8("svg", { ...common, children: /* @__PURE__ */ jsx8("path", { d: "M12 5v14M5 12h14" }) });
+    case "check":
+      return /* @__PURE__ */ jsx8("svg", { ...common, children: /* @__PURE__ */ jsx8("path", { d: "M5 12.5l4 4 10-10" }) });
+    case "bell":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("path", { d: "M6 9a6 6 0 1 1 12 0v4l1.5 3h-15L6 13V9Z" }),
+        /* @__PURE__ */ jsx8("path", { d: "M10 19a2 2 0 0 0 4 0" })
+      ] });
+    case "lock":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("rect", { x: "5", y: "11", width: "14", height: "9", rx: "2" }),
+        /* @__PURE__ */ jsx8("path", { d: "M8 11V8a4 4 0 1 1 8 0v3" })
+      ] });
+    case "sparkle":
+      return /* @__PURE__ */ jsx8("svg", { ...common, children: /* @__PURE__ */ jsx8("path", { d: "M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" }) });
+    case "search":
+      return /* @__PURE__ */ jsxs7("svg", { ...common, children: [
+        /* @__PURE__ */ jsx8("circle", { cx: "11", cy: "11", r: "6.5" }),
+        /* @__PURE__ */ jsx8("path", { d: "M16 16l4 4" })
+      ] });
+    case "chevron-down":
+      return /* @__PURE__ */ jsx8("svg", { ...common, children: /* @__PURE__ */ jsx8("path", { d: "M6 9l6 6 6-6" }) });
+    case "external":
+      return /* @__PURE__ */ jsx8("svg", { ...common, children: /* @__PURE__ */ jsx8("path", { d: "M14 5h5v5M19 5l-9 9M11 6H6a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-5" }) });
+    default:
+      return /* @__PURE__ */ jsx8("svg", { ...common, children: /* @__PURE__ */ jsx8("circle", { cx: "12", cy: "12", r: "6" }) });
+  }
+}
+
+// src/components/GPWordmark.tsx
+import { jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
+function GPWordmark({
+  height = 22,
+  color = COLORS.ink[1],
+  accent = COLORS.green[600]
+}) {
+  return /* @__PURE__ */ jsxs8(
+    "svg",
+    {
+      height,
+      viewBox: "0 0 240 60",
+      xmlns: "http://www.w3.org/2000/svg",
+      "aria-label": "GamePlanr",
+      children: [
+        /* @__PURE__ */ jsxs8(
+          "text",
+          {
+            x: "0",
+            y: "44",
+            fontFamily: '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif',
+            fontWeight: 700,
+            fontSize: 40,
+            letterSpacing: "-1.4",
+            children: [
+              /* @__PURE__ */ jsx9("tspan", { fill: color, children: "GamePlan" }),
+              /* @__PURE__ */ jsx9("tspan", { fill: accent, children: "r" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx9(
+          "path",
+          {
+            d: "M203 12 L207 15 L211 12 L208 17.5 L211 23 L207 20 L203 23 L206 17.5 Z",
+            fill: accent,
+            opacity: 0.85
+          }
+        )
+      ]
+    }
+  );
+}
+function GPMark({ size = 32 }) {
+  return /* @__PURE__ */ jsx9(
+    "div",
+    {
+      style: {
+        width: size,
+        height: size,
+        borderRadius: Math.round(size * 0.28),
+        background: COLORS.green[600],
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#ffffff",
+        fontWeight: 700,
+        fontSize: size * 0.42,
+        letterSpacing: "-0.5px",
+        fontFamily: '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif'
+      },
+      children: "GP"
+    }
+  );
+}
+
+// src/components/AppLauncher.tsx
+import { jsx as jsx10, jsxs as jsxs9 } from "react/jsx-runtime";
+function AppLauncher({
+  apps,
+  featuredId: initialFeaturedId,
+  user,
+  greeting = { title: "Where to next?", subtitle: "One login, every play." },
+  notified = {},
+  onActivate,
+  onNotifyToggle,
+  onContinue,
+  onManageAccount
+}) {
+  const defaultFeatured = initialFeaturedId ?? apps.find((a) => a.activated && a.status === "live")?.id ?? apps.find((a) => a.status === "live")?.id ?? apps[0]?.id;
+  const [featuredId, setFeaturedId] = useState4(defaultFeatured);
+  const featured = apps.find((a) => a.id === featuredId);
+  const others = apps.filter((a) => a.id !== featuredId);
+  return /* @__PURE__ */ jsxs9(
+    "div",
+    {
+      style: {
+        width: "100%",
+        minHeight: "100%",
+        background: COLORS.surface.page,
+        fontFamily: TYPE.family.sans
+      },
+      children: [
+        /* @__PURE__ */ jsx10(TopStrip, { user }),
+        /* @__PURE__ */ jsxs9("div", { style: { maxWidth: 1100, margin: "0 auto", padding: "40px 32px 56px" }, children: [
+          /* @__PURE__ */ jsx10(Greeting, { title: greeting.title, subtitle: greeting.subtitle }),
+          featured && /* @__PURE__ */ jsx10(
+            FeaturedHero,
+            {
+              app: featured,
+              onContinue: () => onContinue?.(featured.id)
+            }
+          ),
+          /* @__PURE__ */ jsxs9(
+            "div",
+            {
+              style: {
+                marginTop: 36,
+                marginBottom: 16,
+                display: "flex",
+                alignItems: "baseline",
+                justifyContent: "space-between"
+              },
+              children: [
+                /* @__PURE__ */ jsx10(
+                  "h2",
+                  {
+                    style: {
+                      margin: 0,
+                      fontSize: 13,
+                      color: COLORS.ink[3],
+                      fontWeight: TYPE.weight.semibold,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.6px"
+                    },
+                    children: "Switch to another app"
+                  }
+                ),
+                /* @__PURE__ */ jsxs9("span", { style: { fontSize: 13, color: COLORS.ink[4] }, children: [
+                  others.length,
+                  " apps"
+                ] })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsx10("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }, children: others.map((app) => /* @__PURE__ */ jsx10(
+            CompactCard,
+            {
+              app,
+              notified: !!notified[app.id],
+              onClick: () => {
+                if (app.status === "soon") {
+                  onNotifyToggle?.(app.id, !notified[app.id]);
+                  return;
+                }
+                if (!app.activated) {
+                  onActivate?.(app.id);
+                }
+                setFeaturedId(app.id);
+              }
+            },
+            app.id
+          )) }),
+          /* @__PURE__ */ jsx10(Footer, { onManageAccount })
+        ] })
+      ]
+    }
+  );
+}
+function TopStrip({ user }) {
+  return /* @__PURE__ */ jsx10(
+    "div",
+    {
+      style: {
+        borderBottom: `1px solid ${COLORS.surface.border}`,
+        background: COLORS.surface.card
+      },
+      children: /* @__PURE__ */ jsxs9(
+        "div",
+        {
+          style: {
+            maxWidth: 1100,
+            margin: "0 auto",
+            padding: "14px 32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between"
+          },
+          children: [
+            /* @__PURE__ */ jsx10(GPWordmark, { height: 20 }),
+            /* @__PURE__ */ jsxs9("div", { style: { display: "flex", alignItems: "center", gap: 12 }, children: [
+              /* @__PURE__ */ jsx10("span", { style: { fontSize: 13, color: COLORS.ink[3] }, children: user.email }),
+              /* @__PURE__ */ jsx10(
+                "div",
+                {
+                  style: {
+                    width: 30,
+                    height: 30,
+                    borderRadius: 99,
+                    background: COLORS.accent.blue.bg,
+                    color: COLORS.accent.blue.fg,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 700,
+                    fontSize: 12
+                  },
+                  children: user.initials
+                }
+              )
+            ] })
+          ]
+        }
+      )
+    }
+  );
+}
+function Greeting({ title, subtitle }) {
+  return /* @__PURE__ */ jsxs9("div", { style: { marginBottom: 24 }, children: [
+    /* @__PURE__ */ jsx10(
+      "h1",
+      {
+        style: {
+          margin: 0,
+          fontSize: 32,
+          lineHeight: 1.15,
+          marginBottom: 4,
+          fontWeight: TYPE.weight.bold,
+          letterSpacing: "-0.56px",
+          color: COLORS.ink[1]
+        },
+        children: title
+      }
+    ),
+    subtitle && /* @__PURE__ */ jsx10("p", { style: { margin: 0, fontSize: 14, lineHeight: 1.5, color: COLORS.ink[3] }, children: subtitle })
+  ] });
+}
+function FeaturedHero({ app, onContinue }) {
+  const tint = TINT[app.tint];
+  return /* @__PURE__ */ jsxs9(
+    "a",
+    {
+      href: "#",
+      onClick: (e) => {
+        e.preventDefault();
+        onContinue?.();
+      },
+      style: {
+        display: "block",
+        background: "linear-gradient(135deg, #0f172a 0%, #111a2e 60%, #0b1220 100%)",
+        borderRadius: 16,
+        padding: 28,
+        color: "#fff",
+        textDecoration: "none",
+        position: "relative",
+        overflow: "hidden",
+        boxShadow: SHADOW.md,
+        cursor: "pointer"
+      },
+      children: [
+        /* @__PURE__ */ jsx10(
+          "div",
+          {
+            "aria-hidden": true,
+            style: {
+              position: "absolute",
+              right: -40,
+              top: -40,
+              width: 260,
+              height: 260,
+              borderRadius: 99,
+              background: `radial-gradient(circle, ${tint.fg}22 0%, transparent 65%)`
+            }
+          }
+        ),
+        /* @__PURE__ */ jsx10("div", { "aria-hidden": true, style: { position: "absolute", right: 60, top: 24, opacity: 0.3 }, children: /* @__PURE__ */ jsx10(AppIcon, { name: "sparkle", size: 14, stroke: "#22c55e" }) }),
+        /* @__PURE__ */ jsxs9(
+          "div",
+          {
+            style: {
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              position: "relative",
+              gap: 20
+            },
+            children: [
+              /* @__PURE__ */ jsxs9("div", { style: { flex: 1, minWidth: 0 }, children: [
+                /* @__PURE__ */ jsx10(
+                  "p",
+                  {
+                    style: {
+                      margin: 0,
+                      fontSize: 11,
+                      fontWeight: TYPE.weight.semibold,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                      color: "#22c55e",
+                      marginBottom: 14
+                    },
+                    children: "Continue where you left off"
+                  }
+                ),
+                /* @__PURE__ */ jsxs9("div", { style: { display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }, children: [
+                  /* @__PURE__ */ jsx10(
+                    "div",
+                    {
+                      style: {
+                        width: 56,
+                        height: 56,
+                        borderRadius: 14,
+                        background: tint.bg,
+                        color: tint.fg,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: `0 4px 16px ${tint.fg}55`,
+                        flexShrink: 0
+                      },
+                      children: /* @__PURE__ */ jsx10(AppIcon, { name: app.icon, size: 28, strokeWidth: 2 })
+                    }
+                  ),
+                  /* @__PURE__ */ jsxs9("div", { style: { minWidth: 0 }, children: [
+                    /* @__PURE__ */ jsx10(
+                      "h2",
+                      {
+                        style: {
+                          margin: 0,
+                          fontSize: 26,
+                          fontWeight: TYPE.weight.bold,
+                          letterSpacing: "-0.6px",
+                          color: "#fff"
+                        },
+                        children: app.name
+                      }
+                    ),
+                    /* @__PURE__ */ jsx10("p", { style: { margin: 0, fontSize: 13, color: COLORS.navy.textDim }, children: app.short })
+                  ] })
+                ] }),
+                app.activity && /* @__PURE__ */ jsxs9("div", { style: { paddingTop: 8 }, children: [
+                  /* @__PURE__ */ jsx10(
+                    "p",
+                    {
+                      style: {
+                        margin: 0,
+                        fontSize: 11,
+                        color: COLORS.navy.textDim,
+                        fontWeight: TYPE.weight.semibold,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.6px",
+                        marginBottom: 6
+                      },
+                      children: "Live now"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx10("p", { style: { margin: 0, fontSize: 18, fontWeight: TYPE.weight.bold, color: "#fff" }, children: app.activity.label }),
+                  /* @__PURE__ */ jsx10("p", { style: { margin: "2px 0 0", fontSize: 13, color: COLORS.navy.textDim }, children: app.activity.sub })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxs9(
+                "button",
+                {
+                  type: "button",
+                  onClick: (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onContinue?.();
+                  },
+                  style: {
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    background: COLORS.green[600],
+                    color: "#fff",
+                    border: 0,
+                    height: 44,
+                    padding: "0 20px",
+                    borderRadius: RADIUS.md,
+                    fontFamily: TYPE.family.sans,
+                    fontSize: 14,
+                    fontWeight: TYPE.weight.semibold,
+                    cursor: "pointer",
+                    boxShadow: "0 4px 16px rgba(22,163,74,0.4)",
+                    flexShrink: 0
+                  },
+                  children: [
+                    "Continue ",
+                    app.name,
+                    /* @__PURE__ */ jsx10(AppIcon, { name: "arrow-right", size: 16 })
+                  ]
+                }
+              )
+            ]
+          }
+        )
+      ]
+    }
+  );
+}
+function CompactCard({ app, notified = false, onClick }) {
+  const [hover, setHover] = useState4(false);
+  const tint = TINT[app.tint];
+  const isSoon = app.status === "soon";
+  const isPaidTrial = app.status === "live" && !app.activated && app.paid;
+  return /* @__PURE__ */ jsxs9(
+    "button",
+    {
+      type: "button",
+      onMouseEnter: () => setHover(true),
+      onMouseLeave: () => setHover(false),
+      onClick,
+      style: {
+        background: COLORS.surface.card,
+        border: `1px solid ${COLORS.surface.border}`,
+        borderRadius: RADIUS.lg,
+        padding: 14,
+        textAlign: "left",
+        cursor: "pointer",
+        transition: "transform 140ms ease, box-shadow 140ms ease",
+        boxShadow: hover ? SHADOW.md : SHADOW.sm,
+        transform: hover ? "translateY(-1px)" : "none",
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 12,
+        opacity: isSoon ? 0.95 : 1,
+        position: "relative",
+        fontFamily: TYPE.family.sans
+      },
+      children: [
+        /* @__PURE__ */ jsx10(
+          "div",
+          {
+            style: {
+              width: 38,
+              height: 38,
+              borderRadius: 9,
+              background: isSoon ? TINT.slate.bg : tint.bg,
+              color: isSoon ? COLORS.ink[4] : tint.fg,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              filter: isSoon ? "saturate(0.4)" : "none"
+            },
+            children: /* @__PURE__ */ jsx10(AppIcon, { name: app.icon, size: 19, strokeWidth: 1.9 })
+          }
+        ),
+        /* @__PURE__ */ jsxs9("div", { style: { flex: 1, minWidth: 0 }, children: [
+          /* @__PURE__ */ jsxs9("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }, children: [
+            /* @__PURE__ */ jsx10(
+              "p",
+              {
+                style: {
+                  margin: 0,
+                  fontSize: 14,
+                  fontWeight: TYPE.weight.bold,
+                  letterSpacing: "-0.1px",
+                  color: isSoon ? COLORS.ink[2] : COLORS.ink[1]
+                },
+                children: app.name
+              }
+            ),
+            !isSoon && app.activated && /* @__PURE__ */ jsx10(
+              "span",
+              {
+                "aria-hidden": true,
+                style: {
+                  width: 5,
+                  height: 5,
+                  borderRadius: 99,
+                  background: COLORS.green[600]
+                }
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsx10("p", { style: { margin: 0, fontSize: 12.5, color: COLORS.ink[3], lineHeight: 1.4 }, children: app.short }),
+          /* @__PURE__ */ jsxs9(
+            "div",
+            {
+              style: {
+                marginTop: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                minHeight: 20
+              },
+              children: [
+                isSoon ? notified ? /* @__PURE__ */ jsxs9(
+                  "span",
+                  {
+                    style: {
+                      fontSize: 11,
+                      fontWeight: TYPE.weight.semibold,
+                      color: COLORS.green.text,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4
+                    },
+                    children: [
+                      /* @__PURE__ */ jsx10(AppIcon, { name: "check", size: 11, strokeWidth: 2.5 }),
+                      " We'll notify you"
+                    ]
+                  }
+                ) : /* @__PURE__ */ jsxs9(
+                  "span",
+                  {
+                    style: {
+                      fontSize: 11,
+                      fontWeight: TYPE.weight.semibold,
+                      color: TINT.amber.fg,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4
+                    },
+                    children: [
+                      /* @__PURE__ */ jsx10(AppIcon, { name: "bell", size: 11 }),
+                      " Notify me",
+                      app.eta ? ` \xB7 ${app.eta}` : ""
+                    ]
+                  }
+                ) : app.activated ? /* @__PURE__ */ jsx10(
+                  "span",
+                  {
+                    style: {
+                      fontSize: 11,
+                      fontWeight: TYPE.weight.semibold,
+                      color: COLORS.ink[3],
+                      textTransform: "uppercase",
+                      letterSpacing: "0.4px"
+                    },
+                    children: app.lastUsed || "Active"
+                  }
+                ) : isPaidTrial ? /* @__PURE__ */ jsxs9(
+                  "span",
+                  {
+                    style: {
+                      fontSize: 11,
+                      fontWeight: TYPE.weight.semibold,
+                      color: COLORS.green[600],
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4
+                    },
+                    children: [
+                      /* @__PURE__ */ jsx10(AppIcon, { name: "sparkle", size: 11, strokeWidth: 2.4 }),
+                      " Start free trial"
+                    ]
+                  }
+                ) : /* @__PURE__ */ jsxs9(
+                  "span",
+                  {
+                    style: {
+                      fontSize: 11,
+                      fontWeight: TYPE.weight.semibold,
+                      color: COLORS.green[600],
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4
+                    },
+                    children: [
+                      /* @__PURE__ */ jsx10(AppIcon, { name: "plus", size: 11, strokeWidth: 2.4 }),
+                      " Activate"
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsx10(
+                  AppIcon,
+                  {
+                    name: "arrow-right",
+                    size: 13,
+                    stroke: hover ? COLORS.green[600] : COLORS.ink[4]
+                  }
+                )
+              ]
+            }
+          )
+        ] })
+      ]
+    }
+  );
+}
+function Footer({ onManageAccount }) {
+  return /* @__PURE__ */ jsxs9(
+    "div",
+    {
+      style: {
+        marginTop: 32,
+        padding: 16,
+        borderRadius: RADIUS.lg,
+        background: COLORS.surface.card,
+        border: `1px solid ${COLORS.surface.border}`,
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        fontFamily: TYPE.family.sans
+      },
+      children: [
+        /* @__PURE__ */ jsx10(
+          "div",
+          {
+            style: {
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              background: COLORS.green[50],
+              color: COLORS.green[600],
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0
+            },
+            children: /* @__PURE__ */ jsx10(AppIcon, { name: "sparkle", size: 20 })
+          }
+        ),
+        /* @__PURE__ */ jsxs9("div", { style: { flex: 1 }, children: [
+          /* @__PURE__ */ jsx10("p", { style: { margin: 0, fontSize: 13.5, fontWeight: TYPE.weight.semibold, color: COLORS.ink[1] }, children: "One login, every app" }),
+          /* @__PURE__ */ jsx10("p", { style: { margin: "2px 0 0", fontSize: 12.5, color: COLORS.ink[3] }, children: "Activate any GamePlanr app instantly with your existing account." })
+        ] }),
+        /* @__PURE__ */ jsxs9(
+          "button",
+          {
+            type: "button",
+            onClick: onManageAccount,
+            style: {
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "transparent",
+              border: 0,
+              color: COLORS.ink[3],
+              fontFamily: TYPE.family.sans,
+              fontSize: 13,
+              fontWeight: TYPE.weight.semibold,
+              cursor: "pointer",
+              padding: "6px 8px",
+              borderRadius: RADIUS.sm
+            },
+            children: [
+              "Manage account",
+              /* @__PURE__ */ jsx10(AppIcon, { name: "arrow-right", size: 13 })
+            ]
+          }
+        )
+      ]
+    }
+  );
+}
+
 // src/components/Sidebar.tsx
-import { Fragment as Fragment2, jsx as jsx8, jsxs as jsxs7 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx11, jsxs as jsxs10 } from "react/jsx-runtime";
 function Sidebar({ children, className, style }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx11(
     "aside",
     {
       className,
@@ -904,7 +1658,7 @@ function Sidebar({ children, className, style }) {
   );
 }
 function Header({ children, style }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx11(
     "div",
     {
       style: {
@@ -919,7 +1673,7 @@ function Section({
   children,
   style
 }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx11(
     "div",
     {
       style: {
@@ -932,7 +1686,7 @@ function Section({
   );
 }
 function Nav({ children, style }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx11(
     "nav",
     {
       "aria-label": "Main navigation",
@@ -975,18 +1729,18 @@ function NavItem({ icon, label, href, onClick, active, trailing }) {
     color: active ? COLORS.green[600] : COLORS.navy.textDim,
     flexShrink: 0
   };
-  const inner = /* @__PURE__ */ jsxs7(Fragment2, { children: [
-    icon && /* @__PURE__ */ jsx8("span", { style: iconStyle, children: icon }),
-    /* @__PURE__ */ jsx8("span", { style: { flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: label }),
+  const inner = /* @__PURE__ */ jsxs10(Fragment2, { children: [
+    icon && /* @__PURE__ */ jsx11("span", { style: iconStyle, children: icon }),
+    /* @__PURE__ */ jsx11("span", { style: { flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: label }),
     trailing
   ] });
   if (href) {
-    return /* @__PURE__ */ jsx8("a", { href, "aria-current": active ? "page" : void 0, style: baseStyle, children: inner });
+    return /* @__PURE__ */ jsx11("a", { href, "aria-current": active ? "page" : void 0, style: baseStyle, children: inner });
   }
-  return /* @__PURE__ */ jsx8("button", { type: "button", onClick, "aria-current": active ? "page" : void 0, style: baseStyle, children: inner });
+  return /* @__PURE__ */ jsx11("button", { type: "button", onClick, "aria-current": active ? "page" : void 0, style: baseStyle, children: inner });
 }
-function Footer({ children, style }) {
-  return /* @__PURE__ */ jsx8(
+function Footer2({ children, style }) {
+  return /* @__PURE__ */ jsx11(
     "div",
     {
       style: {
@@ -1005,11 +1759,11 @@ Sidebar.Header = Header;
 Sidebar.Section = Section;
 Sidebar.Nav = Nav;
 Sidebar.NavItem = NavItem;
-Sidebar.Footer = Footer;
+Sidebar.Footer = Footer2;
 
 // src/components/Button.tsx
-import React4 from "react";
-import { Fragment as Fragment3, jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
+import React5 from "react";
+import { Fragment as Fragment3, jsx as jsx12, jsxs as jsxs11 } from "react/jsx-runtime";
 var sizeMap = {
   sm: { height: 28, padX: 10, font: TYPE.size.small, gap: 6 },
   md: { height: 36, padX: 14, font: TYPE.size.body, gap: 8 },
@@ -1045,7 +1799,7 @@ var variantStyle = (variant, hovered, pressed) => {
     border: "1px solid transparent"
   };
 };
-var Button = React4.forwardRef(function Button2({
+var Button = React5.forwardRef(function Button2({
   variant = "primary",
   size = "md",
   block = false,
@@ -1062,12 +1816,12 @@ var Button = React4.forwardRef(function Button2({
   onMouseUp,
   ...rest
 }, ref) {
-  const [hovered, setHovered] = React4.useState(false);
-  const [pressed, setPressed] = React4.useState(false);
+  const [hovered, setHovered] = React5.useState(false);
+  const [pressed, setPressed] = React5.useState(false);
   const dims = sizeMap[size];
   const isDisabled = disabled || loading;
   const palette = variantStyle(variant, hovered && !isDisabled, pressed && !isDisabled);
-  return /* @__PURE__ */ jsxs8(
+  return /* @__PURE__ */ jsxs11(
     "button",
     {
       ref,
@@ -1113,7 +1867,7 @@ var Button = React4.forwardRef(function Button2({
       },
       ...rest,
       children: [
-        loading ? /* @__PURE__ */ jsx9(Spinner, {}) : leadingIcon,
+        loading ? /* @__PURE__ */ jsx12(Spinner, {}) : leadingIcon,
         children,
         !loading && trailingIcon
       ]
@@ -1121,9 +1875,9 @@ var Button = React4.forwardRef(function Button2({
   );
 });
 function Spinner() {
-  return /* @__PURE__ */ jsxs8(Fragment3, { children: [
-    /* @__PURE__ */ jsx9("style", { children: `@keyframes gp-spin { to { transform: rotate(360deg); } }` }),
-    /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsxs11(Fragment3, { children: [
+    /* @__PURE__ */ jsx12("style", { children: `@keyframes gp-spin { to { transform: rotate(360deg); } }` }),
+    /* @__PURE__ */ jsx12(
       "span",
       {
         "aria-hidden": true,
@@ -1142,8 +1896,8 @@ function Spinner() {
 }
 
 // src/components/IconButton.tsx
-import React5 from "react";
-import { jsx as jsx10 } from "react/jsx-runtime";
+import React6 from "react";
+import { jsx as jsx13 } from "react/jsx-runtime";
 var sizeMap2 = {
   sm: 28,
   md: 36,
@@ -1179,7 +1933,7 @@ var variantStyle2 = (variant, hovered, pressed) => {
     border: "1px solid transparent"
   };
 };
-var IconButton = React5.forwardRef(function IconButton2({
+var IconButton = React6.forwardRef(function IconButton2({
   variant = "ghost",
   size = "md",
   disabled,
@@ -1192,11 +1946,11 @@ var IconButton = React5.forwardRef(function IconButton2({
   onMouseUp,
   ...rest
 }, ref) {
-  const [hovered, setHovered] = React5.useState(false);
-  const [pressed, setPressed] = React5.useState(false);
+  const [hovered, setHovered] = React6.useState(false);
+  const [pressed, setPressed] = React6.useState(false);
   const dim = sizeMap2[size];
   const palette = variantStyle2(variant, hovered && !disabled, pressed && !disabled);
-  return /* @__PURE__ */ jsx10(
+  return /* @__PURE__ */ jsx13(
     "button",
     {
       ref,
@@ -1240,19 +1994,19 @@ var IconButton = React5.forwardRef(function IconButton2({
 });
 
 // src/components/Input.tsx
-import React6 from "react";
-import { jsx as jsx11, jsxs as jsxs9 } from "react/jsx-runtime";
+import React7 from "react";
+import { jsx as jsx14, jsxs as jsxs12 } from "react/jsx-runtime";
 var sizeMap3 = {
   sm: { height: 28, padX: 10, font: TYPE.size.small },
   md: { height: 36, padX: 12, font: TYPE.size.body },
   lg: { height: 40, padX: 14, font: TYPE.size.body }
 };
-var Input = React6.forwardRef(function Input2({ inputSize = "md", invalid = false, leadingIcon, trailingIcon, disabled, style, className, ...rest }, ref) {
-  const [focused, setFocused] = React6.useState(false);
+var Input = React7.forwardRef(function Input2({ inputSize = "md", invalid = false, leadingIcon, trailingIcon, disabled, style, className, ...rest }, ref) {
+  const [focused, setFocused] = React7.useState(false);
   const dims = sizeMap3[inputSize];
   const borderColor = invalid ? "#dc2626" : focused ? COLORS.green[600] : COLORS.surface.border;
   const ringColor = invalid ? "#fecaca" : "#bbf7d0";
-  return /* @__PURE__ */ jsxs9(
+  return /* @__PURE__ */ jsxs12(
     "span",
     {
       className,
@@ -1272,8 +2026,8 @@ var Input = React6.forwardRef(function Input2({ inputSize = "md", invalid = fals
         ...style
       },
       children: [
-        leadingIcon && /* @__PURE__ */ jsx11("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: leadingIcon }),
-        /* @__PURE__ */ jsx11(
+        leadingIcon && /* @__PURE__ */ jsx14("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: leadingIcon }),
+        /* @__PURE__ */ jsx14(
           "input",
           {
             ref,
@@ -1302,26 +2056,26 @@ var Input = React6.forwardRef(function Input2({ inputSize = "md", invalid = fals
             }
           }
         ),
-        trailingIcon && /* @__PURE__ */ jsx11("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: trailingIcon })
+        trailingIcon && /* @__PURE__ */ jsx14("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: trailingIcon })
       ]
     }
   );
 });
 
 // src/components/Select.tsx
-import React7 from "react";
-import { jsx as jsx12, jsxs as jsxs10 } from "react/jsx-runtime";
+import React8 from "react";
+import { jsx as jsx15, jsxs as jsxs13 } from "react/jsx-runtime";
 var sizeMap4 = {
   sm: { height: 28, padX: 10, font: TYPE.size.small },
   md: { height: 36, padX: 12, font: TYPE.size.body },
   lg: { height: 40, padX: 14, font: TYPE.size.body }
 };
-var Select = React7.forwardRef(function Select2({ selectSize = "md", invalid = false, options, placeholder, disabled, style, className, ...rest }, ref) {
-  const [focused, setFocused] = React7.useState(false);
+var Select = React8.forwardRef(function Select2({ selectSize = "md", invalid = false, options, placeholder, disabled, style, className, ...rest }, ref) {
+  const [focused, setFocused] = React8.useState(false);
   const dims = sizeMap4[selectSize];
   const borderColor = invalid ? "#dc2626" : focused ? COLORS.green[600] : COLORS.surface.border;
   const ringColor = invalid ? "#fecaca" : "#bbf7d0";
-  return /* @__PURE__ */ jsxs10(
+  return /* @__PURE__ */ jsxs13(
     "span",
     {
       className,
@@ -1339,7 +2093,7 @@ var Select = React7.forwardRef(function Select2({ selectSize = "md", invalid = f
         ...style
       },
       children: [
-        /* @__PURE__ */ jsxs10(
+        /* @__PURE__ */ jsxs13(
           "select",
           {
             ref,
@@ -1370,12 +2124,12 @@ var Select = React7.forwardRef(function Select2({ selectSize = "md", invalid = f
               cursor: disabled ? "not-allowed" : "pointer"
             },
             children: [
-              placeholder && /* @__PURE__ */ jsx12("option", { value: "", disabled: true, children: placeholder }),
-              options.map((opt) => /* @__PURE__ */ jsx12("option", { value: opt.value, disabled: opt.disabled, children: opt.label }, opt.value))
+              placeholder && /* @__PURE__ */ jsx15("option", { value: "", disabled: true, children: placeholder }),
+              options.map((opt) => /* @__PURE__ */ jsx15("option", { value: opt.value, disabled: opt.disabled, children: opt.label }, opt.value))
             ]
           }
         ),
-        /* @__PURE__ */ jsx12(
+        /* @__PURE__ */ jsx15(
           "span",
           {
             "aria-hidden": true,
@@ -1388,7 +2142,7 @@ var Select = React7.forwardRef(function Select2({ selectSize = "md", invalid = f
               pointerEvents: "none",
               display: "inline-flex"
             },
-            children: /* @__PURE__ */ jsx12("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "none", children: /* @__PURE__ */ jsx12("path", { d: "M3 4.5L6 7.5L9 4.5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) })
+            children: /* @__PURE__ */ jsx15("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "none", children: /* @__PURE__ */ jsx15("path", { d: "M3 4.5L6 7.5L9 4.5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) })
           }
         )
       ]
@@ -1397,17 +2151,17 @@ var Select = React7.forwardRef(function Select2({ selectSize = "md", invalid = f
 });
 
 // src/components/Toggle.tsx
-import React8 from "react";
-import { jsx as jsx13 } from "react/jsx-runtime";
+import React9 from "react";
+import { jsx as jsx16 } from "react/jsx-runtime";
 var sizeMap5 = {
   sm: { width: 32, height: 18, thumb: 14, pad: 2 },
   md: { width: 40, height: 22, thumb: 18, pad: 2 }
 };
-var Toggle = React8.forwardRef(function Toggle2({ checked, onChange, size = "md", disabled, style, className, ...rest }, ref) {
+var Toggle = React9.forwardRef(function Toggle2({ checked, onChange, size = "md", disabled, style, className, ...rest }, ref) {
   const dims = sizeMap5[size];
   const trackBg = checked ? COLORS.green[600] : COLORS.surface.border;
   const thumbX = checked ? dims.width - dims.thumb - dims.pad : dims.pad;
-  return /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsx16(
     "button",
     {
       ref,
@@ -1436,7 +2190,7 @@ var Toggle = React8.forwardRef(function Toggle2({ checked, onChange, size = "md"
         transition: "background-color 160ms ease",
         ...style
       },
-      children: /* @__PURE__ */ jsx13(
+      children: /* @__PURE__ */ jsx16(
         "span",
         {
           "aria-hidden": true,
@@ -1458,10 +2212,10 @@ var Toggle = React8.forwardRef(function Toggle2({ checked, onChange, size = "md"
 });
 
 // src/components/Tabs.tsx
-import React9 from "react";
-import { jsx as jsx14 } from "react/jsx-runtime";
+import React10 from "react";
+import { jsx as jsx17 } from "react/jsx-runtime";
 function Tabs({ items, value, onChange, className, style }) {
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx17(
     "div",
     {
       role: "tablist",
@@ -1475,15 +2229,15 @@ function Tabs({ items, value, onChange, className, style }) {
       },
       children: items.map((item) => {
         const active = item.value === value;
-        return /* @__PURE__ */ jsx14(Tab, { item, active, onSelect: onChange }, item.value);
+        return /* @__PURE__ */ jsx17(Tab, { item, active, onSelect: onChange }, item.value);
       })
     }
   );
 }
 function Tab({ item, active, onSelect }) {
-  const [hovered, setHovered] = React9.useState(false);
+  const [hovered, setHovered] = React10.useState(false);
   const color = active ? COLORS.ink[1] : hovered ? COLORS.ink[2] : COLORS.ink[3];
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx17(
     "button",
     {
       type: "button",
@@ -1514,12 +2268,12 @@ function Tab({ item, active, onSelect }) {
 }
 
 // src/components/Card.tsx
-import React10 from "react";
-import { jsx as jsx15 } from "react/jsx-runtime";
+import React11 from "react";
+import { jsx as jsx18 } from "react/jsx-runtime";
 var padMap = { none: 0, sm: 12, md: 16, lg: 20 };
 var Card = Object.assign(
-  React10.forwardRef(function Card2({ variant = "default", padding = "md", style, children, ...rest }, ref) {
-    return /* @__PURE__ */ jsx15(
+  React11.forwardRef(function Card2({ variant = "default", padding = "md", style, children, ...rest }, ref) {
+    return /* @__PURE__ */ jsx18(
       "div",
       {
         ref,
@@ -1545,7 +2299,7 @@ var Card = Object.assign(
   }
 );
 function CardHeader({ children, style, ...rest }) {
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx18(
     "div",
     {
       ...rest,
@@ -1564,7 +2318,7 @@ function CardHeader({ children, style, ...rest }) {
   );
 }
 function CardTitle({ children, style, ...rest }) {
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx18(
     "h3",
     {
       ...rest,
@@ -1581,7 +2335,7 @@ function CardTitle({ children, style, ...rest }) {
   );
 }
 function CardDescription({ children, style, ...rest }) {
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx18(
     "p",
     {
       ...rest,
@@ -1597,10 +2351,10 @@ function CardDescription({ children, style, ...rest }) {
   );
 }
 function CardBody({ children, style, ...rest }) {
-  return /* @__PURE__ */ jsx15("div", { ...rest, style, children });
+  return /* @__PURE__ */ jsx18("div", { ...rest, style, children });
 }
 function CardFooter({ children, style, ...rest }) {
-  return /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsx18(
     "div",
     {
       ...rest,
@@ -1620,8 +2374,8 @@ function CardFooter({ children, style, ...rest }) {
 }
 
 // src/components/StatCard.tsx
-import React11 from "react";
-import { jsx as jsx16, jsxs as jsxs11 } from "react/jsx-runtime";
+import React12 from "react";
+import { jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
 var accentMap = {
   green: { bg: COLORS.green[100], fg: COLORS.green[700] },
   blue: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg },
@@ -1634,9 +2388,9 @@ var deltaToneMap = {
   negative: "#b91c1c",
   neutral: COLORS.ink[3]
 };
-var StatCard = React11.forwardRef(function StatCard2({ label, value, delta, deltaTone = "neutral", icon, accent = "neutral", style, ...rest }, ref) {
+var StatCard = React12.forwardRef(function StatCard2({ label, value, delta, deltaTone = "neutral", icon, accent = "neutral", style, ...rest }, ref) {
   const tone = accentMap[accent];
-  return /* @__PURE__ */ jsxs11(
+  return /* @__PURE__ */ jsxs14(
     "div",
     {
       ref,
@@ -1654,8 +2408,8 @@ var StatCard = React11.forwardRef(function StatCard2({ label, value, delta, delt
         ...style
       },
       children: [
-        /* @__PURE__ */ jsxs11("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
-          /* @__PURE__ */ jsx16(
+        /* @__PURE__ */ jsxs14("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
+          /* @__PURE__ */ jsx19(
             "span",
             {
               style: {
@@ -1667,7 +2421,7 @@ var StatCard = React11.forwardRef(function StatCard2({ label, value, delta, delt
               children: label
             }
           ),
-          /* @__PURE__ */ jsx16(
+          /* @__PURE__ */ jsx19(
             "span",
             {
               style: {
@@ -1681,7 +2435,7 @@ var StatCard = React11.forwardRef(function StatCard2({ label, value, delta, delt
               children: value
             }
           ),
-          delta && /* @__PURE__ */ jsx16(
+          delta && /* @__PURE__ */ jsx19(
             "span",
             {
               style: {
@@ -1694,7 +2448,7 @@ var StatCard = React11.forwardRef(function StatCard2({ label, value, delta, delt
             }
           )
         ] }),
-        icon && /* @__PURE__ */ jsx16(
+        icon && /* @__PURE__ */ jsx19(
           "span",
           {
             "aria-hidden": true,
@@ -1718,10 +2472,10 @@ var StatCard = React11.forwardRef(function StatCard2({ label, value, delta, delt
 });
 
 // src/components/Table.tsx
-import React12 from "react";
-import { jsx as jsx17, jsxs as jsxs12 } from "react/jsx-runtime";
+import React13 from "react";
+import { jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
 function TableRoot({ style, children, ...rest }) {
-  return /* @__PURE__ */ jsx17(
+  return /* @__PURE__ */ jsx20(
     "div",
     {
       style: {
@@ -1730,7 +2484,7 @@ function TableRoot({ style, children, ...rest }) {
         borderRadius: RADIUS.lg,
         overflow: "hidden"
       },
-      children: /* @__PURE__ */ jsx17("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ jsx17(
+      children: /* @__PURE__ */ jsx20("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ jsx20(
         "table",
         {
           ...rest,
@@ -1749,7 +2503,7 @@ function TableRoot({ style, children, ...rest }) {
   );
 }
 function TableHeader({ style, children, ...rest }) {
-  return /* @__PURE__ */ jsx17(
+  return /* @__PURE__ */ jsx20(
     "thead",
     {
       ...rest,
@@ -1763,11 +2517,11 @@ function TableHeader({ style, children, ...rest }) {
   );
 }
 function TableBody({ style, children, ...rest }) {
-  return /* @__PURE__ */ jsx17("tbody", { ...rest, style, children });
+  return /* @__PURE__ */ jsx20("tbody", { ...rest, style, children });
 }
 function TableRow({ interactive, style, onMouseEnter, onMouseLeave, children, ...rest }) {
-  const [hovered, setHovered] = React12.useState(false);
-  return /* @__PURE__ */ jsx17(
+  const [hovered, setHovered] = React13.useState(false);
+  return /* @__PURE__ */ jsx20(
     "tr",
     {
       ...rest,
@@ -1799,7 +2553,7 @@ function TableHeaderCell({
   children,
   ...rest
 }) {
-  return /* @__PURE__ */ jsx17(
+  return /* @__PURE__ */ jsx20(
     "th",
     {
       ...rest,
@@ -1818,15 +2572,15 @@ function TableHeaderCell({
         userSelect: sortable ? "none" : "auto",
         ...style
       },
-      children: /* @__PURE__ */ jsxs12("span", { style: { display: "inline-flex", alignItems: "center", gap: 4 }, children: [
+      children: /* @__PURE__ */ jsxs15("span", { style: { display: "inline-flex", alignItems: "center", gap: 4 }, children: [
         children,
-        sortable && /* @__PURE__ */ jsx17(SortGlyph, { direction: sortDirection })
+        sortable && /* @__PURE__ */ jsx20(SortGlyph, { direction: sortDirection })
       ] })
     }
   );
 }
 function SortGlyph({ direction }) {
-  return /* @__PURE__ */ jsxs12(
+  return /* @__PURE__ */ jsxs15(
     "span",
     {
       "aria-hidden": true,
@@ -1837,14 +2591,14 @@ function SortGlyph({ direction }) {
         color: direction ? COLORS.ink[2] : COLORS.ink[4]
       },
       children: [
-        /* @__PURE__ */ jsx17("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "desc" ? 0.3 : 1 }, children: /* @__PURE__ */ jsx17("path", { d: "M1 4L4 1L7 4", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) }),
-        /* @__PURE__ */ jsx17("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "asc" ? 0.3 : 1 }, children: /* @__PURE__ */ jsx17("path", { d: "M1 1L4 4L7 1", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) })
+        /* @__PURE__ */ jsx20("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "desc" ? 0.3 : 1 }, children: /* @__PURE__ */ jsx20("path", { d: "M1 4L4 1L7 4", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) }),
+        /* @__PURE__ */ jsx20("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "asc" ? 0.3 : 1 }, children: /* @__PURE__ */ jsx20("path", { d: "M1 1L4 4L7 1", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) })
       ]
     }
   );
 }
 function TableCell({ align = "left", truncate, style, children, ...rest }) {
-  return /* @__PURE__ */ jsx17(
+  return /* @__PURE__ */ jsx20(
     "td",
     {
       ...rest,
@@ -1871,9 +2625,9 @@ var Table = Object.assign(TableRoot, {
 });
 
 // src/components/FilterBar.tsx
-import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
+import { jsx as jsx21, jsxs as jsxs16 } from "react/jsx-runtime";
 function FilterBar({ filters, actions, bare = false, style, children, ...rest }) {
-  return /* @__PURE__ */ jsxs13(
+  return /* @__PURE__ */ jsxs16(
     "div",
     {
       ...rest,
@@ -1889,18 +2643,18 @@ function FilterBar({ filters, actions, bare = false, style, children, ...rest })
         ...style
       },
       children: [
-        filters && /* @__PURE__ */ jsx18("div", { style: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }, children: filters }),
+        filters && /* @__PURE__ */ jsx21("div", { style: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }, children: filters }),
         children,
-        actions && /* @__PURE__ */ jsx18("div", { style: { display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }, children: actions })
+        actions && /* @__PURE__ */ jsx21("div", { style: { display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }, children: actions })
       ]
     }
   );
 }
 
 // src/components/Modal.tsx
-import React13 from "react";
+import React14 from "react";
 import { createPortal } from "react-dom";
-import { jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
+import { jsx as jsx22, jsxs as jsxs17 } from "react/jsx-runtime";
 var sizeMap6 = { sm: 400, md: 560, lg: 760 };
 function Modal({
   open,
@@ -1912,7 +2666,7 @@ function Modal({
   closeOnBackdrop = true,
   children
 }) {
-  React13.useEffect(() => {
+  React14.useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -1928,7 +2682,7 @@ function Modal({
   if (!open) return null;
   if (typeof document === "undefined") return null;
   return createPortal(
-    /* @__PURE__ */ jsx19(
+    /* @__PURE__ */ jsx22(
       "div",
       {
         role: "presentation",
@@ -1945,7 +2699,7 @@ function Modal({
           padding: 16,
           zIndex: 1e3
         },
-        children: /* @__PURE__ */ jsxs14(
+        children: /* @__PURE__ */ jsxs17(
           "div",
           {
             role: "dialog",
@@ -1964,8 +2718,8 @@ function Modal({
               fontFamily: TYPE.family.sans
             },
             children: [
-              (title || description) && /* @__PURE__ */ jsxs14("div", { style: { padding: "16px 20px", borderBottom: `1px solid ${COLORS.surface.borderSoft}` }, children: [
-                title && /* @__PURE__ */ jsx19(
+              (title || description) && /* @__PURE__ */ jsxs17("div", { style: { padding: "16px 20px", borderBottom: `1px solid ${COLORS.surface.borderSoft}` }, children: [
+                title && /* @__PURE__ */ jsx22(
                   "h2",
                   {
                     id: "gp-modal-title",
@@ -1978,10 +2732,10 @@ function Modal({
                     children: title
                   }
                 ),
-                description && /* @__PURE__ */ jsx19("p", { style: { margin: "4px 0 0", fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: description })
+                description && /* @__PURE__ */ jsx22("p", { style: { margin: "4px 0 0", fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: description })
               ] }),
-              /* @__PURE__ */ jsx19("div", { style: { padding: "16px 20px", overflowY: "auto", color: COLORS.ink[1], fontSize: TYPE.size.body }, children }),
-              footer && /* @__PURE__ */ jsx19(
+              /* @__PURE__ */ jsx22("div", { style: { padding: "16px 20px", overflowY: "auto", color: COLORS.ink[1], fontSize: TYPE.size.body }, children }),
+              footer && /* @__PURE__ */ jsx22(
                 "div",
                 {
                   style: {
@@ -2006,17 +2760,17 @@ function Modal({
 }
 
 // src/components/Toast.tsx
-import React14 from "react";
-import { jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
+import React15 from "react";
+import { jsx as jsx23, jsxs as jsxs18 } from "react/jsx-runtime";
 var toneMap = {
-  success: { bg: COLORS.green[100], fg: COLORS.green[700], icon: /* @__PURE__ */ jsx20(CheckCircle, {}) },
-  error: { bg: "#fee2e2", fg: "#b91c1c", icon: /* @__PURE__ */ jsx20(XCircle, {}) },
-  info: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg, icon: /* @__PURE__ */ jsx20(InfoCircle, {}) },
-  warning: { bg: COLORS.accent.orange.bg, fg: COLORS.accent.orange.fg, icon: /* @__PURE__ */ jsx20(AlertCircle, {}) }
+  success: { bg: COLORS.green[100], fg: COLORS.green[700], icon: /* @__PURE__ */ jsx23(CheckCircle, {}) },
+  error: { bg: "#fee2e2", fg: "#b91c1c", icon: /* @__PURE__ */ jsx23(XCircle, {}) },
+  info: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg, icon: /* @__PURE__ */ jsx23(InfoCircle, {}) },
+  warning: { bg: COLORS.accent.orange.bg, fg: COLORS.accent.orange.fg, icon: /* @__PURE__ */ jsx23(AlertCircle, {}) }
 };
-var Toast = React14.forwardRef(function Toast2({ tone = "info", title, description, onClose, action, style, children, ...rest }, ref) {
+var Toast = React15.forwardRef(function Toast2({ tone = "info", title, description, onClose, action, style, children, ...rest }, ref) {
   const palette = toneMap[tone];
-  return /* @__PURE__ */ jsxs15(
+  return /* @__PURE__ */ jsxs18(
     "div",
     {
       ref,
@@ -2038,7 +2792,7 @@ var Toast = React14.forwardRef(function Toast2({ tone = "info", title, descripti
         ...style
       },
       children: [
-        /* @__PURE__ */ jsx20(
+        /* @__PURE__ */ jsx23(
           "span",
           {
             "aria-hidden": true,
@@ -2056,13 +2810,13 @@ var Toast = React14.forwardRef(function Toast2({ tone = "info", title, descripti
             children: palette.icon
           }
         ),
-        /* @__PURE__ */ jsxs15("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ jsx20("div", { style: { fontSize: TYPE.size.body, fontWeight: TYPE.weight.semibold, color: COLORS.ink[1] }, children: title }),
-          description && /* @__PURE__ */ jsx20("div", { style: { marginTop: title ? 2 : 0, fontSize: TYPE.size.small, color: COLORS.ink[2] }, children: description }),
+        /* @__PURE__ */ jsxs18("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ jsx23("div", { style: { fontSize: TYPE.size.body, fontWeight: TYPE.weight.semibold, color: COLORS.ink[1] }, children: title }),
+          description && /* @__PURE__ */ jsx23("div", { style: { marginTop: title ? 2 : 0, fontSize: TYPE.size.small, color: COLORS.ink[2] }, children: description }),
           children,
-          action && /* @__PURE__ */ jsx20("div", { style: { marginTop: 8 }, children: action })
+          action && /* @__PURE__ */ jsx23("div", { style: { marginTop: 8 }, children: action })
         ] }),
-        onClose && /* @__PURE__ */ jsx20(
+        onClose && /* @__PURE__ */ jsx23(
           "button",
           {
             type: "button",
@@ -2081,7 +2835,7 @@ var Toast = React14.forwardRef(function Toast2({ tone = "info", title, descripti
               borderRadius: RADIUS.sm,
               flexShrink: 0
             },
-            children: /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" }) })
+            children: /* @__PURE__ */ jsx23("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx23("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" }) })
           }
         )
       ]
@@ -2089,20 +2843,20 @@ var Toast = React14.forwardRef(function Toast2({ tone = "info", title, descripti
   );
 });
 function CheckCircle() {
-  return /* @__PURE__ */ jsx20("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M4 8.5L7 11L12 5.5", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round" }) });
+  return /* @__PURE__ */ jsx23("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", children: /* @__PURE__ */ jsx23("path", { d: "M4 8.5L7 11L12 5.5", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round" }) });
 }
 function XCircle() {
-  return /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+  return /* @__PURE__ */ jsx23("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx23("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
 }
 function InfoCircle() {
-  return /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M7 6V10M7 4H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+  return /* @__PURE__ */ jsx23("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx23("path", { d: "M7 6V10M7 4H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
 }
 function AlertCircle() {
-  return /* @__PURE__ */ jsx20("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx20("path", { d: "M7 4V8M7 11H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+  return /* @__PURE__ */ jsx23("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ jsx23("path", { d: "M7 4V8M7 11H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
 }
 
 // src/components/FormField.tsx
-import { jsx as jsx21, jsxs as jsxs16 } from "react/jsx-runtime";
+import { jsx as jsx24, jsxs as jsxs19 } from "react/jsx-runtime";
 function FormField({
   label,
   required,
@@ -2115,7 +2869,7 @@ function FormField({
   ...rest
 }) {
   const isHorizontal = layout === "horizontal";
-  return /* @__PURE__ */ jsxs16(
+  return /* @__PURE__ */ jsxs19(
     "div",
     {
       ...rest,
@@ -2129,7 +2883,7 @@ function FormField({
         ...style
       },
       children: [
-        label && /* @__PURE__ */ jsxs16(
+        label && /* @__PURE__ */ jsxs19(
           "label",
           {
             htmlFor,
@@ -2140,13 +2894,13 @@ function FormField({
             },
             children: [
               label,
-              required && /* @__PURE__ */ jsx21("span", { "aria-hidden": true, style: { color: "#dc2626", marginLeft: 4 }, children: "*" })
+              required && /* @__PURE__ */ jsx24("span", { "aria-hidden": true, style: { color: "#dc2626", marginLeft: 4 }, children: "*" })
             ]
           }
         ),
-        /* @__PURE__ */ jsxs16("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
+        /* @__PURE__ */ jsxs19("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
           children,
-          error ? /* @__PURE__ */ jsx21("span", { style: { fontSize: TYPE.size.small, color: "#dc2626" }, children: error }) : helperText ? /* @__PURE__ */ jsx21("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: helperText }) : null
+          error ? /* @__PURE__ */ jsx24("span", { style: { fontSize: TYPE.size.small, color: "#dc2626" }, children: error }) : helperText ? /* @__PURE__ */ jsx24("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: helperText }) : null
         ] })
       ]
     }
@@ -2154,7 +2908,7 @@ function FormField({
 }
 
 // src/components/KPIBar.tsx
-import { jsx as jsx22, jsxs as jsxs17 } from "react/jsx-runtime";
+import { jsx as jsx25, jsxs as jsxs20 } from "react/jsx-runtime";
 var valueColor = (tone) => {
   if (tone === "positive") return COLORS.green[700];
   if (tone === "negative") return "#b91c1c";
@@ -2163,7 +2917,7 @@ var valueColor = (tone) => {
 function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...rest }) {
   const isVertical = orientation === "vertical";
   const dividerStyle = isVertical ? `1px solid ${COLORS.surface.borderSoft}` : `1px solid ${COLORS.surface.borderSoft}`;
-  return /* @__PURE__ */ jsx22(
+  return /* @__PURE__ */ jsx25(
     "div",
     {
       ...rest,
@@ -2178,7 +2932,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
         const showDivider = dividers && i > 0;
         const padBlock = isVertical ? "10px 0" : "0";
         const padInline = isVertical ? "0" : "0 16px";
-        return /* @__PURE__ */ jsxs17(
+        return /* @__PURE__ */ jsxs20(
           "div",
           {
             style: {
@@ -2194,7 +2948,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
               borderLeft: showDivider && !isVertical ? dividerStyle : "none"
             },
             children: [
-              /* @__PURE__ */ jsx22(
+              /* @__PURE__ */ jsx25(
                 "span",
                 {
                   style: {
@@ -2205,7 +2959,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
                   children: item.label
                 }
               ),
-              /* @__PURE__ */ jsx22(
+              /* @__PURE__ */ jsx25(
                 "span",
                 {
                   style: {
@@ -2217,7 +2971,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
                   children: item.value
                 }
               ),
-              item.hint && !isVertical && /* @__PURE__ */ jsx22("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: item.hint })
+              item.hint && !isVertical && /* @__PURE__ */ jsx25("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: item.hint })
             ]
           },
           i
@@ -2228,7 +2982,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
 }
 
 // src/components/DiamondField.tsx
-import { jsx as jsx23, jsxs as jsxs18 } from "react/jsx-runtime";
+import { jsx as jsx26, jsxs as jsxs21 } from "react/jsx-runtime";
 var POSITION_LAYOUT = {
   P: { x: 50, y: 56 },
   C: { x: 50, y: 90 },
@@ -2248,7 +3002,7 @@ function DiamondField({
   style,
   ...rest
 }) {
-  return /* @__PURE__ */ jsxs18(
+  return /* @__PURE__ */ jsxs21(
     "div",
     {
       ...rest,
@@ -2260,21 +3014,21 @@ function DiamondField({
         ...style
       },
       children: [
-        /* @__PURE__ */ jsxs18("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "xMidYMid meet", style: { width: "100%", height: "100%", display: "block" }, children: [
-          /* @__PURE__ */ jsx23("rect", { x: "0", y: "0", width: "100", height: "100", rx: "6", fill: "#e8f5ec" }),
-          /* @__PURE__ */ jsx23("path", { d: "M 8 92 Q 50 -8 92 92 Z", fill: "#c9e7d3" }),
-          /* @__PURE__ */ jsx23("polygon", { points: "50,30 70,60 50,90 30,60", fill: "#e8c89a" }),
-          /* @__PURE__ */ jsx23("line", { x1: "50", y1: "90", x2: "70", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ jsx23("line", { x1: "70", y1: "60", x2: "50", y2: "30", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ jsx23("line", { x1: "50", y1: "30", x2: "30", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ jsx23("line", { x1: "30", y1: "60", x2: "50", y2: "90", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ jsx23("circle", { cx: "50", cy: "60", r: "4", fill: "#d4b380" })
+        /* @__PURE__ */ jsxs21("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "xMidYMid meet", style: { width: "100%", height: "100%", display: "block" }, children: [
+          /* @__PURE__ */ jsx26("rect", { x: "0", y: "0", width: "100", height: "100", rx: "6", fill: "#e8f5ec" }),
+          /* @__PURE__ */ jsx26("path", { d: "M 8 92 Q 50 -8 92 92 Z", fill: "#c9e7d3" }),
+          /* @__PURE__ */ jsx26("polygon", { points: "50,30 70,60 50,90 30,60", fill: "#e8c89a" }),
+          /* @__PURE__ */ jsx26("line", { x1: "50", y1: "90", x2: "70", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx26("line", { x1: "70", y1: "60", x2: "50", y2: "30", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx26("line", { x1: "50", y1: "30", x2: "30", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx26("line", { x1: "30", y1: "60", x2: "50", y2: "90", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ jsx26("circle", { cx: "50", cy: "60", r: "4", fill: "#d4b380" })
         ] }),
         ALL_POSITIONS.map((pos) => {
           const layout = POSITION_LAYOUT[pos];
           const player = positions[pos];
           const isSelected = selected === pos;
-          return /* @__PURE__ */ jsx23(
+          return /* @__PURE__ */ jsx26(
             PositionMarker,
             {
               code: pos,
@@ -2304,7 +3058,7 @@ function PositionMarker({
   const bg = selected ? COLORS.green[600] : filled ? COLORS.surface.card : "rgba(255,255,255,0.6)";
   const fg = selected ? "#ffffff" : COLORS.ink[1];
   const border = selected ? COLORS.green[700] : COLORS.surface.border;
-  return /* @__PURE__ */ jsxs18(
+  return /* @__PURE__ */ jsxs21(
     "button",
     {
       type: "button",
@@ -2326,7 +3080,7 @@ function PositionMarker({
         cursor: interactive ? "pointer" : "default"
       },
       children: [
-        /* @__PURE__ */ jsx23(
+        /* @__PURE__ */ jsx26(
           "span",
           {
             style: {
@@ -2347,7 +3101,7 @@ function PositionMarker({
             children: player?.number ?? code
           }
         ),
-        player?.name && /* @__PURE__ */ jsx23(
+        player?.name && /* @__PURE__ */ jsx26(
           "span",
           {
             style: {
@@ -2370,15 +3124,21 @@ function PositionMarker({
   );
 }
 export {
+  AppIcon,
+  AppLauncher,
   AppSwitcher,
   Button,
   COLORS,
   Card,
+  CompactCard,
   DiamondField,
   EmptyState,
+  FeaturedHero,
   FilterBar,
   FontDebugToggle,
   FormField,
+  GPMark,
+  GPWordmark,
   GamePlanrNav,
   IconButton,
   Input,
@@ -2393,6 +3153,7 @@ export {
   Sidebar,
   StatCard,
   StatusPill,
+  TINT,
   TOKENS,
   TYPE,
   Table,

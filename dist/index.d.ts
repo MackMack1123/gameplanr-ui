@@ -148,6 +148,38 @@ declare const LAYOUT: {
     readonly sidebarWidth: 248;
     readonly sidebarPadding: 16;
 };
+/**
+ * Tint pairs (background + foreground) for app icons in the post-login app
+ * launcher and similar surfaces. Each app maps to one tint name; the consumer
+ * looks up TINT[name] for its bg/fg pair.
+ */
+declare const TINT: {
+    readonly purple: {
+        readonly bg: "#ede9fe";
+        readonly fg: "#6d28d9";
+    };
+    readonly blue: {
+        readonly bg: "#dbeafe";
+        readonly fg: "#1d4ed8";
+    };
+    readonly orange: {
+        readonly bg: "#ffedd5";
+        readonly fg: "#c2410c";
+    };
+    readonly green: {
+        readonly bg: "#dcfce7";
+        readonly fg: "#166534";
+    };
+    readonly amber: {
+        readonly bg: "#fef3c7";
+        readonly fg: "#92400e";
+    };
+    readonly slate: {
+        readonly bg: "#f3f4f6";
+        readonly fg: "#334155";
+    };
+};
+type TintName = keyof typeof TINT;
 declare const TOKENS: {
     readonly COLORS: {
         readonly green: {
@@ -272,6 +304,32 @@ declare const TOKENS: {
         readonly sidebarWidth: 248;
         readonly sidebarPadding: 16;
     };
+    readonly TINT: {
+        readonly purple: {
+            readonly bg: "#ede9fe";
+            readonly fg: "#6d28d9";
+        };
+        readonly blue: {
+            readonly bg: "#dbeafe";
+            readonly fg: "#1d4ed8";
+        };
+        readonly orange: {
+            readonly bg: "#ffedd5";
+            readonly fg: "#c2410c";
+        };
+        readonly green: {
+            readonly bg: "#dcfce7";
+            readonly fg: "#166534";
+        };
+        readonly amber: {
+            readonly bg: "#fef3c7";
+            readonly fg: "#92400e";
+        };
+        readonly slate: {
+            readonly bg: "#f3f4f6";
+            readonly fg: "#334155";
+        };
+    };
 };
 type Tokens = typeof TOKENS;
 
@@ -355,6 +413,131 @@ interface AppSwitcherProps {
  * grid of all apps when clicked.
  */
 declare function AppSwitcher({ apps, currentApp }: AppSwitcherProps): react_jsx_runtime.JSX.Element | null;
+
+/** Names of icons known to <AppIcon />. */
+type AppIconName = "trophy" | "pitch" | "baseball" | "calendar" | "megaphone" | "clipboard" | "fundraise" | "grid" | "arrow-right" | "plus" | "check" | "bell" | "lock" | "sparkle" | "search" | "chevron-down" | "external";
+interface AppIconProps extends React.SVGAttributes<SVGSVGElement> {
+    name: AppIconName;
+    /** Pixel size of the icon (square). Defaults to 22. */
+    size?: number;
+    /** Stroke color. Defaults to currentColor. */
+    stroke?: string;
+    /** Stroke width. Defaults to 1.75. */
+    strokeWidth?: number;
+}
+/**
+ * Hand-drawn 24×24 stroke icon set used by <AppLauncher /> and friends.
+ * Every icon is a plain SVG with rounded caps/joins so they sit cleanly inside
+ * tinted icon tiles. Pass `size`, `stroke`, `strokeWidth` to override.
+ */
+declare function AppIcon({ name, size, stroke, strokeWidth, ...rest }: AppIconProps): react_jsx_runtime.JSX.Element;
+
+/**
+ * One app's data as rendered by <AppLauncher />.
+ *
+ * `status='live'` apps either appear in the "Your apps" hero/grid (when
+ * `activated`) or in the "Available to activate" slot (when not). `status='soon'`
+ * apps appear in the grid with a "Notify me" / "We'll notify you" footer.
+ */
+interface AppLauncherApp {
+    /** Stable app slug, e.g. "lineup", "tournament". */
+    id: string;
+    name: string;
+    /** Production hostname, e.g. "lineup.gameplanr.co". May be null for soon apps. */
+    domain: string | null;
+    /** Long-form pitch (currently unused at this density; kept for parity). */
+    tagline?: string;
+    /** Short pitch, one sentence — shown on cards. */
+    short: string;
+    /** Icon name from <AppIcon />. */
+    icon: AppIconName;
+    /** Tint pair name from TOKENS.TINT. */
+    tint: TintName;
+    status: "live" | "soon";
+    /** True if this user has an entitlement / has activated the app. */
+    activated: boolean;
+    /** True if this app charges (Lineup), so the CTA reads "Start free trial". */
+    paid?: boolean;
+    /** Display string like "2 days ago" or "Today". */
+    lastUsed?: string;
+    /** Live activity payload, shown in the hero only if present. */
+    activity?: {
+        label: string;
+        sub: string;
+    } | null;
+    /** ETA copy for soon apps, e.g. "Summer 2026". */
+    eta?: string;
+}
+interface AppLauncherUser {
+    email: string;
+    /** 1-2 letter avatar initials. */
+    initials: string;
+}
+interface AppLauncherProps {
+    apps: AppLauncherApp[];
+    /** Which app starts in the hero slot. Defaults to the first activated live app. */
+    featuredId?: string;
+    user: AppLauncherUser;
+    greeting?: {
+        title: string;
+        subtitle?: string;
+    };
+    /** Map of appId → notified flag for soon-app subscriptions. */
+    notified?: Record<string, boolean>;
+    /** Click handler for an activate-and-promote action on a live, unactivated card. */
+    onActivate?: (appId: string) => void;
+    /** Click handler for a notify-me toggle on a soon card. Should round-trip to server. */
+    onNotifyToggle?: (appId: string, willBeNotified: boolean) => void;
+    /** Click handler for the hero "Continue <App>" CTA. */
+    onContinue?: (appId: string) => void;
+    /** Click handler for the account footer "Manage account" link. */
+    onManageAccount?: () => void;
+}
+/**
+ * Post-login GamePlanr app launcher: a featured "Continue where you left off"
+ * hero plus a compact grid of every other app the user can switch to.
+ *
+ * The component manages local UI state (which app is in the hero, hover) and
+ * emits callbacks for activate/notify/continue/manage-account. Persistent
+ * state (entitlements, notify subscriptions, lastUsed timestamps) flows in
+ * via props and should round-trip through the consumer's server.
+ */
+declare function AppLauncher({ apps, featuredId: initialFeaturedId, user, greeting, notified, onActivate, onNotifyToggle, onContinue, onManageAccount, }: AppLauncherProps): react_jsx_runtime.JSX.Element;
+interface AppLauncherHeroProps {
+    app: AppLauncherApp;
+    onContinue?: () => void;
+}
+declare function FeaturedHero({ app, onContinue }: AppLauncherHeroProps): react_jsx_runtime.JSX.Element;
+interface AppLauncherCardProps {
+    app: AppLauncherApp;
+    notified?: boolean;
+    onClick?: () => void;
+}
+declare function CompactCard({ app, notified, onClick }: AppLauncherCardProps): react_jsx_runtime.JSX.Element;
+
+interface GPWordmarkProps {
+    /** Rendered height in pixels. Width auto-scales via SVG viewBox. */
+    height?: number;
+    /** Color of the "GamePlan" text. */
+    color?: string;
+    /** Color of the trailing "r" + the sparkle accent. */
+    accent?: string;
+}
+/**
+ * "GamePlanr" wordmark. The "GamePlan" portion uses Plus Jakarta Sans bold
+ * in a dark ink color; the trailing "r" is rendered in the brand green and
+ * followed by a small 4-point sparkle in the same green.
+ */
+declare function GPWordmark({ height, color, accent, }: GPWordmarkProps): react_jsx_runtime.JSX.Element;
+interface GPMarkProps {
+    /** Pixel size (square). */
+    size?: number;
+}
+/**
+ * Solid green "GP" square mark — the favicon-shaped variant of the wordmark.
+ * Used in compact spaces where the full wordmark won't fit.
+ */
+declare function GPMark({ size }: GPMarkProps): react_jsx_runtime.JSX.Element;
 
 interface SidebarProps {
     children: React.ReactNode;
@@ -633,4 +816,4 @@ interface DiamondFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare function DiamondField({ positions, selected, onPositionClick, style, ...rest }: DiamondFieldProps): react_jsx_runtime.JSX.Element;
 
-export { type AppId, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, type PositionCode, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+export { AppIcon, type AppIconName, type AppIconProps, type AppId, AppLauncher, type AppLauncherApp, type AppLauncherCardProps, type AppLauncherHeroProps, type AppLauncherProps, type AppLauncherUser, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, CompactCard, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FeaturedHero, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GPMark, type GPMarkProps, GPWordmark, type GPWordmarkProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, type PositionCode, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TINT, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, type TintName, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };

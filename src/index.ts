@@ -3,8 +3,8 @@ export type { GamePlanrNavProps } from "./GamePlanrNav";
 export { LogoIcon } from "./LogoIcon";
 
 // v3 design system
-export { TOKENS, COLORS, TYPE, RADIUS, SHADOW, LAYOUT } from "./tokens";
-export type { Tokens } from "./tokens";
+export { TOKENS, COLORS, TYPE, RADIUS, SHADOW, LAYOUT, TINT } from "./tokens";
+export type { Tokens, TintName } from "./tokens";
 
 export { StatusPill } from "./components/StatusPill";
 export type { StatusPillProps, StatusPillVariant } from "./components/StatusPill";
@@ -19,6 +19,21 @@ export { FontDebugToggle } from "./components/FontDebugToggle";
 
 export { AppSwitcher } from "./components/AppSwitcher";
 export type { AppSwitcherProps, AppSwitcherApp, AppId } from "./components/AppSwitcher";
+
+export { AppLauncher, FeaturedHero, CompactCard } from "./components/AppLauncher";
+export type {
+  AppLauncherProps,
+  AppLauncherApp,
+  AppLauncherUser,
+  AppLauncherHeroProps,
+  AppLauncherCardProps,
+} from "./components/AppLauncher";
+
+export { AppIcon } from "./components/AppIcon";
+export type { AppIconName, AppIconProps } from "./components/AppIcon";
+
+export { GPWordmark, GPMark } from "./components/GPWordmark";
+export type { GPWordmarkProps, GPMarkProps } from "./components/GPWordmark";
 
 export { Sidebar } from "./components/Sidebar";
 export type { SidebarProps, SidebarNavItemProps } from "./components/Sidebar";
