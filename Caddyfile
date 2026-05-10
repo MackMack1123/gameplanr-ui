@@ -47,10 +47,14 @@
 	}
 
 	# Everything else: gated by basic_auth (the human path, unchanged).
+	# ┌──────────────────────────────────────────────────────────────────┐
+	# │ ⚠ AUTH TEMPORARILY DISABLED — REVERT THIS BEFORE THE WINDOW ENDS │
+	# │ Re-enable with: git checkout Caddyfile && kamal deploy           │
+	# └──────────────────────────────────────────────────────────────────┘
 	handle {
-		basic_auth {
-			brett.mackrell@gmail.com $2y$14$kdxOMGi.PEBACEkmzvZROeb7ezE3G/LeClboWiS5kEjnSH5V/dev.
-		}
+		# basic_auth {
+		# 	brett.mackrell@gmail.com $2y$14$kdxOMGi.PEBACEkmzvZROeb7ezE3G/LeClboWiS5kEjnSH5V/dev.
+		# }
 		root * /usr/share/caddy
 		encode gzip
 		try_files {path} /index.html
