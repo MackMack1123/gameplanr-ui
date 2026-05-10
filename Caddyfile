@@ -4,14 +4,52 @@
 		respond "ok" 200
 	}
 
-	# Everything else: gated.
+	# Headers applied to every response (including auth-bypassed agent traffic).
+	header {
+		X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
+		-Server
+	}
+
+	# Agent access — opt-in token that bypasses basic_auth for AI agents
+	# and other tools that can't paint a basic-auth dialog. Two ways in:
+	#
+	#   1. ?key=<token> on the URL       → bypass + set a 1-hour cookie
+	#   2. design_agent_token=<token>    → bypass (asset reqs after step 1)
+	#      cookie present
+	#
+	# Token lives in env var DESIGN_AGENT_TOKEN. Rotate by updating it in
+	# .kamal/secrets and redeploying. If the env var is unset, the
+	# fallback below is a 64-char impossible string so the bypass never
+	# accidentally activates against an empty token.
+	@hasAgentTokenInUrl {
+		query key={$DESIGN_AGENT_TOKEN:DISABLED_no_DESIGN_AGENT_TOKEN_in_env_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
+	}
+	@hasAgentSession {
+		header_regexp Cookie design_agent_token={$DESIGN_AGENT_TOKEN:DISABLED_no_DESIGN_AGENT_TOKEN_in_env_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}
+	}
+
+	# URL token: serve the asset AND set the session cookie so the SPA's
+	# follow-up requests (JS bundle, fonts) inherit access.
+	handle @hasAgentTokenInUrl {
+		header Set-Cookie "design_agent_token={$DESIGN_AGENT_TOKEN}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=3600"
+		root * /usr/share/caddy
+		encode gzip
+		try_files {path} /index.html
+		file_server
+	}
+
+	# Cookie session: subsequent requests after the cookie is set.
+	handle @hasAgentSession {
+		root * /usr/share/caddy
+		encode gzip
+		try_files {path} /index.html
+		file_server
+	}
+
+	# Everything else: gated by basic_auth (the human path, unchanged).
 	handle {
 		basic_auth {
 			brett.mackrell@gmail.com $2y$14$kdxOMGi.PEBACEkmzvZROeb7ezE3G/LeClboWiS5kEjnSH5V/dev.
-		}
-		header {
-			X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
-			-Server
 		}
 		root * /usr/share/caddy
 		encode gzip

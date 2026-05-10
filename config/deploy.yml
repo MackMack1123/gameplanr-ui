@@ -29,3 +29,11 @@ proxy:
   healthcheck:
     path: /up
     timeout: 10
+
+# Pass the agent-bypass token into the Caddy container at runtime so the
+# Caddyfile's {$DESIGN_AGENT_TOKEN} resolves. If unset, the bypass is
+# inert (the Caddyfile uses an impossible fallback string). Rotate by
+# changing the value in .kamal/secrets and redeploying.
+env:
+  secret:
+    - DESIGN_AGENT_TOKEN
