@@ -10,6 +10,9 @@
  *     };
  */
 declare const preset: {
+    plugins: {
+        handler: () => void;
+    }[];
     theme: {
         extend: {
             colors: {

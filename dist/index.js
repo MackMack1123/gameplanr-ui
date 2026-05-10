@@ -52,6 +52,7 @@ __export(index_exports, {
   KPIBar: () => KPIBar,
   LAYOUT: () => LAYOUT,
   LogoIcon: () => LogoIcon,
+  MobileBottomNav: () => MobileBottomNav,
   Modal: () => Modal,
   PageHeader: () => PageHeader,
   RADIUS: () => RADIUS,
@@ -66,7 +67,8 @@ __export(index_exports, {
   Table: () => Table,
   Tabs: () => Tabs,
   Toast: () => Toast,
-  Toggle: () => Toggle
+  Toggle: () => Toggle,
+  useIsMobile: () => useIsMobile
 });
 module.exports = __toCommonJS(index_exports);
 
@@ -1831,9 +1833,171 @@ Sidebar.Nav = Nav;
 Sidebar.NavItem = NavItem;
 Sidebar.Footer = Footer2;
 
-// src/components/Button.tsx
-var import_react5 = __toESM(require("react"));
+// src/components/MobileBottomNav.tsx
 var import_jsx_runtime12 = require("react/jsx-runtime");
+function MobileBottomNav({
+  children,
+  className,
+  style,
+  ariaLabel = "Primary mobile navigation"
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+    "nav",
+    {
+      className,
+      "aria-label": ariaLabel,
+      style: {
+        position: "fixed",
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 50,
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "stretch",
+        background: COLORS.surface.card,
+        borderTop: `1px solid ${COLORS.surface.border}`,
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        fontFamily: TYPE.family.sans,
+        ...style
+      },
+      children
+    }
+  );
+}
+function Item({
+  icon,
+  label,
+  href,
+  onClick,
+  active,
+  badge
+}) {
+  const baseStyle = {
+    flex: 1,
+    minWidth: 0,
+    display: "inline-flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 2,
+    padding: "8px 6px",
+    minHeight: 56,
+    // 48px touch + safe vertical
+    background: "transparent",
+    border: "none",
+    borderRadius: RADIUS.sm,
+    cursor: "pointer",
+    color: active ? COLORS.green[600] : COLORS.ink[3],
+    textDecoration: "none",
+    fontFamily: TYPE.family.sans,
+    fontSize: TYPE.size.micro,
+    fontWeight: active ? TYPE.weight.semibold : TYPE.weight.medium,
+    lineHeight: 1.1,
+    transition: "color 120ms ease",
+    WebkitTapHighlightColor: "transparent"
+  };
+  const iconWrap = {
+    position: "relative",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 24,
+    height: 24,
+    color: "inherit"
+  };
+  const labelStyle = {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    maxWidth: "100%"
+  };
+  const inner = /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(import_jsx_runtime12.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: iconWrap, children: [
+      icon,
+      badge != null && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+        "span",
+        {
+          style: {
+            position: "absolute",
+            top: -2,
+            right: -4,
+            minWidth: 14,
+            height: 14,
+            padding: "0 4px",
+            borderRadius: 999,
+            background: "#dc2626",
+            color: "#fff",
+            fontSize: 9,
+            fontWeight: 700,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: badge
+        }
+      )
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: labelStyle, children: label })
+  ] });
+  if (href) {
+    return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+      "a",
+      {
+        href,
+        "aria-current": active ? "page" : void 0,
+        style: baseStyle,
+        children: inner
+      }
+    );
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+    "button",
+    {
+      type: "button",
+      onClick,
+      "aria-current": active ? "page" : void 0,
+      style: baseStyle,
+      children: inner
+    }
+  );
+}
+function Spacer({
+  height = 56,
+  style
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+    "div",
+    {
+      "aria-hidden": true,
+      style: {
+        height,
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        ...style
+      }
+    }
+  );
+}
+MobileBottomNav.Item = Item;
+MobileBottomNav.Spacer = Spacer;
+
+// src/hooks/use-mobile.ts
+var import_react5 = require("react");
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = (0, import_react5.useState)(false);
+  (0, import_react5.useEffect)(() => {
+    const check = () => setIsMobile(window.innerWidth <= breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+  return isMobile;
+}
+
+// src/components/Button.tsx
+var import_react6 = __toESM(require("react"));
+var import_jsx_runtime13 = require("react/jsx-runtime");
 var sizeMap = {
   sm: { height: 28, padX: 10, font: TYPE.size.small, gap: 6 },
   md: { height: 36, padX: 14, font: TYPE.size.body, gap: 8 },
@@ -1869,7 +2033,7 @@ var variantStyle = (variant, hovered, pressed) => {
     border: "1px solid transparent"
   };
 };
-var Button = import_react5.default.forwardRef(function Button2({
+var Button = import_react6.default.forwardRef(function Button2({
   variant = "primary",
   size = "md",
   block = false,
@@ -1886,12 +2050,12 @@ var Button = import_react5.default.forwardRef(function Button2({
   onMouseUp,
   ...rest
 }, ref) {
-  const [hovered, setHovered] = import_react5.default.useState(false);
-  const [pressed, setPressed] = import_react5.default.useState(false);
+  const [hovered, setHovered] = import_react6.default.useState(false);
+  const [pressed, setPressed] = import_react6.default.useState(false);
   const dims = sizeMap[size];
   const isDisabled = disabled || loading;
   const palette = variantStyle(variant, hovered && !isDisabled, pressed && !isDisabled);
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
     "button",
     {
       ref,
@@ -1937,7 +2101,7 @@ var Button = import_react5.default.forwardRef(function Button2({
       },
       ...rest,
       children: [
-        loading ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Spinner, {}) : leadingIcon,
+        loading ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(Spinner, {}) : leadingIcon,
         children,
         !loading && trailingIcon
       ]
@@ -1945,9 +2109,9 @@ var Button = import_react5.default.forwardRef(function Button2({
   );
 });
 function Spinner() {
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(import_jsx_runtime12.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("style", { children: `@keyframes gp-spin { to { transform: rotate(360deg); } }` }),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(import_jsx_runtime13.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("style", { children: `@keyframes gp-spin { to { transform: rotate(360deg); } }` }),
+    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
       "span",
       {
         "aria-hidden": true,
@@ -1966,8 +2130,8 @@ function Spinner() {
 }
 
 // src/components/IconButton.tsx
-var import_react6 = __toESM(require("react"));
-var import_jsx_runtime13 = require("react/jsx-runtime");
+var import_react7 = __toESM(require("react"));
+var import_jsx_runtime14 = require("react/jsx-runtime");
 var sizeMap2 = {
   sm: 28,
   md: 36,
@@ -2003,7 +2167,7 @@ var variantStyle2 = (variant, hovered, pressed) => {
     border: "1px solid transparent"
   };
 };
-var IconButton = import_react6.default.forwardRef(function IconButton2({
+var IconButton = import_react7.default.forwardRef(function IconButton2({
   variant = "ghost",
   size = "md",
   disabled,
@@ -2016,11 +2180,11 @@ var IconButton = import_react6.default.forwardRef(function IconButton2({
   onMouseUp,
   ...rest
 }, ref) {
-  const [hovered, setHovered] = import_react6.default.useState(false);
-  const [pressed, setPressed] = import_react6.default.useState(false);
+  const [hovered, setHovered] = import_react7.default.useState(false);
+  const [pressed, setPressed] = import_react7.default.useState(false);
   const dim = sizeMap2[size];
   const palette = variantStyle2(variant, hovered && !disabled, pressed && !disabled);
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
     "button",
     {
       ref,
@@ -2064,19 +2228,19 @@ var IconButton = import_react6.default.forwardRef(function IconButton2({
 });
 
 // src/components/Input.tsx
-var import_react7 = __toESM(require("react"));
-var import_jsx_runtime14 = require("react/jsx-runtime");
+var import_react8 = __toESM(require("react"));
+var import_jsx_runtime15 = require("react/jsx-runtime");
 var sizeMap3 = {
   sm: { height: 28, padX: 10, font: TYPE.size.small },
   md: { height: 36, padX: 12, font: TYPE.size.body },
   lg: { height: 40, padX: 14, font: TYPE.size.body }
 };
-var Input = import_react7.default.forwardRef(function Input2({ inputSize = "md", invalid = false, leadingIcon, trailingIcon, disabled, style, className, ...rest }, ref) {
-  const [focused, setFocused] = import_react7.default.useState(false);
+var Input = import_react8.default.forwardRef(function Input2({ inputSize = "md", invalid = false, leadingIcon, trailingIcon, disabled, style, className, ...rest }, ref) {
+  const [focused, setFocused] = import_react8.default.useState(false);
   const dims = sizeMap3[inputSize];
   const borderColor = invalid ? "#dc2626" : focused ? COLORS.green[600] : COLORS.surface.border;
   const ringColor = invalid ? "#fecaca" : "#bbf7d0";
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
     "span",
     {
       className,
@@ -2096,8 +2260,8 @@ var Input = import_react7.default.forwardRef(function Input2({ inputSize = "md",
         ...style
       },
       children: [
-        leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: leadingIcon }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        leadingIcon && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: leadingIcon }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
           "input",
           {
             ref,
@@ -2126,26 +2290,26 @@ var Input = import_react7.default.forwardRef(function Input2({ inputSize = "md",
             }
           }
         ),
-        trailingIcon && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: trailingIcon })
+        trailingIcon && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { style: { display: "inline-flex", color: COLORS.ink[3], flexShrink: 0 }, children: trailingIcon })
       ]
     }
   );
 });
 
 // src/components/Select.tsx
-var import_react8 = __toESM(require("react"));
-var import_jsx_runtime15 = require("react/jsx-runtime");
+var import_react9 = __toESM(require("react"));
+var import_jsx_runtime16 = require("react/jsx-runtime");
 var sizeMap4 = {
   sm: { height: 28, padX: 10, font: TYPE.size.small },
   md: { height: 36, padX: 12, font: TYPE.size.body },
   lg: { height: 40, padX: 14, font: TYPE.size.body }
 };
-var Select = import_react8.default.forwardRef(function Select2({ selectSize = "md", invalid = false, options, placeholder, disabled, style, className, ...rest }, ref) {
-  const [focused, setFocused] = import_react8.default.useState(false);
+var Select = import_react9.default.forwardRef(function Select2({ selectSize = "md", invalid = false, options, placeholder, disabled, style, className, ...rest }, ref) {
+  const [focused, setFocused] = import_react9.default.useState(false);
   const dims = sizeMap4[selectSize];
   const borderColor = invalid ? "#dc2626" : focused ? COLORS.green[600] : COLORS.surface.border;
   const ringColor = invalid ? "#fecaca" : "#bbf7d0";
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
     "span",
     {
       className,
@@ -2163,7 +2327,7 @@ var Select = import_react8.default.forwardRef(function Select2({ selectSize = "m
         ...style
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
           "select",
           {
             ref,
@@ -2194,12 +2358,12 @@ var Select = import_react8.default.forwardRef(function Select2({ selectSize = "m
               cursor: disabled ? "not-allowed" : "pointer"
             },
             children: [
-              placeholder && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: "", disabled: true, children: placeholder }),
-              options.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("option", { value: opt.value, disabled: opt.disabled, children: opt.label }, opt.value))
+              placeholder && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("option", { value: "", disabled: true, children: placeholder }),
+              options.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("option", { value: opt.value, disabled: opt.disabled, children: opt.label }, opt.value))
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
           "span",
           {
             "aria-hidden": true,
@@ -2212,7 +2376,7 @@ var Select = import_react8.default.forwardRef(function Select2({ selectSize = "m
               pointerEvents: "none",
               display: "inline-flex"
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("path", { d: "M3 4.5L6 7.5L9 4.5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) })
+            children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("path", { d: "M3 4.5L6 7.5L9 4.5", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }) })
           }
         )
       ]
@@ -2221,17 +2385,17 @@ var Select = import_react8.default.forwardRef(function Select2({ selectSize = "m
 });
 
 // src/components/Toggle.tsx
-var import_react9 = __toESM(require("react"));
-var import_jsx_runtime16 = require("react/jsx-runtime");
+var import_react10 = __toESM(require("react"));
+var import_jsx_runtime17 = require("react/jsx-runtime");
 var sizeMap5 = {
   sm: { width: 32, height: 18, thumb: 14, pad: 2 },
   md: { width: 40, height: 22, thumb: 18, pad: 2 }
 };
-var Toggle = import_react9.default.forwardRef(function Toggle2({ checked, onChange, size = "md", disabled, style, className, ...rest }, ref) {
+var Toggle = import_react10.default.forwardRef(function Toggle2({ checked, onChange, size = "md", disabled, style, className, ...rest }, ref) {
   const dims = sizeMap5[size];
   const trackBg = checked ? COLORS.green[600] : COLORS.surface.border;
   const thumbX = checked ? dims.width - dims.thumb - dims.pad : dims.pad;
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
     "button",
     {
       ref,
@@ -2260,7 +2424,7 @@ var Toggle = import_react9.default.forwardRef(function Toggle2({ checked, onChan
         transition: "background-color 160ms ease",
         ...style
       },
-      children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
         "span",
         {
           "aria-hidden": true,
@@ -2282,10 +2446,10 @@ var Toggle = import_react9.default.forwardRef(function Toggle2({ checked, onChan
 });
 
 // src/components/Tabs.tsx
-var import_react10 = __toESM(require("react"));
-var import_jsx_runtime17 = require("react/jsx-runtime");
+var import_react11 = __toESM(require("react"));
+var import_jsx_runtime18 = require("react/jsx-runtime");
 function Tabs({ items, value, onChange, className, style }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
     "div",
     {
       role: "tablist",
@@ -2299,15 +2463,15 @@ function Tabs({ items, value, onChange, className, style }) {
       },
       children: items.map((item) => {
         const active = item.value === value;
-        return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Tab, { item, active, onSelect: onChange }, item.value);
+        return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(Tab, { item, active, onSelect: onChange }, item.value);
       })
     }
   );
 }
 function Tab({ item, active, onSelect }) {
-  const [hovered, setHovered] = import_react10.default.useState(false);
+  const [hovered, setHovered] = import_react11.default.useState(false);
   const color = active ? COLORS.ink[1] : hovered ? COLORS.ink[2] : COLORS.ink[3];
-  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
     "button",
     {
       type: "button",
@@ -2338,12 +2502,12 @@ function Tab({ item, active, onSelect }) {
 }
 
 // src/components/Card.tsx
-var import_react11 = __toESM(require("react"));
-var import_jsx_runtime18 = require("react/jsx-runtime");
+var import_react12 = __toESM(require("react"));
+var import_jsx_runtime19 = require("react/jsx-runtime");
 var padMap = { none: 0, sm: 12, md: 16, lg: 20 };
 var Card = Object.assign(
-  import_react11.default.forwardRef(function Card2({ variant = "default", padding = "md", style, children, ...rest }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+  import_react12.default.forwardRef(function Card2({ variant = "default", padding = "md", style, children, ...rest }, ref) {
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
       "div",
       {
         ref,
@@ -2369,7 +2533,7 @@ var Card = Object.assign(
   }
 );
 function CardHeader({ children, style, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
     "div",
     {
       ...rest,
@@ -2388,7 +2552,7 @@ function CardHeader({ children, style, ...rest }) {
   );
 }
 function CardTitle({ children, style, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
     "h3",
     {
       ...rest,
@@ -2405,7 +2569,7 @@ function CardTitle({ children, style, ...rest }) {
   );
 }
 function CardDescription({ children, style, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
     "p",
     {
       ...rest,
@@ -2421,10 +2585,10 @@ function CardDescription({ children, style, ...rest }) {
   );
 }
 function CardBody({ children, style, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { ...rest, style, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { ...rest, style, children });
 }
 function CardFooter({ children, style, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
     "div",
     {
       ...rest,
@@ -2444,8 +2608,8 @@ function CardFooter({ children, style, ...rest }) {
 }
 
 // src/components/StatCard.tsx
-var import_react12 = __toESM(require("react"));
-var import_jsx_runtime19 = require("react/jsx-runtime");
+var import_react13 = __toESM(require("react"));
+var import_jsx_runtime20 = require("react/jsx-runtime");
 var accentMap = {
   green: { bg: COLORS.green[100], fg: COLORS.green[700] },
   blue: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg },
@@ -2458,9 +2622,9 @@ var deltaToneMap = {
   negative: "#b91c1c",
   neutral: COLORS.ink[3]
 };
-var StatCard = import_react12.default.forwardRef(function StatCard2({ label, value, delta, deltaTone = "neutral", icon, accent = "neutral", style, ...rest }, ref) {
+var StatCard = import_react13.default.forwardRef(function StatCard2({ label, value, delta, deltaTone = "neutral", icon, accent = "neutral", style, ...rest }, ref) {
   const tone = accentMap[accent];
-  return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
     "div",
     {
       ref,
@@ -2478,8 +2642,8 @@ var StatCard = import_react12.default.forwardRef(function StatCard2({ label, val
         ...style
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "span",
             {
               style: {
@@ -2491,7 +2655,7 @@ var StatCard = import_react12.default.forwardRef(function StatCard2({ label, val
               children: label
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "span",
             {
               style: {
@@ -2505,7 +2669,7 @@ var StatCard = import_react12.default.forwardRef(function StatCard2({ label, val
               children: value
             }
           ),
-          delta && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+          delta && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "span",
             {
               style: {
@@ -2518,7 +2682,7 @@ var StatCard = import_react12.default.forwardRef(function StatCard2({ label, val
             }
           )
         ] }),
-        icon && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+        icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
           "span",
           {
             "aria-hidden": true,
@@ -2542,10 +2706,10 @@ var StatCard = import_react12.default.forwardRef(function StatCard2({ label, val
 });
 
 // src/components/Table.tsx
-var import_react13 = __toESM(require("react"));
-var import_jsx_runtime20 = require("react/jsx-runtime");
+var import_react14 = __toESM(require("react"));
+var import_jsx_runtime21 = require("react/jsx-runtime");
 function TableRoot({ style, children, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
     "div",
     {
       style: {
@@ -2554,7 +2718,7 @@ function TableRoot({ style, children, ...rest }) {
         borderRadius: RADIUS.lg,
         overflow: "hidden"
       },
-      children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
         "table",
         {
           ...rest,
@@ -2573,7 +2737,7 @@ function TableRoot({ style, children, ...rest }) {
   );
 }
 function TableHeader({ style, children, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
     "thead",
     {
       ...rest,
@@ -2587,11 +2751,11 @@ function TableHeader({ style, children, ...rest }) {
   );
 }
 function TableBody({ style, children, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tbody", { ...rest, style, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("tbody", { ...rest, style, children });
 }
 function TableRow({ interactive, style, onMouseEnter, onMouseLeave, children, ...rest }) {
-  const [hovered, setHovered] = import_react13.default.useState(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  const [hovered, setHovered] = import_react14.default.useState(false);
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
     "tr",
     {
       ...rest,
@@ -2623,7 +2787,7 @@ function TableHeaderCell({
   children,
   ...rest
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
     "th",
     {
       ...rest,
@@ -2642,15 +2806,15 @@ function TableHeaderCell({
         userSelect: sortable ? "none" : "auto",
         ...style
       },
-      children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", gap: 4 }, children: [
+      children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", gap: 4 }, children: [
         children,
-        sortable && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(SortGlyph, { direction: sortDirection })
+        sortable && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(SortGlyph, { direction: sortDirection })
       ] })
     }
   );
 }
 function SortGlyph({ direction }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(
     "span",
     {
       "aria-hidden": true,
@@ -2661,14 +2825,14 @@ function SortGlyph({ direction }) {
         color: direction ? COLORS.ink[2] : COLORS.ink[4]
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "desc" ? 0.3 : 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("path", { d: "M1 4L4 1L7 4", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "asc" ? 0.3 : 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("path", { d: "M1 1L4 4L7 1", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "desc" ? 0.3 : 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("path", { d: "M1 4L4 1L7 4", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("svg", { width: "8", height: "5", viewBox: "0 0 8 5", fill: "none", style: { opacity: direction === "asc" ? 0.3 : 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("path", { d: "M1 1L4 4L7 1", stroke: "currentColor", strokeWidth: "1.4", strokeLinecap: "round" }) })
       ]
     }
   );
 }
 function TableCell({ align = "left", truncate, style, children, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
     "td",
     {
       ...rest,
@@ -2695,9 +2859,9 @@ var Table = Object.assign(TableRoot, {
 });
 
 // src/components/FilterBar.tsx
-var import_jsx_runtime21 = require("react/jsx-runtime");
+var import_jsx_runtime22 = require("react/jsx-runtime");
 function FilterBar({ filters, actions, bare = false, style, children, ...rest }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
     "div",
     {
       ...rest,
@@ -2713,18 +2877,18 @@ function FilterBar({ filters, actions, bare = false, style, children, ...rest })
         ...style
       },
       children: [
-        filters && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }, children: filters }),
+        filters && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", minWidth: 0 }, children: filters }),
         children,
-        actions && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }, children: actions })
+        actions && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }, children: actions })
       ]
     }
   );
 }
 
 // src/components/Modal.tsx
-var import_react14 = __toESM(require("react"));
+var import_react15 = __toESM(require("react"));
 var import_react_dom = require("react-dom");
-var import_jsx_runtime22 = require("react/jsx-runtime");
+var import_jsx_runtime23 = require("react/jsx-runtime");
 var sizeMap6 = { sm: 400, md: 560, lg: 760 };
 function Modal({
   open,
@@ -2736,7 +2900,7 @@ function Modal({
   closeOnBackdrop = true,
   children
 }) {
-  import_react14.default.useEffect(() => {
+  import_react15.default.useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -2752,7 +2916,7 @@ function Modal({
   if (!open) return null;
   if (typeof document === "undefined") return null;
   return (0, import_react_dom.createPortal)(
-    /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       "div",
       {
         role: "presentation",
@@ -2769,7 +2933,7 @@ function Modal({
           padding: 16,
           zIndex: 1e3
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
           "div",
           {
             role: "dialog",
@@ -2788,8 +2952,8 @@ function Modal({
               fontFamily: TYPE.family.sans
             },
             children: [
-              (title || description) && /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { style: { padding: "16px 20px", borderBottom: `1px solid ${COLORS.surface.borderSoft}` }, children: [
-                title && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+              (title || description) && /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: { padding: "16px 20px", borderBottom: `1px solid ${COLORS.surface.borderSoft}` }, children: [
+                title && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
                   "h2",
                   {
                     id: "gp-modal-title",
@@ -2802,10 +2966,10 @@ function Modal({
                     children: title
                   }
                 ),
-                description && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("p", { style: { margin: "4px 0 0", fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: description })
+                description && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("p", { style: { margin: "4px 0 0", fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: description })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { padding: "16px 20px", overflowY: "auto", color: COLORS.ink[1], fontSize: TYPE.size.body }, children }),
-              footer && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: { padding: "16px 20px", overflowY: "auto", color: COLORS.ink[1], fontSize: TYPE.size.body }, children }),
+              footer && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
                 "div",
                 {
                   style: {
@@ -2830,17 +2994,17 @@ function Modal({
 }
 
 // src/components/Toast.tsx
-var import_react15 = __toESM(require("react"));
-var import_jsx_runtime23 = require("react/jsx-runtime");
+var import_react16 = __toESM(require("react"));
+var import_jsx_runtime24 = require("react/jsx-runtime");
 var toneMap = {
-  success: { bg: COLORS.green[100], fg: COLORS.green[700], icon: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(CheckCircle, {}) },
-  error: { bg: "#fee2e2", fg: "#b91c1c", icon: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(XCircle, {}) },
-  info: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg, icon: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(InfoCircle, {}) },
-  warning: { bg: COLORS.accent.orange.bg, fg: COLORS.accent.orange.fg, icon: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(AlertCircle, {}) }
+  success: { bg: COLORS.green[100], fg: COLORS.green[700], icon: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(CheckCircle, {}) },
+  error: { bg: "#fee2e2", fg: "#b91c1c", icon: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(XCircle, {}) },
+  info: { bg: COLORS.accent.blue.bg, fg: COLORS.accent.blue.fg, icon: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(InfoCircle, {}) },
+  warning: { bg: COLORS.accent.orange.bg, fg: COLORS.accent.orange.fg, icon: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(AlertCircle, {}) }
 };
-var Toast = import_react15.default.forwardRef(function Toast2({ tone = "info", title, description, onClose, action, style, children, ...rest }, ref) {
+var Toast = import_react16.default.forwardRef(function Toast2({ tone = "info", title, description, onClose, action, style, children, ...rest }, ref) {
   const palette = toneMap[tone];
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
     "div",
     {
       ref,
@@ -2862,7 +3026,7 @@ var Toast = import_react15.default.forwardRef(function Toast2({ tone = "info", t
         ...style
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
           "span",
           {
             "aria-hidden": true,
@@ -2880,13 +3044,13 @@ var Toast = import_react15.default.forwardRef(function Toast2({ tone = "info", t
             children: palette.icon
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
-          title && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: { fontSize: TYPE.size.body, fontWeight: TYPE.weight.semibold, color: COLORS.ink[1] }, children: title }),
-          description && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: { marginTop: title ? 2 : 0, fontSize: TYPE.size.small, color: COLORS.ink[2] }, children: description }),
+        /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
+          title && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { style: { fontSize: TYPE.size.body, fontWeight: TYPE.weight.semibold, color: COLORS.ink[1] }, children: title }),
+          description && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { style: { marginTop: title ? 2 : 0, fontSize: TYPE.size.small, color: COLORS.ink[2] }, children: description }),
           children,
-          action && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { style: { marginTop: 8 }, children: action })
+          action && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { style: { marginTop: 8 }, children: action })
         ] }),
-        onClose && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+        onClose && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
           "button",
           {
             type: "button",
@@ -2905,7 +3069,7 @@ var Toast = import_react15.default.forwardRef(function Toast2({ tone = "info", t
               borderRadius: RADIUS.sm,
               flexShrink: 0
             },
-            children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" }) })
+            children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" }) })
           }
         )
       ]
@@ -2913,20 +3077,20 @@ var Toast = import_react15.default.forwardRef(function Toast2({ tone = "info", t
   );
 });
 function CheckCircle() {
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("path", { d: "M4 8.5L7 11L12 5.5", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round" }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("svg", { width: "16", height: "16", viewBox: "0 0 16 16", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("path", { d: "M4 8.5L7 11L12 5.5", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round" }) });
 }
 function XCircle() {
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("path", { d: "M3 3L11 11M11 3L3 11", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
 }
 function InfoCircle() {
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("path", { d: "M7 6V10M7 4H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("path", { d: "M7 6V10M7 4H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
 }
 function AlertCircle() {
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("path", { d: "M7 4V8M7 11H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 14 14", fill: "none", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("path", { d: "M7 4V8M7 11H7.01", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }) });
 }
 
 // src/components/FormField.tsx
-var import_jsx_runtime24 = require("react/jsx-runtime");
+var import_jsx_runtime25 = require("react/jsx-runtime");
 function FormField({
   label,
   required,
@@ -2939,7 +3103,7 @@ function FormField({
   ...rest
 }) {
   const isHorizontal = layout === "horizontal";
-  return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
     "div",
     {
       ...rest,
@@ -2953,7 +3117,7 @@ function FormField({
         ...style
       },
       children: [
-        label && /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
+        label && /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
           "label",
           {
             htmlFor,
@@ -2964,13 +3128,13 @@ function FormField({
             },
             children: [
               label,
-              required && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { "aria-hidden": true, style: { color: "#dc2626", marginLeft: 4 }, children: "*" })
+              required && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { "aria-hidden": true, style: { color: "#dc2626", marginLeft: 4 }, children: "*" })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }, children: [
           children,
-          error ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { style: { fontSize: TYPE.size.small, color: "#dc2626" }, children: error }) : helperText ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: helperText }) : null
+          error ? /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { style: { fontSize: TYPE.size.small, color: "#dc2626" }, children: error }) : helperText ? /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: helperText }) : null
         ] })
       ]
     }
@@ -2978,7 +3142,7 @@ function FormField({
 }
 
 // src/components/KPIBar.tsx
-var import_jsx_runtime25 = require("react/jsx-runtime");
+var import_jsx_runtime26 = require("react/jsx-runtime");
 var valueColor = (tone) => {
   if (tone === "positive") return COLORS.green[700];
   if (tone === "negative") return "#b91c1c";
@@ -2987,7 +3151,7 @@ var valueColor = (tone) => {
 function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...rest }) {
   const isVertical = orientation === "vertical";
   const dividerStyle = isVertical ? `1px solid ${COLORS.surface.borderSoft}` : `1px solid ${COLORS.surface.borderSoft}`;
-  return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
     "div",
     {
       ...rest,
@@ -3002,7 +3166,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
         const showDivider = dividers && i > 0;
         const padBlock = isVertical ? "10px 0" : "0";
         const padInline = isVertical ? "0" : "0 16px";
-        return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
+        return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
           "div",
           {
             style: {
@@ -3018,7 +3182,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
               borderLeft: showDivider && !isVertical ? dividerStyle : "none"
             },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
                 "span",
                 {
                   style: {
@@ -3029,7 +3193,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
                   children: item.label
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
                 "span",
                 {
                   style: {
@@ -3041,7 +3205,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
                   children: item.value
                 }
               ),
-              item.hint && !isVertical && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: item.hint })
+              item.hint && !isVertical && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { style: { fontSize: TYPE.size.small, color: COLORS.ink[3] }, children: item.hint })
             ]
           },
           i
@@ -3052,7 +3216,7 @@ function KPIBar({ items, orientation = "horizontal", dividers = true, style, ...
 }
 
 // src/components/DiamondField.tsx
-var import_jsx_runtime26 = require("react/jsx-runtime");
+var import_jsx_runtime27 = require("react/jsx-runtime");
 var POSITION_LAYOUT = {
   P: { x: 50, y: 56 },
   C: { x: 50, y: 90 },
@@ -3072,7 +3236,7 @@ function DiamondField({
   style,
   ...rest
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
     "div",
     {
       ...rest,
@@ -3084,21 +3248,21 @@ function DiamondField({
         ...style
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "xMidYMid meet", style: { width: "100%", height: "100%", display: "block" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("rect", { x: "0", y: "0", width: "100", height: "100", rx: "6", fill: "#e8f5ec" }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("path", { d: "M 8 92 Q 50 -8 92 92 Z", fill: "#c9e7d3" }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("polygon", { points: "50,30 70,60 50,90 30,60", fill: "#e8c89a" }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("line", { x1: "50", y1: "90", x2: "70", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("line", { x1: "70", y1: "60", x2: "50", y2: "30", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("line", { x1: "50", y1: "30", x2: "30", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("line", { x1: "30", y1: "60", x2: "50", y2: "90", stroke: "#ffffff", strokeWidth: "0.6" }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("circle", { cx: "50", cy: "60", r: "4", fill: "#d4b380" })
+        /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("svg", { viewBox: "0 0 100 100", preserveAspectRatio: "xMidYMid meet", style: { width: "100%", height: "100%", display: "block" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("rect", { x: "0", y: "0", width: "100", height: "100", rx: "6", fill: "#e8f5ec" }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("path", { d: "M 8 92 Q 50 -8 92 92 Z", fill: "#c9e7d3" }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("polygon", { points: "50,30 70,60 50,90 30,60", fill: "#e8c89a" }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("line", { x1: "50", y1: "90", x2: "70", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("line", { x1: "70", y1: "60", x2: "50", y2: "30", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("line", { x1: "50", y1: "30", x2: "30", y2: "60", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("line", { x1: "30", y1: "60", x2: "50", y2: "90", stroke: "#ffffff", strokeWidth: "0.6" }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("circle", { cx: "50", cy: "60", r: "4", fill: "#d4b380" })
         ] }),
         ALL_POSITIONS.map((pos) => {
           const layout = POSITION_LAYOUT[pos];
           const player = positions[pos];
           const isSelected = selected === pos;
-          return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
             PositionMarker,
             {
               code: pos,
@@ -3128,7 +3292,7 @@ function PositionMarker({
   const bg = selected ? COLORS.green[600] : filled ? COLORS.surface.card : "rgba(255,255,255,0.6)";
   const fg = selected ? "#ffffff" : COLORS.ink[1];
   const border = selected ? COLORS.green[700] : COLORS.surface.border;
-  return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
     "button",
     {
       type: "button",
@@ -3150,7 +3314,7 @@ function PositionMarker({
         cursor: interactive ? "pointer" : "default"
       },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
           "span",
           {
             style: {
@@ -3171,7 +3335,7 @@ function PositionMarker({
             children: player?.number ?? code
           }
         ),
-        player?.name && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+        player?.name && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
           "span",
           {
             style: {
@@ -3216,6 +3380,7 @@ function PositionMarker({
   KPIBar,
   LAYOUT,
   LogoIcon,
+  MobileBottomNav,
   Modal,
   PageHeader,
   RADIUS,
@@ -3230,5 +3395,6 @@ function PositionMarker({
   Table,
   Tabs,
   Toast,
-  Toggle
+  Toggle,
+  useIsMobile
 });

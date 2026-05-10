@@ -1,5 +1,8 @@
 "use client";
 
+// src/tailwind.preset.ts
+import tailwindcssAnimate from "tailwindcss-animate";
+
 // src/tokens.ts
 var COLORS = {
   // Brand green — Tailwind green-600 family. NOT emerald.
@@ -71,6 +74,7 @@ var LAYOUT = {
 
 // src/tailwind.preset.ts
 var preset = {
+  plugins: [tailwindcssAnimate],
   theme: {
     extend: {
       colors: {

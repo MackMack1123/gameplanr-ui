@@ -590,6 +590,78 @@ interface SidebarNavItemProps {
     trailing?: React.ReactNode;
 }
 
+interface MobileBottomNavProps {
+    children: React.ReactNode;
+    className?: string;
+    style?: React.CSSProperties;
+    /** ARIA label for the nav landmark. Defaults to "Primary mobile navigation". */
+    ariaLabel?: string;
+}
+/**
+ * Fixed bottom-bar primary navigation for mobile. Designed to be the
+ * canonical mobile-nav pattern in v3 (paired with the sidebar→sheet
+ * drawer for secondary/deeper nav).
+ *
+ * Renders unconditionally — the consumer decides whether to mount it
+ * (typically via `useIsMobile()`):
+ *
+ *   const isMobile = useIsMobile();
+ *   return (
+ *     <>
+ *       {!isMobile && <Sidebar>...</Sidebar>}
+ *       <main>...</main>
+ *       {isMobile && (
+ *         <MobileBottomNav>
+ *           <MobileBottomNav.Item icon={<HomeIcon/>} label="Home" href="/" active />
+ *           <MobileBottomNav.Item icon={<CalIcon/>}  label="Calendar" href="/cal" />
+ *           <MobileBottomNav.Item icon={<TeamIcon/>} label="Teams" href="/teams" />
+ *           <MobileBottomNav.Item icon={<MoreIcon/>} label="More" onClick={openSheet} />
+ *         </MobileBottomNav>
+ *       )}
+ *       <MobileBottomNav.Spacer />
+ *     </>
+ *   );
+ *
+ * Caps at roughly 5 items for thumb-reachability — overflow goes into a
+ * "More" item that opens a Sheet drawer (see `Sidebar` + `useIsMobile`
+ * for the drawer pattern). Includes safe-area-inset-bottom padding so
+ * the bar clears the iOS home indicator.
+ */
+declare function MobileBottomNav({ children, className, style, ariaLabel, }: MobileBottomNavProps): react_jsx_runtime.JSX.Element;
+declare namespace MobileBottomNav {
+    var Item: ({ icon, label, href, onClick, active, badge, }: MobileBottomNavItemProps) => react_jsx_runtime.JSX.Element;
+    var Spacer: ({ height, style, }: {
+        height?: number;
+        style?: React.CSSProperties;
+    }) => react_jsx_runtime.JSX.Element;
+}
+interface MobileBottomNavItemProps {
+    /** Icon node — typically 22–24px square. Required for visual clarity. */
+    icon: React.ReactNode;
+    /** Short label rendered under the icon. Keep to ~10 chars. */
+    label: string;
+    /** Treat as a link if provided; otherwise a button. */
+    href?: string;
+    onClick?: () => void;
+    /** Marks the item as the current view; receives the active styling. */
+    active?: boolean;
+    /** Optional small badge/dot rendered top-right of the icon. */
+    badge?: React.ReactNode;
+}
+
+/**
+ * Returns `true` when the viewport is at or below the mobile breakpoint
+ * (default 768px). Updates on window resize.
+ *
+ * Used by `<Sidebar>` consumers to swap to a `<Sheet>` drawer on mobile,
+ * by `<MobileBottomNav>` callers to render only on mobile, and by any
+ * component that needs to branch on viewport size.
+ *
+ * SSR-safe: returns `false` on the first render (no `window`), then
+ * updates on mount via the effect.
+ */
+declare function useIsMobile(breakpoint?: number): boolean;
+
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -816,4 +888,4 @@ interface DiamondFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare function DiamondField({ positions, selected, onPositionClick, style, ...rest }: DiamondFieldProps): react_jsx_runtime.JSX.Element;
 
-export { AppIcon, type AppIconName, type AppIconProps, type AppId, AppLauncher, type AppLauncherApp, type AppLauncherCardProps, type AppLauncherHeroProps, type AppLauncherProps, type AppLauncherUser, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, CompactCard, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FeaturedHero, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GPMark, type GPMarkProps, GPWordmark, type GPWordmarkProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, type PositionCode, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TINT, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, type TintName, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens };
+export { AppIcon, type AppIconName, type AppIconProps, type AppId, AppLauncher, type AppLauncherApp, type AppLauncherCardProps, type AppLauncherHeroProps, type AppLauncherProps, type AppLauncherUser, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, CompactCard, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FeaturedHero, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GPMark, type GPMarkProps, GPWordmark, type GPWordmarkProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, MobileBottomNav, type MobileBottomNavItemProps, type MobileBottomNavProps, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, type PositionCode, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TINT, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, type TintName, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens, useIsMobile };

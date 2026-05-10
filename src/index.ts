@@ -38,6 +38,14 @@ export type { GPWordmarkProps, GPMarkProps } from "./components/GPWordmark";
 export { Sidebar } from "./components/Sidebar";
 export type { SidebarProps, SidebarNavItemProps } from "./components/Sidebar";
 
+export { MobileBottomNav } from "./components/MobileBottomNav";
+export type {
+  MobileBottomNavProps,
+  MobileBottomNavItemProps,
+} from "./components/MobileBottomNav";
+
+export { useIsMobile } from "./hooks/use-mobile";
+
 export { Button } from "./components/Button";
 export type { ButtonProps, ButtonVariant, ButtonSize } from "./components/Button";
 

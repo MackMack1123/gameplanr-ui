@@ -1,8 +1,10 @@
 "use client";
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -16,6 +18,14 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/tailwind.preset.ts
@@ -24,6 +34,7 @@ __export(tailwind_preset_exports, {
   default: () => tailwind_preset_default
 });
 module.exports = __toCommonJS(tailwind_preset_exports);
+var import_tailwindcss_animate = __toESM(require("tailwindcss-animate"));
 
 // src/tokens.ts
 var COLORS = {
@@ -96,6 +107,7 @@ var LAYOUT = {
 
 // src/tailwind.preset.ts
 var preset = {
+  plugins: [import_tailwindcss_animate.default],
   theme: {
     extend: {
       colors: {

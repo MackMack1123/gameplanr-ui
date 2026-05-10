@@ -10,9 +10,11 @@
  *     };
  */
 
+import tailwindcssAnimate from "tailwindcss-animate";
 import { COLORS, RADIUS, SHADOW, LAYOUT } from "./tokens";
 
 const preset = {
+  plugins: [tailwindcssAnimate],
   theme: {
     extend: {
       colors: {

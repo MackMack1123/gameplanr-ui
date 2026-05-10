@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { COLORS } from "@gameplanr/ui";
+import { COLORS, MobileBottomNav } from "@gameplanr/ui";
 import { Section, Example } from "../Section";
 
 /**
@@ -847,6 +847,253 @@ function DnDListNote() {
 }
 
 // ──────────────────────────────────────────────────────────────────────────
+// Widget 7: MobileBottomNav (canonical mobile primary nav)
+// ──────────────────────────────────────────────────────────────────────────
+
+const MOBILE_BOTTOM_NAV_JSX = `// Canonical mobile primary navigation in v3. Pair with the sidebar
+// for desktop and a sheet drawer for secondary/deeper nav. Caps at
+// ~5 items for thumb-reachability; overflow goes into a "More" item
+// that opens a Sheet drawer.
+
+import { MobileBottomNav, useIsMobile } from "@gameplanr/ui";
+
+const isMobile = useIsMobile();
+
+return (
+  <>
+    {isMobile && (
+      <MobileBottomNav>
+        <MobileBottomNav.Item icon={<HomeIcon/>}  label="Home"     href="/" active />
+        <MobileBottomNav.Item icon={<CalIcon/>}   label="Calendar" href="/calendar" />
+        <MobileBottomNav.Item icon={<TeamIcon/>}  label="Teams"    href="/teams" />
+        <MobileBottomNav.Item icon={<InboxIcon/>} label="Inbox"    href="/inbox" badge="3" />
+        <MobileBottomNav.Item icon={<MoreIcon/>}  label="More"     onClick={openSheet} />
+      </MobileBottomNav>
+    )}
+    {/* Pad page content so the last row clears the fixed bar */}
+    <MobileBottomNav.Spacer />
+  </>
+);`;
+
+// Tiny inline icon set for the demo
+function HomeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="100%" height="100%">
+      <path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/>
+    </svg>
+  );
+}
+function CalIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="100%" height="100%">
+      <rect x="3" y="5" width="18" height="16" rx="2"/>
+      <path d="M3 9h18M8 3v4M16 3v4"/>
+    </svg>
+  );
+}
+function TeamIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="100%" height="100%">
+      <circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/>
+      <path d="M3 20c0-3 3-5 6-5s6 2 6 5M15 20c0-2 2-4 4-4s2.5 1 2.5 2.5"/>
+    </svg>
+  );
+}
+function InboxIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="100%" height="100%">
+      <path d="M4 13l2-7h12l2 7"/><path d="M4 13v6h16v-6"/>
+      <path d="M4 13h5l1 2h4l1-2h5"/>
+    </svg>
+  );
+}
+function MoreIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="100%" height="100%">
+      <circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>
+    </svg>
+  );
+}
+
+function MobileBottomNavDemo() {
+  // Frame the nav inside a phone-shaped container so the fixed
+  // positioning reads correctly without escaping the docs page.
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: 320,
+        height: 480,
+        background: COLORS.surface.page,
+        border: `1px solid ${COLORS.surface.border}`,
+        borderRadius: 24,
+        overflow: "hidden",
+        boxShadow: "0 1px 3px rgba(15,23,42,0.06), 0 4px 12px rgba(15,23,42,0.04)",
+      }}
+    >
+      <div style={{ padding: 16, fontSize: 12, color: COLORS.ink[3] }}>
+        Page content scrolls here…
+      </div>
+      <div
+        style={{
+          // Override the fixed-bottom positioning for the demo so it
+          // sits inside the phone frame instead of the viewport.
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+      >
+        <MobileBottomNav style={{ position: "relative" }}>
+          <MobileBottomNav.Item icon={<HomeIcon />} label="Home" onClick={() => {}} active />
+          <MobileBottomNav.Item icon={<CalIcon />} label="Calendar" onClick={() => {}} />
+          <MobileBottomNav.Item icon={<TeamIcon />} label="Teams" onClick={() => {}} />
+          <MobileBottomNav.Item icon={<InboxIcon />} label="Inbox" onClick={() => {}} badge="3" />
+          <MobileBottomNav.Item icon={<MoreIcon />} label="More" onClick={() => {}} />
+        </MobileBottomNav>
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// Widget 8: Sidebar → Sheet drawer (secondary/deeper nav on mobile)
+// ──────────────────────────────────────────────────────────────────────────
+
+const SIDEBAR_TO_SHEET_JSX = `// Companion to MobileBottomNav. Sidebar is the desktop primary nav;
+// on mobile, hide it behind a Sheet (drawer) opened from a "More" item
+// in the bottom bar. The sidebar tree is reused inside the sheet so
+// secondary nav items have one source of truth.
+
+import { useState } from "react";
+import { Sidebar, MobileBottomNav, useIsMobile } from "@gameplanr/ui";
+// Sheet primitive: bring your own (e.g. shadcn/ui Sheet, Radix Dialog,
+// vaul, etc.) — keeps gameplanr-ui dependency-free.
+
+function AppChrome({ children }) {
+  const isMobile = useIsMobile();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const navTree = (
+    <Sidebar.Nav>
+      <Sidebar.NavItem icon={<HomeIcon/>}     label="Home"      href="/" active />
+      <Sidebar.NavItem icon={<CalIcon/>}      label="Calendar"  href="/cal" />
+      <Sidebar.NavItem icon={<TeamIcon/>}     label="Teams"     href="/teams" />
+      <Sidebar.NavItem icon={<SettingsIcon/>} label="Settings"  href="/settings" />
+    </Sidebar.Nav>
+  );
+
+  return (
+    <div style={{ display: "flex", minHeight: "100vh" }}>
+      {!isMobile && <Sidebar>{navTree}</Sidebar>}
+      <main style={{ flex: 1 }}>
+        {children}
+        <MobileBottomNav.Spacer />
+      </main>
+      {isMobile && (
+        <MobileBottomNav>
+          <MobileBottomNav.Item icon={<HomeIcon/>} label="Home"     href="/" active />
+          <MobileBottomNav.Item icon={<CalIcon/>}  label="Calendar" href="/cal" />
+          <MobileBottomNav.Item icon={<TeamIcon/>} label="Teams"    href="/teams" />
+          <MobileBottomNav.Item icon={<MoreIcon/>} label="More"     onClick={() => setDrawerOpen(true)} />
+        </MobileBottomNav>
+      )}
+      {isMobile && (
+        <Sheet open={drawerOpen} onOpenChange={setDrawerOpen} side="right">
+          <Sidebar style={{ width: "100%", position: "static", height: "auto" }}>
+            {navTree}
+          </Sidebar>
+        </Sheet>
+      )}
+    </div>
+  );
+}`;
+
+function SidebarToSheetNote() {
+  return (
+    <div
+      style={{
+        background: "#fff",
+        border: `1px solid ${COLORS.surface.border}`,
+        borderRadius: 12,
+        padding: 16,
+        width: "100%",
+        fontSize: 13,
+        color: COLORS.ink[2],
+        lineHeight: 1.5,
+      }}
+    >
+      <div style={{ fontWeight: 600, color: COLORS.ink[1], marginBottom: 8 }}>
+        Two surfaces, one nav tree
+      </div>
+      <ul style={{ margin: 0, paddingLeft: 18 }}>
+        <li><strong>Desktop:</strong> sidebar visible, no bottom bar.</li>
+        <li><strong>Mobile:</strong> sidebar hidden; primary nav lives in <code>MobileBottomNav</code> at the bottom; secondary/deeper items live behind a "More" sheet drawer that re-renders the same sidebar tree.</li>
+      </ul>
+      <div style={{ marginTop: 8, color: COLORS.ink[3], fontSize: 12 }}>
+        The Sheet primitive is intentionally not in <code>@gameplanr/ui</code>. Bring your own (shadcn/ui Sheet, Radix Dialog, vaul, etc.) so we don't ship a transitive Radix dep.
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// Widget 9: AppLauncher (post-login app picker)
+// ──────────────────────────────────────────────────────────────────────────
+
+const APP_LAUNCHER_JSX = `// Post-login app picker shown after a user authenticates and chooses
+// which GamePlanr app to enter. Composed of a top strip (greeting +
+// account), a featured hero card, and a 3-column compact grid of the
+// remaining apps. Theming uses the TINT palette from tokens.
+
+import { AppLauncher, AppIcon, TINT } from "@gameplanr/ui";
+
+const apps = [
+  { id: "field",      name: "Field",      tint: "green",  icon: <AppIcon name="pitch"/>,    href: "/field" },
+  { id: "tournament", name: "Tournament", tint: "purple", icon: <AppIcon name="trophy"/>,   href: "/tournament" },
+  { id: "calendar",   name: "Calendar",   tint: "blue",   icon: <AppIcon name="calendar"/>, href: "/calendar" },
+  { id: "lineup",     name: "Lineup",     tint: "orange", icon: <AppIcon name="baseball"/>, href: "/lineup" },
+  { id: "volunteer",  name: "Volunteer",  tint: "amber",  icon: <AppIcon name="megaphone"/>,href: "/volunteer" },
+];
+
+<AppLauncher
+  user={{ name: "Brett", email: "brett@example.com" }}
+  featured={apps[0]}
+  apps={apps.slice(1)}
+  onSignOut={() => {/* ... */}}
+/>`;
+
+function AppLauncherNote() {
+  return (
+    <div
+      style={{
+        background: "#fff",
+        border: `1px solid ${COLORS.surface.border}`,
+        borderRadius: 12,
+        padding: 16,
+        width: "100%",
+        fontSize: 13,
+        color: COLORS.ink[2],
+        lineHeight: 1.5,
+      }}
+    >
+      <div style={{ fontWeight: 600, color: COLORS.ink[1], marginBottom: 8 }}>
+        Composed of <code>FeaturedHero</code> + <code>CompactCard</code>
+      </div>
+      <ul style={{ margin: 0, paddingLeft: 18 }}>
+        <li><code>FeaturedHero</code> — the big primary-app card at the top.</li>
+        <li><code>CompactCard</code> — secondary apps in the 3-column grid.</li>
+        <li>Both consume the <code>TINT</code> token map for per-app color: <code>{`{ bg, fg }`}</code> pairs scoped to <code>purple | blue | orange | green | amber | slate</code>.</li>
+        <li>Account footer is built-in — pass <code>user.name</code>, <code>user.email</code>, and an <code>onSignOut</code> callback.</li>
+      </ul>
+      <div style={{ marginTop: 8, color: COLORS.ink[3], fontSize: 12 }}>
+        The Auth app renders the picker server-side as inline-styled HTML (no React) using the same tokens; React-based consumers should import <code>{`<AppLauncher />`}</code> directly for parity.
+      </div>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────
 // Section
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -902,6 +1149,30 @@ export function WidgetsSection({ id }: { id: string }) {
         <CodeSnippet code={DND_LIST_JSX} />
         <WidgetNote>
           The visual demo above isn't draggable. Working version requires @dnd-kit/core + @dnd-kit/sortable. Use whenever users need to reorder a list (batting order, priority weights, etc.)
+        </WidgetNote>
+      </Example>
+
+      <Example label="MobileBottomNav · canonical mobile primary nav">
+        <MobileBottomNavDemo />
+        <CodeSnippet code={MOBILE_BOTTOM_NAV_JSX} />
+        <WidgetNote>
+          Pair with <code>useIsMobile()</code> so it only mounts on mobile. Caps at ~5 items for thumb-reachability — overflow into a "More" item that opens a sheet drawer (see next widget). Includes <code>safe-area-inset-bottom</code> padding so the bar clears the iOS home indicator. Drop a <code>{`<MobileBottomNav.Spacer />`}</code> at the end of <code>{`<main>`}</code> so the last row isn't hidden behind the fixed bar.
+        </WidgetNote>
+      </Example>
+
+      <Example label="Sidebar → Sheet drawer · secondary mobile nav">
+        <SidebarToSheetNote />
+        <CodeSnippet code={SIDEBAR_TO_SHEET_JSX} />
+        <WidgetNote>
+          The companion to <code>MobileBottomNav</code>. One <code>{`<Sidebar.Nav>`}</code> tree feeds both surfaces — desktop sidebar and the mobile sheet drawer — so secondary items have a single source of truth. Sheet primitive is BYO (shadcn/ui Sheet, Radix Dialog, vaul) — gameplanr-ui stays Radix-free.
+        </WidgetNote>
+      </Example>
+
+      <Example label="AppLauncher · post-login app picker">
+        <AppLauncherNote />
+        <CodeSnippet code={APP_LAUNCHER_JSX} />
+        <WidgetNote>
+          Live demo intentionally omitted — the component needs realistic per-app data (icons, hrefs, tints, signed-in user) that varies per consumer. The JSX above is the canonical shape. <code>FeaturedHero</code> and <code>CompactCard</code> are also exported for one-off composition.
         </WidgetNote>
       </Example>
     </Section>
