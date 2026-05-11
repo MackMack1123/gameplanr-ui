@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, Toggle, FormField } from "@gameplanr/ui";
+import { Input, Select, Toggle, FormField, Label, Textarea } from "@gameplanr/ui";
 import { Section, Example } from "../Section";
 
 const SearchIcon = () => (
@@ -15,7 +15,28 @@ export function FormsSection({ id }: { id: string }) {
   const [team, setTeam] = React.useState("");
 
   return (
-    <Section id={id} title="Forms" description="Input, Select, Toggle, FormField.">
+    <Section id={id} title="Forms" description="Input, Select, Toggle, FormField, Label, Textarea.">
+      <Example label="Label — standalone (use FormField for the full row chrome)">
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
+          <Label htmlFor="ex-email">Email</Label>
+          <Input id="ex-email" placeholder="you@team.com" />
+          <Label htmlFor="ex-name" required>Display name</Label>
+          <Input id="ex-name" placeholder="Jordan M." />
+          <Label htmlFor="ex-bio" optional="(optional)">Bio</Label>
+          <Textarea id="ex-bio" rows={3} placeholder="A short bio…" />
+        </div>
+      </Example>
+
+      <Example label="Textarea — sizes, autoResize, invalid">
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%" }}>
+          <Textarea size="sm" placeholder="Small (rows=2)" rows={2} />
+          <Textarea size="md" placeholder="Medium (default, rows=3)" />
+          <Textarea size="lg" placeholder="Large (rows=4)" rows={4} />
+          <Textarea autoResize maxRows={6} placeholder="autoResize — type to grow up to 6 rows" />
+          <Textarea invalid defaultValue="error state" />
+        </div>
+      </Example>
+
       <Example label="Input — sizes">
         <Input inputSize="sm" placeholder="Small" />
         <Input inputSize="md" placeholder="Medium (default)" />

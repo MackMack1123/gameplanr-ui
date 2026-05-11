@@ -1,4 +1,4 @@
-import { Card, StatCard, KPIBar, FilterBar, Button, Select, Input } from "@gameplanr/ui";
+import { Card, StatCard, KPIBar, FilterBar, Button, Select, Input, Separator } from "@gameplanr/ui";
 import { Section, Example } from "../Section";
 
 const CalIcon = () => (
@@ -15,7 +15,22 @@ const TrophyIcon = () => (
 
 export function LayoutSection({ id }: { id: string }) {
   return (
-    <Section id={id} title="Layout" description="Card, StatCard, KPIBar, FilterBar.">
+    <Section id={id} title="Layout" description="Card, StatCard, KPIBar, FilterBar, Separator.">
+      <Example label="Separator — horizontal + vertical">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
+          <div style={{ fontSize: 13, color: "#334155" }}>Above the line</div>
+          <Separator />
+          <div style={{ fontSize: 13, color: "#334155" }}>Below the line</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, height: 24 }}>
+            <span style={{ fontSize: 13 }}>Left</span>
+            <Separator orientation="vertical" />
+            <span style={{ fontSize: 13 }}>Middle</span>
+            <Separator orientation="vertical" />
+            <span style={{ fontSize: 13 }}>Right</span>
+          </div>
+        </div>
+      </Example>
+
       <Example label="Card with subcomponents">
         <div style={{ width: "100%", maxWidth: 460 }}>
           <Card>

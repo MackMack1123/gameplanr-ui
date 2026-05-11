@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, StatusPill } from "@gameplanr/ui";
+import { Table, StatusPill, Pagination, Chart, COLORS } from "@gameplanr/ui";
 import { Section, Example } from "../Section";
 
 const ROWS = [
@@ -12,8 +12,9 @@ const ROWS = [
 
 export function DataSection({ id }: { id: string }) {
   const [sort, setSort] = React.useState<"asc" | "desc" | null>("asc");
+  const [page, setPage] = React.useState(3);
   return (
-    <Section id={id} title="Data" description="Table with sortable headers, status pills, hover rows.">
+    <Section id={id} title="Data" description="Table, Pagination, Chart, status pills.">
       <Example label="Table">
         <div style={{ width: "100%" }}>
           <Table>
@@ -50,6 +51,59 @@ export function DataSection({ id }: { id: string }) {
           </Table>
         </div>
       </Example>
+
+      <Example label="Pagination">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
+          <Pagination page={page} pageCount={42} onPageChange={setPage} />
+          <Pagination page={1} pageCount={3} onPageChange={() => {}} />
+          <Pagination page={5} pageCount={5} onPageChange={() => {}} />
+        </div>
+      </Example>
+
+      <Example label="Chart — container chrome (BYO renderer)">
+        <div style={{ width: "100%", maxWidth: 560 }}>
+          <Chart
+            title="Sign-ups this week"
+            description="Compared to the previous 7 days."
+            legend={[
+              { id: "this-week", label: "This week", color: COLORS.green[600] },
+              { id: "last-week", label: "Last week", color: COLORS.ink[3] },
+            ]}
+          >
+            <SimpleBars />
+          </Chart>
+        </div>
+      </Example>
+
+      <Example label="Chart — loading + empty states">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, width: "100%" }}>
+          <Chart title="Loading…" loading height={160} />
+          <Chart title="Empty" empty="No data for the selected range." height={160} />
+        </div>
+      </Example>
     </Section>
+  );
+}
+
+// Tiny inline SVG bar chart so the docs page doesn't pull in recharts.
+function SimpleBars() {
+  const data = [4, 7, 6, 9, 8, 12, 10];
+  const prev = [3, 5, 6, 5, 7, 8, 7];
+  const max = Math.max(...data, ...prev);
+  return (
+    <svg viewBox="0 0 280 200" width="100%" height="100%" preserveAspectRatio="none">
+      {data.map((v, i) => {
+        const x = i * 38 + 14;
+        const h1 = (v / max) * 160;
+        const h2 = (prev[i] / max) * 160;
+        return (
+          <g key={i}>
+            <rect x={x} y={180 - h2} width={12} height={h2} fill="#94a3b8" rx={2} />
+            <rect x={x + 14} y={180 - h1} width={12} height={h1} fill="#16a34a" rx={2} />
+          </g>
+        );
+      })}
+      <line x1={0} y1={180} x2={280} y2={180} stroke="#e5e7eb" strokeWidth={1} />
+    </svg>
   );
 }

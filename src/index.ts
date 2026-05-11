@@ -46,6 +46,49 @@ export type {
 
 export { useIsMobile } from "./hooks/use-mobile";
 
+// v3.2 primitives — Calendar's shadcn-zero gap audit
+export { Separator } from "./components/Separator";
+export type { SeparatorProps, SeparatorOrientation } from "./components/Separator";
+
+export { Label } from "./components/Label";
+export type { LabelProps } from "./components/Label";
+
+export { Skeleton } from "./components/Skeleton";
+export type { SkeletonProps } from "./components/Skeleton";
+
+export { Progress } from "./components/Progress";
+export type { ProgressProps, ProgressTone } from "./components/Progress";
+
+export { Alert } from "./components/Alert";
+export type { AlertProps, AlertTone } from "./components/Alert";
+
+export { Textarea } from "./components/Textarea";
+export type { TextareaProps } from "./components/Textarea";
+
+export { Pagination } from "./components/Pagination";
+export type { PaginationProps } from "./components/Pagination";
+
+export { Accordion } from "./components/Accordion";
+export type { AccordionProps } from "./components/Accordion";
+
+export { Sheet } from "./components/Sheet";
+export type { SheetProps, SheetSide, SheetSize } from "./components/Sheet";
+
+export { ConfirmDialog } from "./components/ConfirmDialog";
+export type { ConfirmDialogProps, ConfirmTone } from "./components/ConfirmDialog";
+
+export { Tooltip } from "./components/Tooltip";
+export type { TooltipProps, TooltipSide } from "./components/Tooltip";
+
+export { Popover } from "./components/Popover";
+export type { PopoverProps, PopoverSide, PopoverAlign } from "./components/Popover";
+
+export { Carousel } from "./components/Carousel";
+export type { CarouselProps } from "./components/Carousel";
+
+export { Chart } from "./components/Chart";
+export type { ChartProps, ChartLegendItem } from "./components/Chart";
+
 export { Button } from "./components/Button";
 export type { ButtonProps, ButtonVariant, ButtonSize } from "./components/Button";
 

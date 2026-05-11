@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { COLORS, MobileBottomNav } from "@gameplanr/ui";
+import { COLORS, MobileBottomNav, Accordion, Carousel } from "@gameplanr/ui";
 import { Section, Example } from "../Section";
 
 /**
@@ -1108,10 +1108,66 @@ export function WidgetsSection({ id }: { id: string }) {
         <SidebarToSheetNote />
         <CodeSnippet code={SIDEBAR_TO_SHEET_JSX} />
         <WidgetNote>
-          The companion to <code>MobileBottomNav</code>. One <code>{`<Sidebar.Nav>`}</code> tree feeds both surfaces — desktop sidebar and the mobile sheet drawer — so secondary items have a single source of truth. Sheet primitive is BYO (shadcn/ui Sheet, Radix Dialog, vaul) — gameplanr-ui stays Radix-free.
+          The companion to <code>MobileBottomNav</code>. One <code>{`<Sidebar.Nav>`}</code> tree feeds both surfaces — desktop sidebar and the mobile sheet drawer — so secondary items have a single source of truth. v3.2 ships a <code>{`<Sheet>`}</code> primitive in <code>@gameplanr/ui</code>, so this no longer needs to be BYO.
         </WidgetNote>
       </Example>
 
+      <Example label="Accordion · disclosure stack (single or multiple open)">
+        <div style={{ width: "100%", maxWidth: 520 }}>
+          <Accordion type="single" defaultOpenIds={["a"]}>
+            <Accordion.Item id="a">
+              <Accordion.Trigger>Can I import a roster from TeamSnap?</Accordion.Trigger>
+              <Accordion.Content>
+                Yes — paste a CSV in Settings → Import. Player numbers and positions are preserved.
+              </Accordion.Content>
+            </Accordion.Item>
+            <Accordion.Item id="b">
+              <Accordion.Trigger>Does the lineup balance enforcement run client-side?</Accordion.Trigger>
+              <Accordion.Content>
+                Yes. The optimizer is pure JS; nothing leaves the browser unless you explicitly share.
+              </Accordion.Content>
+            </Accordion.Item>
+            <Accordion.Item id="c">
+              <Accordion.Trigger>Can I undo a saved lineup?</Accordion.Trigger>
+              <Accordion.Content>
+                Each save is versioned. Use the History menu in the lineup header.
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+        </div>
+      </Example>
+
+      <Example label="Carousel · scroll-snap with arrows + dots">
+        <div style={{ width: "100%", maxWidth: 480 }}>
+          <Carousel slideWidth="100%">
+            <CarouselSlide bg="#dcfce7" fg="#166534" label="Slide 1 — Field" />
+            <CarouselSlide bg="#dbeafe" fg="#1d4ed8" label="Slide 2 — Calendar" />
+            <CarouselSlide bg="#ffedd5" fg="#c2410c" label="Slide 3 — Tournament" />
+            <CarouselSlide bg="#ede9fe" fg="#6d28d9" label="Slide 4 — Lineup" />
+          </Carousel>
+        </div>
+      </Example>
+
     </Section>
+  );
+}
+
+function CarouselSlide({ bg, fg, label }: { bg: string; fg: string; label: string }) {
+  return (
+    <div
+      style={{
+        height: 180,
+        background: bg,
+        color: fg,
+        borderRadius: 12,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 16,
+        fontWeight: 700,
+      }}
+    >
+      {label}
+    </div>
   );
 }

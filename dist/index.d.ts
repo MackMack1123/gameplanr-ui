@@ -662,6 +662,387 @@ interface MobileBottomNavItemProps {
  */
 declare function useIsMobile(breakpoint?: number): boolean;
 
+type SeparatorOrientation = "horizontal" | "vertical";
+interface SeparatorProps {
+    orientation?: SeparatorOrientation;
+    /** When true, the separator is decorative (default). Set false for semantic
+     *  separators that should be announced to assistive tech. */
+    decorative?: boolean;
+    /** Pixel inset on both ends (margin), useful inside dense menus. */
+    inset?: number;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Plain divider line. Defaults to horizontal full-width.
+ *
+ *   <Separator />
+ *   <Separator orientation="vertical" style={{ height: 24 }} />
+ */
+declare function Separator({ orientation, decorative, inset, className, style, }: SeparatorProps): react_jsx_runtime.JSX.Element;
+
+interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+    /** htmlFor of the associated control. Always pass when standing alone — the label↔input link is what makes click-to-focus work. */
+    htmlFor?: string;
+    /** Renders a small green asterisk after the label text. */
+    required?: boolean;
+    /** Optional secondary copy rendered to the right at lower contrast. */
+    optional?: React.ReactNode;
+}
+/**
+ * Standalone <label>. Use when a control needs a label but doesn't want the
+ * full FormField chrome (description, error, helper). For form rows with
+ * description/error, prefer FormField.
+ *
+ *   <Label htmlFor="email" required>Email</Label>
+ *   <Input id="email" />
+ */
+declare function Label({ htmlFor, required, optional, children, style, ...rest }: LabelProps): react_jsx_runtime.JSX.Element;
+
+interface SkeletonProps {
+    /** Pixel width or any CSS length. Defaults to 100%. */
+    width?: number | string;
+    /** Pixel height or any CSS length. Defaults to 14px (one body line). */
+    height?: number | string;
+    /** Border radius. "pill" → 999px; "circle" → 50%; otherwise treated as a CSS length / token key. */
+    shape?: "rect" | "pill" | "circle";
+    /** Pause the shimmer (e.g. when the parent wants to stop animations). */
+    paused?: boolean;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Loading shimmer block. Use as a placeholder while async data loads.
+ *
+ *   <Skeleton width="60%" height={20} />
+ *   <Skeleton shape="circle" width={32} height={32} />
+ */
+declare function Skeleton({ width, height, shape, paused, className, style, }: SkeletonProps): react_jsx_runtime.JSX.Element;
+
+type ProgressTone = "brand" | "neutral" | "warning" | "danger";
+interface ProgressProps {
+    /** Current value, clamped to [0, max]. */
+    value: number;
+    /** Max value. Defaults to 100. */
+    max?: number;
+    /** Bar tone — defaults to brand green. */
+    tone?: ProgressTone;
+    /** Visual size — sm = 4px, md = 6px (default), lg = 10px. */
+    size?: "sm" | "md" | "lg";
+    /** Render the value as a percent label to the right of the bar. */
+    showLabel?: boolean;
+    /** Indeterminate mode — pass undefined value or set indeterminate true. */
+    indeterminate?: boolean;
+    /** Accessible label for screen readers. Defaults to "Progress". */
+    ariaLabel?: string;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Determinate or indeterminate progress bar.
+ *
+ *   <Progress value={42} />
+ *   <Progress value={3} max={10} tone="warning" showLabel />
+ *   <Progress indeterminate />
+ */
+declare function Progress({ value, max, tone, size, showLabel, indeterminate, ariaLabel, className, style, }: ProgressProps): react_jsx_runtime.JSX.Element;
+
+type AlertTone = "info" | "success" | "warning" | "destructive";
+interface AlertProps {
+    tone?: AlertTone;
+    title?: React.ReactNode;
+    /** Body content. Either pass children or this. */
+    children?: React.ReactNode;
+    /** Optional leading icon. Renders without an icon if omitted. */
+    icon?: React.ReactNode;
+    /** Inline action(s) rendered to the right (e.g. <Button size="sm">…</Button>). */
+    action?: React.ReactNode;
+    /** Show an X dismiss button. Pass onDismiss to wire it up. */
+    dismissible?: boolean;
+    onDismiss?: () => void;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Inline informational/warning/error bar — NOT a toast.
+ * For ephemeral notifications use <Toast /> instead.
+ *
+ *   <Alert tone="warning" title="Heads up">Your trial ends in 3 days.</Alert>
+ *   <Alert tone="destructive" dismissible onDismiss={...}>Failed to save.</Alert>
+ */
+declare function Alert({ tone, title, children, icon, action, dismissible, onDismiss, className, style, }: AlertProps): react_jsx_runtime.JSX.Element | null;
+
+interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
+    /** Visual size — controls padding + line-height feel. */
+    size?: "sm" | "md" | "lg";
+    /** Render in error state (red ring + border). */
+    invalid?: boolean;
+    /** Auto-grow height to fit content (with min/max from rows + maxRows). */
+    autoResize?: boolean;
+    /** Cap auto-resize at this many rows (default 12). */
+    maxRows?: number;
+}
+/**
+ * Multi-line text input. Same conventions as Input — token-driven, plain HTML,
+ * focus ring on the brand green.
+ *
+ *   <Textarea placeholder="Notes" rows={4} />
+ *   <Textarea autoResize maxRows={10} value={s} onChange={e => setS(e.target.value)} />
+ */
+declare function Textarea({ size, invalid, autoResize, maxRows, rows, style, onChange, value, defaultValue, ...rest }: TextareaProps): react_jsx_runtime.JSX.Element;
+
+interface PaginationProps {
+    /** Current page (1-indexed). */
+    page: number;
+    /** Total page count. */
+    pageCount: number;
+    onPageChange: (page: number) => void;
+    /** How many sibling page buttons to render on either side of the current page. */
+    siblingCount?: number;
+    /** ARIA label for the nav element. Defaults to "Pagination". */
+    ariaLabel?: string;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Compact 1-indexed pagination control with first/prev/next/last + sibling
+ * buttons and a "…" gap when pages overflow the visible window.
+ *
+ *   <Pagination page={page} pageCount={42} onPageChange={setPage} />
+ */
+declare function Pagination({ page, pageCount, onPageChange, siblingCount, ariaLabel, className, style, }: PaginationProps): react_jsx_runtime.JSX.Element;
+
+type AccordionType = "single" | "multiple";
+interface AccordionProps {
+    /** "single" → only one item open at a time. "multiple" → independent toggles. */
+    type?: AccordionType;
+    /** Controlled open ids. */
+    openIds?: string[];
+    /** Uncontrolled initial open ids. */
+    defaultOpenIds?: string[];
+    onOpenChange?: (openIds: string[]) => void;
+    children: React.ReactNode;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Disclosure stack. Each child is an `<Accordion.Item id="…">` with
+ * `<Accordion.Trigger>` and `<Accordion.Content>` inside.
+ *
+ *   <Accordion type="single" defaultOpenIds={["a"]}>
+ *     <Accordion.Item id="a">
+ *       <Accordion.Trigger>Question A</Accordion.Trigger>
+ *       <Accordion.Content>Answer A</Accordion.Content>
+ *     </Accordion.Item>
+ *   </Accordion>
+ */
+declare function Accordion({ type, openIds: controlledOpen, defaultOpenIds, onOpenChange, children, className, style, }: AccordionProps): react_jsx_runtime.JSX.Element;
+declare namespace Accordion {
+    var Item: ({ id, children, style, }: {
+        id: string;
+        children: React.ReactNode;
+        style?: React.CSSProperties;
+    }) => react_jsx_runtime.JSX.Element;
+    var Trigger: ({ children, style, }: {
+        children: React.ReactNode;
+        style?: React.CSSProperties;
+    }) => react_jsx_runtime.JSX.Element | null;
+    var Content: ({ children, style, }: {
+        children: React.ReactNode;
+        style?: React.CSSProperties;
+    }) => react_jsx_runtime.JSX.Element | null;
+}
+
+type SheetSide = "right" | "left" | "top" | "bottom";
+type SheetSize = "sm" | "md" | "lg" | "full";
+interface SheetProps {
+    open: boolean;
+    onClose: () => void;
+    /** Which edge the sheet slides in from. Default "right". */
+    side?: SheetSide;
+    /** Width (for left/right) or height (for top/bottom). Default "md". */
+    size?: SheetSize;
+    title?: React.ReactNode;
+    description?: React.ReactNode;
+    /** Footer slot for action buttons. */
+    footer?: React.ReactNode;
+    /** When true, clicking the backdrop closes. Default true. */
+    closeOnBackdrop?: boolean;
+    children?: React.ReactNode;
+    /** ARIA label when no title is shown. */
+    ariaLabel?: string;
+}
+/**
+ * Edge-slide drawer (panel that slides in from a side). The canonical mobile
+ * drawer in v3 — pair with `useIsMobile` to swap a desktop sidebar into a
+ * sheet on mobile.
+ *
+ *   const [open, setOpen] = useState(false);
+ *   <Sheet open={open} onClose={() => setOpen(false)} side="right" title="Settings">
+ *     ...
+ *   </Sheet>
+ */
+declare function Sheet({ open, onClose, side, size, title, description, footer, closeOnBackdrop, children, ariaLabel, }: SheetProps): React.ReactPortal | null;
+
+type ConfirmTone = "neutral" | "destructive";
+interface ConfirmDialogProps {
+    open: boolean;
+    onCancel: () => void;
+    onConfirm: () => void;
+    title: React.ReactNode;
+    /** Body copy explaining what's about to happen. */
+    description?: React.ReactNode;
+    /** Confirm button label. Default "Confirm". */
+    confirmLabel?: string;
+    /** Cancel button label. Default "Cancel". */
+    cancelLabel?: string;
+    /** "destructive" → red confirm button, dialog title gets a destructive tint. */
+    tone?: ConfirmTone;
+    /** When confirmLoading is true, the confirm button shows a busy state and is disabled. */
+    confirmLoading?: boolean;
+    /** When true, clicking the backdrop = cancel. Default true. */
+    closeOnBackdrop?: boolean;
+}
+/**
+ * Single-purpose confirm modal — title + body + Cancel/Confirm pair.
+ * Use for destructive or otherwise-irreversible actions where Modal would be
+ * overkill.
+ *
+ *   <ConfirmDialog
+ *     open={open}
+ *     onCancel={() => setOpen(false)}
+ *     onConfirm={async () => { setBusy(true); await del(); setOpen(false); }}
+ *     title="Delete this team?"
+ *     description="This is permanent. Players, schedules, and history are gone."
+ *     confirmLabel="Delete team"
+ *     tone="destructive"
+ *     confirmLoading={busy}
+ *   />
+ */
+declare function ConfirmDialog({ open, onCancel, onConfirm, title, description, confirmLabel, cancelLabel, tone, confirmLoading, closeOnBackdrop, }: ConfirmDialogProps): React.ReactPortal | null;
+
+type TooltipSide = "top" | "bottom" | "left" | "right";
+interface TooltipProps {
+    /** Tooltip content. Plain text usually, but rich nodes are supported. */
+    content: React.ReactNode;
+    /** Trigger element. Receives a ref + the relevant aria/event handlers. */
+    children: React.ReactElement;
+    /** Preferred side. The tooltip will flip to keep itself in viewport. Default "top". */
+    side?: TooltipSide;
+    /** ms to wait before showing on hover. Default 250. Focus shows immediately. */
+    delay?: number;
+    /** When true, render nothing (useful when the trigger is in a disabled state). */
+    disabled?: boolean;
+}
+/**
+ * Lightweight hover/focus tooltip. No Radix dep — uses native bounding-rect
+ * positioning with a single-axis flip if the preferred side overflows.
+ *
+ *   <Tooltip content="Save (⌘S)">
+ *     <IconButton ... />
+ *   </Tooltip>
+ */
+declare function Tooltip({ content, children, side, delay, disabled, }: TooltipProps): react_jsx_runtime.JSX.Element;
+
+type PopoverSide = "bottom" | "top" | "left" | "right";
+type PopoverAlign = "start" | "center" | "end";
+interface PopoverProps {
+    /** Trigger element. Click toggles, ESC + outside-click close. */
+    trigger: React.ReactElement;
+    /** Content shown when open. */
+    children: React.ReactNode;
+    /** Preferred side. Will flip to the opposite side if it overflows the viewport. */
+    side?: PopoverSide;
+    /** Alignment along the trigger's edge. Default "start". */
+    align?: PopoverAlign;
+    /** Pixel offset from the trigger edge. Default 6. */
+    offset?: number;
+    /** Controlled open state — pair with onOpenChange. */
+    open?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    /** ARIA label when no semantic title is in the body. */
+    ariaLabel?: string;
+}
+/**
+ * Anchored floating panel. Click trigger to toggle, ESC + click-outside to
+ * close. Underpins date/color pickers, menus, and other dropdowns.
+ *
+ *   <Popover trigger={<Button>Filter</Button>} side="bottom" align="start">
+ *     <FilterMenu ... />
+ *   </Popover>
+ */
+declare function Popover({ trigger, children, side, align, offset, open: controlledOpen, defaultOpen, onOpenChange, ariaLabel, }: PopoverProps): react_jsx_runtime.JSX.Element;
+
+interface CarouselProps {
+    children: React.ReactNode;
+    /** Show the prev/next arrow controls. Default true. */
+    showArrows?: boolean;
+    /** Show the dot indicator strip below the slides. Default true. */
+    showDots?: boolean;
+    /** Pixel gap between slides. Default 12. */
+    gap?: number;
+    /** Width per slide as a CSS length. Default "100%". */
+    slideWidth?: string;
+    /** ARIA label for the region. Default "Carousel". */
+    ariaLabel?: string;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Horizontal scroll-snap carousel. No autoplay, no fancy easing — just
+ * arrows + dots over a native scroll-snap track. Each direct child becomes
+ * one slide.
+ *
+ *   <Carousel>
+ *     <img src="..."/>
+ *     <img src="..."/>
+ *     <img src="..."/>
+ *   </Carousel>
+ */
+declare function Carousel({ children, showArrows, showDots, gap, slideWidth, ariaLabel, className, style, }: CarouselProps): react_jsx_runtime.JSX.Element;
+
+interface ChartLegendItem {
+    /** Stable id (used by React keys). */
+    id: string;
+    label: React.ReactNode;
+    /** Swatch color — falls back to ink-3 if omitted. */
+    color?: string;
+}
+interface ChartProps {
+    title?: React.ReactNode;
+    description?: React.ReactNode;
+    /** Top-right slot — typically a date-range or aggregation toggle. */
+    toolbar?: React.ReactNode;
+    /** Legend items. Rendered below the chart body when supplied. */
+    legend?: ChartLegendItem[];
+    /** Body slot — the actual chart renderer (BYO: recharts, chart.js, custom SVG). */
+    children?: React.ReactNode;
+    /** Render the loading shimmer at the given height instead of children. */
+    loading?: boolean;
+    /** When provided AND not loading AND no children, render an empty-state node. */
+    empty?: React.ReactNode;
+    /** Pixel height for the chart body. Default 240. */
+    height?: number;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Chart container — provides consistent card chrome (title, toolbar, legend,
+ * loading + empty states) without coupling to a charting library. Consumers
+ * pass the chart renderer of their choice as children:
+ *
+ *   <Chart title="Sign-ups" toolbar={<RangeSelect/>} legend={[...]}>
+ *     <ResponsiveContainer width="100%" height="100%">
+ *       <LineChart data={data}>...</LineChart>
+ *     </ResponsiveContainer>
+ *   </Chart>
+ *
+ * For loading/empty states, gameplanr-ui handles the chrome — pass `loading`
+ * or `empty` and skip children.
+ */
+declare function Chart({ title, description, toolbar, legend, children, loading, empty, height, className, style, }: ChartProps): react_jsx_runtime.JSX.Element;
+
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -888,4 +1269,4 @@ interface DiamondFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare function DiamondField({ positions, selected, onPositionClick, style, ...rest }: DiamondFieldProps): react_jsx_runtime.JSX.Element;
 
-export { AppIcon, type AppIconName, type AppIconProps, type AppId, AppLauncher, type AppLauncherApp, type AppLauncherCardProps, type AppLauncherHeroProps, type AppLauncherProps, type AppLauncherUser, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, CompactCard, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FeaturedHero, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GPMark, type GPMarkProps, GPWordmark, type GPWordmarkProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, LogoIcon, MobileBottomNav, type MobileBottomNavItemProps, type MobileBottomNavProps, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, type PositionCode, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Sidebar, type SidebarNavItemProps, type SidebarProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TINT, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, type TintName, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens, useIsMobile };
+export { Accordion, type AccordionProps, Alert, type AlertProps, type AlertTone, AppIcon, type AppIconName, type AppIconProps, type AppId, AppLauncher, type AppLauncherApp, type AppLauncherCardProps, type AppLauncherHeroProps, type AppLauncherProps, type AppLauncherUser, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, Carousel, type CarouselProps, Chart, type ChartLegendItem, type ChartProps, CompactCard, ConfirmDialog, type ConfirmDialogProps, type ConfirmTone, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FeaturedHero, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GPMark, type GPMarkProps, GPWordmark, type GPWordmarkProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, Label, type LabelProps, LogoIcon, MobileBottomNav, type MobileBottomNavItemProps, type MobileBottomNavProps, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, Popover, type PopoverAlign, type PopoverProps, type PopoverSide, type PositionCode, Progress, type ProgressProps, type ProgressTone, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Separator, type SeparatorOrientation, type SeparatorProps, Sheet, type SheetProps, type SheetSide, type SheetSize, Sidebar, type SidebarNavItemProps, type SidebarProps, Skeleton, type SkeletonProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TINT, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Textarea, type TextareaProps, type TintName, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens, Tooltip, type TooltipProps, type TooltipSide, useIsMobile };
