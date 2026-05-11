@@ -6,8 +6,8 @@ import { COLORS } from "../tokens";
 export type ProgressTone = "brand" | "neutral" | "warning" | "danger";
 
 export interface ProgressProps {
-  /** Current value, clamped to [0, max]. */
-  value: number;
+  /** Current value, clamped to [0, max]. Optional when `indeterminate` is true. */
+  value?: number;
   /** Max value. Defaults to 100. */
   max?: number;
   /** Bar tone — defaults to brand green. */
@@ -58,7 +58,7 @@ function ensureIndetStyle() {
  *   <Progress indeterminate />
  */
 export function Progress({
-  value,
+  value = 0,
   max = 100,
   tone = "brand",
   size = "md",

@@ -721,8 +721,8 @@ declare function Skeleton({ width, height, shape, paused, className, style, }: S
 
 type ProgressTone = "brand" | "neutral" | "warning" | "danger";
 interface ProgressProps {
-    /** Current value, clamped to [0, max]. */
-    value: number;
+    /** Current value, clamped to [0, max]. Optional when `indeterminate` is true. */
+    value?: number;
     /** Max value. Defaults to 100. */
     max?: number;
     /** Bar tone — defaults to brand green. */

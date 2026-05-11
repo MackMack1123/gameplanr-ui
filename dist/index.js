@@ -2141,7 +2141,7 @@ function ensureIndetStyle() {
   indetStyleInjected = true;
 }
 function Progress({
-  value,
+  value = 0,
   max = 100,
   tone = "brand",
   size = "md",
