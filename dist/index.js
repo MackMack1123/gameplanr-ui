@@ -1172,6 +1172,15 @@ var LAUNCHER_QUERY_CSS = `
   .gp-launcher-greeting-h1 {
     font-size: 24px !important;
   }
+  .gp-launcher-footer {
+    flex-wrap: wrap !important;
+  }
+  .gp-launcher-footer-btn {
+    flex-basis: 100% !important;
+    justify-content: flex-end !important;
+    margin-top: 4px !important;
+    padding: 8px 0 !important;
+  }
 }
 @container gp-launcher (min-width: 521px) and (max-width: 768px) {
   .gp-launcher-grid {
@@ -1716,6 +1725,7 @@ function Footer({ onManageAccount }) {
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
     "div",
     {
+      className: "gp-launcher-footer",
       style: {
         marginTop: 32,
         padding: 16,
@@ -1753,6 +1763,7 @@ function Footer({ onManageAccount }) {
           "button",
           {
             type: "button",
+            className: "gp-launcher-footer-btn",
             onClick: onManageAccount,
             style: {
               display: "inline-flex",
@@ -1766,7 +1777,8 @@ function Footer({ onManageAccount }) {
               fontWeight: TYPE.weight.semibold,
               cursor: "pointer",
               padding: "6px 8px",
-              borderRadius: RADIUS.sm
+              borderRadius: RADIUS.sm,
+              flexShrink: 0
             },
             children: [
               "Manage account",
