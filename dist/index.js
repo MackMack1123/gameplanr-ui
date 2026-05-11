@@ -1149,6 +1149,45 @@ function GPMark({ size = 32 }) {
 
 // src/components/AppLauncher.tsx
 var import_jsx_runtime10 = require("react/jsx-runtime");
+var LAUNCHER_QUERY_CSS = `
+.gp-launcher-root {
+  container-type: inline-size;
+  container-name: gp-launcher;
+}
+@container gp-launcher (max-width: 520px) {
+  .gp-launcher-inner { padding: 24px 16px 40px !important; }
+  .gp-launcher-hero { padding: 20px !important; }
+  .gp-launcher-hero-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+  }
+  .gp-launcher-hero-cta {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .gp-launcher-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .gp-launcher-greeting-h1 {
+    font-size: 24px !important;
+  }
+}
+@container gp-launcher (min-width: 521px) and (max-width: 768px) {
+  .gp-launcher-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+`;
+var launcherStyleInjected = false;
+function ensureLauncherStyle() {
+  if (typeof document === "undefined" || launcherStyleInjected) return;
+  const tag = document.createElement("style");
+  tag.setAttribute("data-gp-launcher", "");
+  tag.appendChild(document.createTextNode(LAUNCHER_QUERY_CSS));
+  document.head.appendChild(tag);
+  launcherStyleInjected = true;
+}
 function AppLauncher({
   apps,
   featuredId: initialFeaturedId,
@@ -1161,12 +1200,14 @@ function AppLauncher({
   onManageAccount
 }) {
   const defaultFeatured = initialFeaturedId ?? apps.find((a) => a.activated && a.status === "live")?.id ?? apps.find((a) => a.status === "live")?.id ?? apps[0]?.id;
+  ensureLauncherStyle();
   const [featuredId, setFeaturedId] = (0, import_react4.useState)(defaultFeatured);
   const featured = apps.find((a) => a.id === featuredId);
   const others = apps.filter((a) => a.id !== featuredId);
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
     "div",
     {
+      className: "gp-launcher-root",
       style: {
         width: "100%",
         minHeight: "100%",
@@ -1175,67 +1216,81 @@ function AppLauncher({
       },
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TopStrip, { user }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { maxWidth: 1100, margin: "0 auto", padding: "40px 32px 56px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Greeting, { title: greeting.title, subtitle: greeting.subtitle }),
-          featured && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-            FeaturedHero,
-            {
-              app: featured,
-              onContinue: () => onContinue?.(featured.id)
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-            "div",
-            {
-              style: {
-                marginTop: 36,
-                marginBottom: 16,
-                display: "flex",
-                alignItems: "baseline",
-                justifyContent: "space-between"
-              },
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                  "h2",
-                  {
-                    style: {
-                      margin: 0,
-                      fontSize: 13,
-                      color: COLORS.ink[3],
-                      fontWeight: TYPE.weight.semibold,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.6px"
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+          "div",
+          {
+            className: "gp-launcher-inner",
+            style: { maxWidth: 1100, margin: "0 auto", padding: "40px 32px 56px" },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Greeting, { title: greeting.title, subtitle: greeting.subtitle }),
+              featured && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                FeaturedHero,
+                {
+                  app: featured,
+                  onContinue: () => onContinue?.(featured.id)
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                "div",
+                {
+                  style: {
+                    marginTop: 36,
+                    marginBottom: 16,
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between"
+                  },
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      "h2",
+                      {
+                        style: {
+                          margin: 0,
+                          fontSize: 13,
+                          color: COLORS.ink[3],
+                          fontWeight: TYPE.weight.semibold,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.6px"
+                        },
+                        children: "Switch to another app"
+                      }
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: 13, color: COLORS.ink[4] }, children: [
+                      others.length,
+                      " apps"
+                    ] })
+                  ]
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                "div",
+                {
+                  className: "gp-launcher-grid",
+                  style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 },
+                  children: others.map((app) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    CompactCard,
+                    {
+                      app,
+                      notified: !!notified[app.id],
+                      onClick: () => {
+                        if (app.status === "soon") {
+                          onNotifyToggle?.(app.id, !notified[app.id]);
+                          return;
+                        }
+                        if (!app.activated) {
+                          onActivate?.(app.id);
+                        }
+                        setFeaturedId(app.id);
+                      }
                     },
-                    children: "Switch to another app"
-                  }
-                ),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { fontSize: 13, color: COLORS.ink[4] }, children: [
-                  others.length,
-                  " apps"
-                ] })
-              ]
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }, children: others.map((app) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-            CompactCard,
-            {
-              app,
-              notified: !!notified[app.id],
-              onClick: () => {
-                if (app.status === "soon") {
-                  onNotifyToggle?.(app.id, !notified[app.id]);
-                  return;
+                    app.id
+                  ))
                 }
-                if (!app.activated) {
-                  onActivate?.(app.id);
-                }
-                setFeaturedId(app.id);
-              }
-            },
-            app.id
-          )) }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Footer, { onManageAccount })
-        ] })
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Footer, { onManageAccount })
+            ]
+          }
+        )
       ]
     }
   );
@@ -1293,6 +1348,7 @@ function Greeting({ title, subtitle }) {
     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
       "h1",
       {
+        className: "gp-launcher-greeting-h1",
         style: {
           margin: 0,
           fontSize: 32,
@@ -1318,6 +1374,7 @@ function FeaturedHero({ app, onContinue }) {
         e.preventDefault();
         onContinue?.();
       },
+      className: "gp-launcher-hero",
       style: {
         display: "block",
         background: "linear-gradient(135deg, #0f172a 0%, #111a2e 60%, #0b1220 100%)",
@@ -1350,6 +1407,7 @@ function FeaturedHero({ app, onContinue }) {
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
           "div",
           {
+            className: "gp-launcher-hero-row",
             style: {
               display: "flex",
               justifyContent: "space-between",
@@ -1434,6 +1492,7 @@ function FeaturedHero({ app, onContinue }) {
                 "button",
                 {
                   type: "button",
+                  className: "gp-launcher-hero-cta",
                   onClick: (e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1442,6 +1501,7 @@ function FeaturedHero({ app, onContinue }) {
                   style: {
                     display: "inline-flex",
                     alignItems: "center",
+                    justifyContent: "center",
                     gap: 8,
                     background: COLORS.green[600],
                     color: "#fff",

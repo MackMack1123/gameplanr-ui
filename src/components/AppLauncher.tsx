@@ -5,6 +5,62 @@ import { COLORS, RADIUS, SHADOW, TYPE, TINT, type TintName } from "../tokens";
 import { AppIcon, type AppIconName } from "./AppIcon";
 import { GPWordmark } from "./GPWordmark";
 
+/* ----- Responsive container-query styles ---------------------------------
+ * AppLauncher is meant for a 1100px-max-width centered surface, but it can
+ * land in narrower containers (mobile webview, embedded preview, narrow
+ * window). We use CSS container queries on the root so the layout adapts
+ * to the *component's* width rather than the viewport.
+ *
+ * < 520px (mobile): hero stacks vertically, CTA goes full width, grid is
+ *   single-column, page padding tightens.
+ * 521–768px (tablet-ish): grid drops to 2 columns; hero stays horizontal.
+ * ≥ 769px: original 3-col grid + horizontal hero.
+ *
+ * Inline styles trump CSS, so the overrides use `!important`. That's
+ * defensible here — we want the container-query rules to win unconditionally.
+ * ----------------------------------------------------------------------- */
+
+const LAUNCHER_QUERY_CSS = `
+.gp-launcher-root {
+  container-type: inline-size;
+  container-name: gp-launcher;
+}
+@container gp-launcher (max-width: 520px) {
+  .gp-launcher-inner { padding: 24px 16px 40px !important; }
+  .gp-launcher-hero { padding: 20px !important; }
+  .gp-launcher-hero-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+  }
+  .gp-launcher-hero-cta {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .gp-launcher-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .gp-launcher-greeting-h1 {
+    font-size: 24px !important;
+  }
+}
+@container gp-launcher (min-width: 521px) and (max-width: 768px) {
+  .gp-launcher-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+`;
+
+let launcherStyleInjected = false;
+function ensureLauncherStyle() {
+  if (typeof document === "undefined" || launcherStyleInjected) return;
+  const tag = document.createElement("style");
+  tag.setAttribute("data-gp-launcher", "");
+  tag.appendChild(document.createTextNode(LAUNCHER_QUERY_CSS));
+  document.head.appendChild(tag);
+  launcherStyleInjected = true;
+}
+
 /**
  * One app's data as rendered by <AppLauncher />.
  *
@@ -89,12 +145,14 @@ export function AppLauncher({
     apps.find((a) => a.status === "live")?.id ??
     apps[0]?.id;
 
+  ensureLauncherStyle();
   const [featuredId, setFeaturedId] = useState<string | undefined>(defaultFeatured);
   const featured = apps.find((a) => a.id === featuredId);
   const others = apps.filter((a) => a.id !== featuredId);
 
   return (
     <div
+      className="gp-launcher-root"
       style={{
         width: "100%",
         minHeight: "100%",
@@ -104,7 +162,10 @@ export function AppLauncher({
     >
       <TopStrip user={user} />
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 32px 56px" }}>
+      <div
+        className="gp-launcher-inner"
+        style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 32px 56px" }}
+      >
         <Greeting title={greeting.title} subtitle={greeting.subtitle} />
 
         {featured && (
@@ -138,7 +199,10 @@ export function AppLauncher({
           <span style={{ fontSize: 13, color: COLORS.ink[4] }}>{others.length} apps</span>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+        <div
+          className="gp-launcher-grid"
+          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}
+        >
           {others.map((app) => (
             <CompactCard
               key={app.id}
@@ -217,6 +281,7 @@ function Greeting({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
     <div style={{ marginBottom: 24 }}>
       <h1
+        className="gp-launcher-greeting-h1"
         style={{
           margin: 0,
           fontSize: 32,
@@ -255,6 +320,7 @@ export function FeaturedHero({ app, onContinue }: AppLauncherHeroProps) {
         e.preventDefault();
         onContinue?.();
       }}
+      className="gp-launcher-hero"
       style={{
         display: "block",
         background: "linear-gradient(135deg, #0f172a 0%, #111a2e 60%, #0b1220 100%)",
@@ -285,6 +351,7 @@ export function FeaturedHero({ app, onContinue }: AppLauncherHeroProps) {
       </div>
 
       <div
+        className="gp-launcher-hero-row"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -368,6 +435,7 @@ export function FeaturedHero({ app, onContinue }: AppLauncherHeroProps) {
 
         <button
           type="button"
+          className="gp-launcher-hero-cta"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -376,6 +444,7 @@ export function FeaturedHero({ app, onContinue }: AppLauncherHeroProps) {
           style={{
             display: "inline-flex",
             alignItems: "center",
+            justifyContent: "center",
             gap: 8,
             background: COLORS.green[600],
             color: "#fff",
