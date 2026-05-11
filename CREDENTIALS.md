@@ -4,6 +4,65 @@ Operator-facing notes for the credentials this repo touches. Both files
 referenced here are gitignored — they live on the operator's machine
 only.
 
+## Agent access to design.gameplanr.co
+
+The docs site (design.gameplanr.co) sits behind basic_auth for humans.
+Agents (Claude Code sessions, Cursor, scripts, etc.) can't paint a
+basic-auth dialog, so use the **token bypass** introduced in commit
+770d792.
+
+### Quickest path
+
+```sh
+# From any clone of this repo (gameplanr-ui):
+bin/agent-url            # prints the bypass URL
+bin/agent-url --curl     # prints ready-to-run curl commands
+bin/agent-url --open     # opens it in your browser (macOS/Linux)
+bin/agent-url --path /assets/foo.js   # bypass URL for a specific asset
+```
+
+The script reads `.kamal/secrets` → `DESIGN_AGENT_TOKEN` and constructs
+the URL — never log or share the URL itself; it embeds the token.
+
+### What the bypass does
+
+- `?key=<token>` on any URL → Caddy serves the asset AND sets a cookie
+  `design_agent_token=<token>` (HttpOnly, Secure, SameSite=Lax,
+  Max-Age=3600). All asset requests within the next hour with that
+  cookie skip basic_auth.
+- Wrong/missing token → falls through to the basic_auth handler (401
+  for agents, dialog for humans).
+- If `DESIGN_AGENT_TOKEN` is unset in the env at deploy time, the
+  Caddyfile falls back to a 64-char impossible string so the bypass
+  cleanly no-ops (smoke-test before assuming it's broken — see step
+  C / msg #77 in the agent-bus history).
+
+### Smoke test (verify the bypass works after a deploy)
+
+```sh
+TOKEN=$(grep ^DESIGN_AGENT_TOKEN= .kamal/secrets | cut -d= -f2-)
+curl -s -o /dev/null -w "%{http_code}\n" "https://design.gameplanr.co/?key=$TOKEN"
+# expect: 200
+
+curl -s -o /dev/null -w "%{http_code}\n" "https://design.gameplanr.co/"
+# expect: 401  (basic_auth still gates the human path)
+```
+
+If the first curl returns 401, the env var didn't reach the container.
+Verify with: `kamal app exec --reuse 'printenv | grep DESIGN_AGENT_TOKEN'`
+(should print the var; if not, redeploy after confirming `.kamal/secrets`
+has it).
+
+### Sharing this with other agents
+
+Agents on the same machine that have repo read access can run
+`bin/agent-url` themselves. For agents on other machines or in cloud
+sandboxes, the operator must share the token out-of-band (e.g., set
+it as an env var in the agent's environment) — never check the token
+into a shared repo or publicly readable doc.
+
+
+
 ## What's where
 
 | Credential | File · key | Used by |

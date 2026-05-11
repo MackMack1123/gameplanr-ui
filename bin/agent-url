@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# bin/agent-url — print a bypass URL for design.gameplanr.co that skips basic_auth
+#
+# Usage:
+#   bin/agent-url                # print bypass URL (paste into curl/browser)
+#   bin/agent-url --curl         # print a ready-to-run curl command
+#   bin/agent-url --open         # open the URL in your default browser (macOS)
+#   bin/agent-url --path /assets/x.js   # bypass URL for a specific asset path
+#
+# Token source: $REPO/.kamal/secrets → DESIGN_AGENT_TOKEN.
+# Token bypass mechanism: commit 770d792. See CREDENTIALS.md → "Agent access".
+#
+# The bypass works because Caddy reads ?key=<token> on the URL, sets a
+# 1-hour cookie, then any subsequent request with that cookie skips
+# basic_auth. Tokens are rotated by editing .kamal/secrets and redeploying.
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SECRETS="$REPO_ROOT/.kamal/secrets"
+
+if [ ! -r "$SECRETS" ]; then
+  echo "agent-url: cannot read $SECRETS" >&2
+  echo "  This script must run from inside the gameplanr-ui repo with .kamal/secrets present." >&2
+  exit 1
+fi
+
+TOKEN="$(grep -E '^DESIGN_AGENT_TOKEN=' "$SECRETS" | head -1 | cut -d= -f2-)"
+if [ -z "$TOKEN" ]; then
+  echo "agent-url: DESIGN_AGENT_TOKEN not set in $SECRETS" >&2
+  echo "  Add it (any 64-char random string), then run: kamal deploy" >&2
+  exit 1
+fi
+
+HOST="https://design.gameplanr.co"
+PATH_PART="/"
+MODE="url"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --curl) MODE="curl"; shift ;;
+    --open) MODE="open"; shift ;;
+    --path) PATH_PART="$2"; shift 2 ;;
+    -h|--help)
+      sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0 ;;
+    *) echo "agent-url: unknown arg: $1" >&2; exit 2 ;;
+  esac
+done
+
+URL="${HOST}${PATH_PART}?key=${TOKEN}"
+
+case "$MODE" in
+  url)
+    echo "$URL"
+    ;;
+  curl)
+    # Cookie-jar form so follow-up requests work too
+    cat <<EOF
+# One-shot fetch:
+curl '$URL'
+
+# Set the bypass cookie once, reuse for the session (1hr):
+curl -c /tmp/gp-design-cookie.txt '$URL' >/dev/null
+curl -b /tmp/gp-design-cookie.txt '${HOST}/'
+EOF
+    ;;
+  open)
+    if command -v open >/dev/null 2>&1; then
+      open "$URL"
+    elif command -v xdg-open >/dev/null 2>&1; then
+      xdg-open "$URL"
+    else
+      echo "agent-url: no 'open' or 'xdg-open' available; URL printed below" >&2
+      echo "$URL"
+    fi
+    ;;
+esac
