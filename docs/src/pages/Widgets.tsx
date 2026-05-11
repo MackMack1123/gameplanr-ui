@@ -1038,62 +1038,6 @@ function SidebarToSheetNote() {
 }
 
 // ──────────────────────────────────────────────────────────────────────────
-// Widget 9: AppLauncher (post-login app picker)
-// ──────────────────────────────────────────────────────────────────────────
-
-const APP_LAUNCHER_JSX = `// Post-login app picker shown after a user authenticates and chooses
-// which GamePlanr app to enter. Composed of a top strip (greeting +
-// account), a featured hero card, and a 3-column compact grid of the
-// remaining apps. Theming uses the TINT palette from tokens.
-
-import { AppLauncher, AppIcon, TINT } from "@gameplanr/ui";
-
-const apps = [
-  { id: "field",      name: "Field",      tint: "green",  icon: <AppIcon name="pitch"/>,    href: "/field" },
-  { id: "tournament", name: "Tournament", tint: "purple", icon: <AppIcon name="trophy"/>,   href: "/tournament" },
-  { id: "calendar",   name: "Calendar",   tint: "blue",   icon: <AppIcon name="calendar"/>, href: "/calendar" },
-  { id: "lineup",     name: "Lineup",     tint: "orange", icon: <AppIcon name="baseball"/>, href: "/lineup" },
-  { id: "volunteer",  name: "Volunteer",  tint: "amber",  icon: <AppIcon name="megaphone"/>,href: "/volunteer" },
-];
-
-<AppLauncher
-  user={{ name: "Brett", email: "brett@example.com" }}
-  featured={apps[0]}
-  apps={apps.slice(1)}
-  onSignOut={() => {/* ... */}}
-/>`;
-
-function AppLauncherNote() {
-  return (
-    <div
-      style={{
-        background: "#fff",
-        border: `1px solid ${COLORS.surface.border}`,
-        borderRadius: 12,
-        padding: 16,
-        width: "100%",
-        fontSize: 13,
-        color: COLORS.ink[2],
-        lineHeight: 1.5,
-      }}
-    >
-      <div style={{ fontWeight: 600, color: COLORS.ink[1], marginBottom: 8 }}>
-        Composed of <code>FeaturedHero</code> + <code>CompactCard</code>
-      </div>
-      <ul style={{ margin: 0, paddingLeft: 18 }}>
-        <li><code>FeaturedHero</code> — the big primary-app card at the top.</li>
-        <li><code>CompactCard</code> — secondary apps in the 3-column grid.</li>
-        <li>Both consume the <code>TINT</code> token map for per-app color: <code>{`{ bg, fg }`}</code> pairs scoped to <code>purple | blue | orange | green | amber | slate</code>.</li>
-        <li>Account footer is built-in — pass <code>user.name</code>, <code>user.email</code>, and an <code>onSignOut</code> callback.</li>
-      </ul>
-      <div style={{ marginTop: 8, color: COLORS.ink[3], fontSize: 12 }}>
-        The Auth app renders the picker server-side as inline-styled HTML (no React) using the same tokens; React-based consumers should import <code>{`<AppLauncher />`}</code> directly for parity.
-      </div>
-    </div>
-  );
-}
-
-// ──────────────────────────────────────────────────────────────────────────
 // Section
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -1168,13 +1112,6 @@ export function WidgetsSection({ id }: { id: string }) {
         </WidgetNote>
       </Example>
 
-      <Example label="AppLauncher · post-login app picker">
-        <AppLauncherNote />
-        <CodeSnippet code={APP_LAUNCHER_JSX} />
-        <WidgetNote>
-          Live demo intentionally omitted — the component needs realistic per-app data (icons, hrefs, tints, signed-in user) that varies per consumer. The JSX above is the canonical shape. <code>FeaturedHero</code> and <code>CompactCard</code> are also exported for one-off composition.
-        </WidgetNote>
-      </Example>
     </Section>
   );
 }

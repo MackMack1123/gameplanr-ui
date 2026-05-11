@@ -8,19 +8,21 @@ import { DataSection } from "./pages/Data";
 import { FeedbackSection } from "./pages/Feedback";
 import { DomainSection } from "./pages/Domain";
 import { ChromeSection } from "./pages/Chrome";
+import { AppLauncherSection } from "./pages/AppLauncher";
 import { WidgetsSection } from "./pages/Widgets";
 
 const sections = [
-  { id: "brand",    label: "Brand",      Component: BrandSection },
-  { id: "tokens",   label: "Tokens",     Component: TokensSection },
-  { id: "buttons",  label: "Buttons",    Component: ButtonsSection },
-  { id: "forms",    label: "Forms",      Component: FormsSection },
-  { id: "layout",   label: "Layout",     Component: LayoutSection },
-  { id: "data",     label: "Data",       Component: DataSection },
-  { id: "feedback", label: "Feedback",   Component: FeedbackSection },
-  { id: "domain",   label: "Domain",     Component: DomainSection },
-  { id: "chrome",   label: "Chrome",     Component: ChromeSection },
-  { id: "widgets",  label: "Widgets",    Component: WidgetsSection },
+  { id: "brand",        label: "Brand",        Component: BrandSection },
+  { id: "tokens",       label: "Tokens",       Component: TokensSection },
+  { id: "buttons",      label: "Buttons",      Component: ButtonsSection },
+  { id: "forms",        label: "Forms",        Component: FormsSection },
+  { id: "layout",       label: "Layout",       Component: LayoutSection },
+  { id: "data",         label: "Data",         Component: DataSection },
+  { id: "feedback",     label: "Feedback",     Component: FeedbackSection },
+  { id: "domain",       label: "Domain",       Component: DomainSection },
+  { id: "chrome",       label: "Chrome",       Component: ChromeSection },
+  { id: "app-launcher", label: "App Launcher", Component: AppLauncherSection },
+  { id: "widgets",      label: "Widgets",      Component: WidgetsSection },
 ];
 
 export function App() {
