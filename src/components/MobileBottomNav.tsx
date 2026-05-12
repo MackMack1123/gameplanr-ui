@@ -62,7 +62,11 @@ export function MobileBottomNav({
         display: "flex",
         justifyContent: "space-around",
         alignItems: "stretch",
-        background: COLORS.surface.card,
+        // Semi-transparent + backdrop blur gives a native iOS feel over content.
+        // Falls back to the solid card color on browsers without backdrop-filter.
+        background: "rgba(255,255,255,0.92)",
+        backdropFilter: "blur(10px) saturate(180%)",
+        WebkitBackdropFilter: "blur(10px) saturate(180%)",
         borderTop: `1px solid ${COLORS.surface.border}`,
         paddingBottom: "env(safe-area-inset-bottom, 0px)",
         fontFamily: TYPE.family.sans,
@@ -108,7 +112,10 @@ function Item({
     gap: 2,
     padding: "8px 6px",
     minHeight: 56, // 48px touch + safe vertical
-    background: "transparent",
+    // Active item gets a subtle green wash (10% brand green) behind it
+    // for a stronger affordance than text-color alone — matches the
+    // pattern Calendar landed on locally before adoption.
+    background: active ? "rgba(22,163,74,0.10)" : "transparent",
     border: "none",
     borderRadius: RADIUS.sm,
     cursor: "pointer",
@@ -118,7 +125,7 @@ function Item({
     fontSize: TYPE.size.micro,
     fontWeight: active ? TYPE.weight.semibold : TYPE.weight.medium,
     lineHeight: 1.1,
-    transition: "color 120ms ease",
+    transition: "color 160ms ease, background-color 160ms ease",
     WebkitTapHighlightColor: "transparent",
   };
 
@@ -130,6 +137,10 @@ function Item({
     width: 24,
     height: 24,
     color: "inherit",
+    // Active icon scales up slightly — small but adds polish, matches
+    // the native-app feel users expect from a primary tab bar.
+    transform: active ? "scale(1.10)" : "scale(1)",
+    transition: "transform 200ms cubic-bezier(.32,.72,0,1)",
   };
 
   const labelStyle: React.CSSProperties = {
