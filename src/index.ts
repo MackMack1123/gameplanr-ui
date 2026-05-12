@@ -89,6 +89,14 @@ export type { CarouselProps } from "./components/Carousel";
 export { Chart } from "./components/Chart";
 export type { ChartProps, ChartLegendItem } from "./components/Chart";
 
+// v3.3 — CalendarGrid (requires date-fns as optional peerDep)
+export { CalendarGrid } from "./components/CalendarGrid";
+export type {
+  CalendarGridProps,
+  CalendarDayMeta,
+  WeekStartsOn,
+} from "./components/CalendarGrid";
+
 export { Button } from "./components/Button";
 export type { ButtonProps, ButtonVariant, ButtonSize } from "./components/Button";
 

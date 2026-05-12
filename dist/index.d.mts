@@ -1,5 +1,6 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import React from 'react';
+import { Locale } from 'date-fns';
 
 type AppId$1 = "calendar" | "lineup" | "field" | "volunteer" | "tournament" | "fundraiser";
 interface GamePlanrNavProps {
@@ -1043,6 +1044,81 @@ interface ChartProps {
  */
 declare function Chart({ title, description, toolbar, legend, children, loading, empty, height, className, style, }: ChartProps): react_jsx_runtime.JSX.Element;
 
+/** Day of week index: 0 = Sunday, 1 = Monday, …, 6 = Saturday. */
+type WeekStartsOn = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+interface CalendarDayMeta {
+    /** ISO date for this cell. */
+    date: Date;
+    /** True if this date belongs to a neighbouring month (leading/trailing fill). */
+    isOutsideMonth: boolean;
+    /** True if this date is today (in the user's local timezone). */
+    isToday: boolean;
+    /** True if Saturday or Sunday. */
+    isWeekend: boolean;
+    /** True if this date matches the controlled `selected` prop. */
+    isSelected: boolean;
+    /** True if this cell currently owns keyboard focus inside the grid. */
+    isFocused: boolean;
+}
+interface CalendarGridProps {
+    /** The month to display. Any date in the target month works. */
+    month: Date;
+    onMonthChange?: (next: Date) => void;
+    /** Currently selected day (controlled). Pure presentation — wire onDayClick to update it. */
+    selected?: Date | null;
+    onDayClick?: (date: Date, meta: CalendarDayMeta) => void;
+    /** First day of the week. 0 = Sunday (default), 1 = Monday. */
+    weekStartsOn?: WeekStartsOn;
+    /** date-fns Locale for weekday + month names. Defaults to en-US. */
+    locale?: Locale;
+    /** Render the chrome (month label + prev/next + weekday header). Default true. */
+    showHeader?: boolean;
+    /** Custom per-cell renderer. Receives the date + meta. If omitted, the cell renders the day number. */
+    renderDay?: (meta: CalendarDayMeta) => React.ReactNode;
+    /** Custom weekday-name renderer. Receives the weekday short label (already localized). */
+    renderWeekday?: (label: string, weekdayIndex: number) => React.ReactNode;
+    /** Fixed pixel height for each day cell. Default 96. Set lower for compact pickers. */
+    cellHeight?: number;
+    /** ARIA label for the grid region. Default "Calendar". */
+    ariaLabel?: string;
+    className?: string;
+    style?: React.CSSProperties;
+}
+/**
+ * Month grid (6 weeks × 7 days) with keyboard navigation, optional chrome,
+ * and a per-cell renderer slot. Theming via gp-* tokens; consumers do NOT
+ * pass className overrides — pass `renderDay` to customize cell content.
+ *
+ * Keyboard:
+ *   - Arrow keys     → move focus by day
+ *   - PgUp / PgDn    → previous / next month (focus follows)
+ *   - Shift+PgUp/Dn  → previous / next year
+ *   - Home / End     → start / end of week
+ *   - Enter / Space  → onDayClick on the focused cell
+ *
+ * A11y:
+ *   - Grid uses role="grid" with role="row" + role="gridcell" inside.
+ *   - aria-label on each cell with the full date.
+ *   - role="status" live region announces month/year on month change.
+ *   - aria-selected on the cell matching `selected`.
+ *
+ * Event-density: use `renderDay` to draw event chips per cell.
+ *
+ *   <CalendarGrid
+ *     month={month}
+ *     onMonthChange={setMonth}
+ *     selected={selected}
+ *     onDayClick={setSelected}
+ *     renderDay={({ date }) => (
+ *       <>
+ *         <DayHeader date={date} />
+ *         {eventsFor(date).map((e) => <EventChip key={e.id} event={e} />)}
+ *       </>
+ *     )}
+ *   />
+ */
+declare function CalendarGrid({ month, onMonthChange, selected, onDayClick, weekStartsOn, locale, showHeader, renderDay, renderWeekday, cellHeight, ariaLabel, className, style, }: CalendarGridProps): react_jsx_runtime.JSX.Element;
+
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -1269,4 +1345,4 @@ interface DiamondFieldProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 declare function DiamondField({ positions, selected, onPositionClick, style, ...rest }: DiamondFieldProps): react_jsx_runtime.JSX.Element;
 
-export { Accordion, type AccordionProps, Alert, type AlertProps, type AlertTone, AppIcon, type AppIconName, type AppIconProps, type AppId, AppLauncher, type AppLauncherApp, type AppLauncherCardProps, type AppLauncherHeroProps, type AppLauncherProps, type AppLauncherUser, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, Card, type CardProps, Carousel, type CarouselProps, Chart, type ChartLegendItem, type ChartProps, CompactCard, ConfirmDialog, type ConfirmDialogProps, type ConfirmTone, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FeaturedHero, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GPMark, type GPMarkProps, GPWordmark, type GPWordmarkProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, Label, type LabelProps, LogoIcon, MobileBottomNav, type MobileBottomNavItemProps, type MobileBottomNavProps, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, Popover, type PopoverAlign, type PopoverProps, type PopoverSide, type PositionCode, Progress, type ProgressProps, type ProgressTone, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Separator, type SeparatorOrientation, type SeparatorProps, Sheet, type SheetProps, type SheetSide, type SheetSize, Sidebar, type SidebarNavItemProps, type SidebarProps, Skeleton, type SkeletonProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TINT, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Textarea, type TextareaProps, type TintName, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens, Tooltip, type TooltipProps, type TooltipSide, useIsMobile };
+export { Accordion, type AccordionProps, Alert, type AlertProps, type AlertTone, AppIcon, type AppIconName, type AppIconProps, type AppId, AppLauncher, type AppLauncherApp, type AppLauncherCardProps, type AppLauncherHeroProps, type AppLauncherProps, type AppLauncherUser, AppSwitcher, type AppSwitcherApp, type AppSwitcherProps, Button, type ButtonProps, type ButtonSize, type ButtonVariant, COLORS, type CalendarDayMeta, CalendarGrid, type CalendarGridProps, Card, type CardProps, Carousel, type CarouselProps, Chart, type ChartLegendItem, type ChartProps, CompactCard, ConfirmDialog, type ConfirmDialogProps, type ConfirmTone, DiamondField, type DiamondFieldProps, type DiamondPlayer, EmptyState, type EmptyStateProps, FeaturedHero, FilterBar, type FilterBarProps, FontDebugToggle, FormField, type FormFieldProps, GPMark, type GPMarkProps, GPWordmark, type GPWordmarkProps, GamePlanrNav, type GamePlanrNavProps, IconButton, type IconButtonProps, type IconButtonSize, type IconButtonVariant, Input, type InputProps, type InputSize, KPIBar, type KPIBarProps, type KPIItem, LAYOUT, Label, type LabelProps, LogoIcon, MobileBottomNav, type MobileBottomNavItemProps, type MobileBottomNavProps, Modal, type ModalProps, type ModalSize, PageHeader, type PageHeaderProps, Pagination, type PaginationProps, Popover, type PopoverAlign, type PopoverProps, type PopoverSide, type PositionCode, Progress, type ProgressProps, type ProgressTone, RADIUS, SHADOW, Select, type SelectOption, type SelectProps, type SelectSize, Separator, type SeparatorOrientation, type SeparatorProps, Sheet, type SheetProps, type SheetSide, type SheetSize, Sidebar, type SidebarNavItemProps, type SidebarProps, Skeleton, type SkeletonProps, type StatAccent, StatCard, type StatCardProps, StatusPill, type StatusPillProps, type StatusPillVariant, TINT, TOKENS, TYPE, type TabItem, Table, type TableCellProps, type TableHeaderCellProps, type TableProps, type TableRowProps, type TableSortDirection, Tabs, type TabsProps, Textarea, type TextareaProps, type TintName, Toast, type ToastProps, type ToastTone, Toggle, type ToggleProps, type ToggleSize, type Tokens, Tooltip, type TooltipProps, type TooltipSide, type WeekStartsOn, useIsMobile };

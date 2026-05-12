@@ -1,6 +1,6 @@
 {
   "name": "@gameplanr/ui",
-  "version": "3.2.4",
+  "version": "3.3.0",
   "description": "GamePlanr v3 design system — shared tokens, Tailwind preset, and components.",
   "repository": {
     "type": "git",
@@ -33,8 +33,14 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
+    "date-fns": "^3 || ^4",
     "react": ">=18",
     "react-dom": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "date-fns": {
+      "optional": true
+    }
   },
   "dependencies": {
     "tailwindcss-animate": "^1.0.7"
@@ -43,6 +49,7 @@
     "@types/node": "^25.6.0",
     "@types/react": "^18",
     "@types/react-dom": "^18.3.7",
+    "date-fns": "^3.6.0",
     "react": "^18",
     "react-dom": "^18",
     "tsup": "^8",
